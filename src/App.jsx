@@ -16,6 +16,7 @@ import News from '@/pages/News';
 import Gallery from '@/pages/Gallery';
 import Calendar from '@/pages/Calendar';
 import Contact from '@/pages/Contact';
+import Admin from '@/pages/Admin';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -54,6 +55,7 @@ const AuthenticatedApp = () => {
         <Route path="/galeria" element={<Gallery />} />
         <Route path="/calendario" element={<Calendar />} />
         <Route path="/contato" element={<Contact />} />
+        <Route path="/admin" element={<Admin />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

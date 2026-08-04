@@ -79,9 +79,10 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Escola Prism · Scholar's Prism. Todos os direitos reservados.
-          </p>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <p>© {new Date().getFullYear()} Escola Prism · Scholar's Prism. Todos os direitos reservados.</p>
+            <Link to="/admin" className="transition-colors hover:text-primary">Painel Admin</Link>
+          </div>
           <div className="flex items-center gap-3">
             {[
               { Icon: Instagram, label: "Instagram" },

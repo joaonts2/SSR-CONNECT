@@ -1,0 +1,44 @@
+{
+  "name": "News",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "Eventos",
+        "Acad\u00eamico",
+        "Esportes",
+        "Cultura",
+        "Comunicado"
+      ],
+      "default": "Comunicado"
+    },
+    "excerpt": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string",
+      "default": "Equipe Prism"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_published": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title"
+  ]
+}
