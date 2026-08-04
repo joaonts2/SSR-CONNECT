@@ -6,7 +6,7 @@ import { Modal, Field, inputCls } from "./ui";
 const CATEGORIES = ["Eventos", "Acadêmico", "Esportes", "Cultura", "Comunicado"];
 const empty = {
   title: "", category: "Comunicado", excerpt: "", content: "",
-  image_url: "", author: "Equipe Prism", date: "", is_published: true,
+  image_url: "", author: "Equipe CETI", date: "", is_published: true,
 };
 
 export default function NewsManager() {

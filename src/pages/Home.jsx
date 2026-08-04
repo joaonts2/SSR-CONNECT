@@ -89,7 +89,7 @@ export default function Home() {
 
         <div className="relative z-10 mx-auto max-w-5xl text-center">
           <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-block rounded-full glass-ui px-5 py-2 text-xs font-semibold uppercase tracking-widest text-primary">
-            Ecossistema Educacional da Escola Prism
+            CETI Sebastião Soares Ribeiro
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="heading-font mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance">
             Onde o Conhecimento <br className="hidden sm:block" /> Encontra o <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent italic">Futuro.</span>
@@ -147,7 +147,7 @@ export default function Home() {
           </motion.div>
 
           <div>
-            <SectionHeading align="left" eyebrow="Sobre a Prism" title="Uma instituição construída sobre o futuro" description="Há mais de duas décadas, a Escola Prism une tradição acadêmica e inovação tecnológica para oferecer uma educação transformadora." />
+            <SectionHeading align="left"               eyebrow="Sobre o CETI" title="Uma instituição construída sobre o futuro"               description="Há mais de duas décadas, o CETI Sebastião Soares Ribeiro une tradição acadêmica e inovação tecnológica para oferecer uma educação transformadora." />
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">Nossa metodologia integra tecnologias emergentes, aprendizado projetivo e um acompanhamento individualizado, preparando cada estudante para os desafios de um mundo em constante transformação.</p>
             <div className="mt-8 grid grid-cols-3 gap-4">
               {[{ n: "2.400+", l: "Alunos" }, { n: "180", l: "Educadores" }, { n: "98%", l: "Aprovação" }].map((s) => (
@@ -277,7 +277,7 @@ export default function Home() {
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-blue-600 to-secondary px-8 py-16 text-center text-white shadow-2xl sm:px-16">
           <div className="absolute inset-0 opacity-20 prism-gradient" />
           <div className="relative">
-            <h2 className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte da Prism?</h2>
+            <h2 className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte do CETI?</h2>
             <p className="mx-auto mt-4 max-w-xl text-white/90 text-balance">Matrículas abertas para 2027. Agende uma visita ou fale com nossa secretaria.</p>
             <Link to="/contato" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-primary shadow-lg transition hover:scale-105">Iniciar matrícula <ArrowRight className="h-4 w-4" /></Link>
           </div>

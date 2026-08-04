@@ -7,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 const departments = [
   { icon: MapPin, title: "Endereço", value: "Av. do Conhecimento, 1822 — Centro, São Paulo/SP" },
   { icon: Phone, title: "Telefone", value: "(11) 4000-1822" },
-  { icon: Mail, title: "E-mail", value: "contato@escolaprism.edu.br" },
+  { icon: Mail, title: "E-mail", value: "contato@cetisebastiaosoribeiro.edu.br" },
   { icon: Clock, title: "Horário", value: "Seg a Sex, 7h30 às 17h30" },
 ];
 
@@ -88,7 +88,7 @@ export default function Contact() {
 
             <div className="mt-8 overflow-hidden rounded-3xl border border-border shadow-xl">
               <iframe
-                title="Mapa Escola Prism"
+                title="Mapa do CETI"
                 src="https://www.openstreetmap.org/export/embed.html?bbox=-46.6593%2C-23.5613%2C-46.6373%2C-23.5413&layer=mapnik&marker=-23.5513%2C-46.6483"
                 className="h-56 w-full"
                 loading="lazy"

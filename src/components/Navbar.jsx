@@ -57,7 +57,7 @@ export default function Navbar() {
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="heading-font text-xl font-extrabold tracking-tight">
-            PRISM<span className="text-secondary">.</span>
+            CETI<span className="text-secondary">.</span>
           </span>
         </Link>
 

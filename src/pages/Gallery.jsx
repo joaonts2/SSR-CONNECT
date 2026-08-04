@@ -15,7 +15,7 @@ const albums = [
 ];
 
 const videos = [
-  { title: "Tour pelo Campus Prism", duration: "4:32", gradient: "from-blue-600 to-indigo-700" },
+  { title: "Tour pelo Campus do CETI", duration: "4:32", gradient: "from-blue-600 to-indigo-700" },
   { title: "Robótica em Ação", duration: "6:18", gradient: "from-emerald-600 to-teal-700" },
   { title: "Depoimentos de Ex-Alunos", duration: "8:45", gradient: "from-amber-600 to-orange-700" },
   { title: "Feira de Ciências — Bastidores", duration: "5:22", gradient: "from-sky-600 to-blue-700" },
@@ -34,7 +34,7 @@ export default function Gallery() {
       <PageHero
         eyebrow="Galeria"
         title="Momentos que contam histórias"
-        description="Fotos e vídeos dos eventos, projetos e do dia a dia na Escola Prism."
+        description="Fotos e vídeos dos eventos, projetos e do dia a dia no CETI Sebastião Soares Ribeiro."
       />
 
       {/* Álbuns de fotos */}

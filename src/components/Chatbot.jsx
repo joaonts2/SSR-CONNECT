@@ -33,7 +33,7 @@ const KNOWLEDGE = [
   },
   {
     keys: ["contato", "telefone", "email", "e-mail", "endereco", "endereço"],
-    answer: "Telefone: (11) 4000-1822 · E-mail: contato@escolaprism.edu.br · Endereço: Av. do Conhecimento, 1822 — Centro.",
+    answer: "Telefone: (11) 4000-1822 · E-mail: contato@cetisebastiaosoribeiro.edu.br · Endereço: Av. do Conhecimento, 1822 — Centro.",
     links: [{ label: "Fale Conosco", to: "/contato" }],
   },
   {
@@ -45,7 +45,7 @@ const KNOWLEDGE = [
   {
     keys: ["olá", "ola", "oi", "bom dia", "boa tarde", "boa noite", "ajuda"],
     answer:
-      "Olá! Sou o assistente virtual Prism. Posso ajudar com matrículas, calendário, biblioteca, provas e mais. Sobre o que você gostaria de saber?",
+      "Olá! Sou o assistente virtual do CETI. Posso ajudar com matrículas, calendário, biblioteca, provas e mais. Sobre o que você gostaria de saber?",
   },
 ];
 
@@ -58,7 +58,7 @@ function findAnswer(text) {
 
 const initialMessage = {
   from: "bot",
-  text: "Olá! 👋 Sou o Concierge Prism, seu assistente virtual. Como posso ajudar hoje?",
+  text: "Olá! 👋 Sou o Concierge CETI, seu assistente virtual. Como posso ajudar hoje?",
 };
 
 export default function Chatbot() {
@@ -92,7 +92,7 @@ export default function Chatbot() {
                 <Bot className="h-5 w-5" />
               </span>
               <div>
-                <p className="text-sm font-semibold leading-tight">Concierge Prism</p>
+                <p className="text-sm font-semibold leading-tight">Concierge CETI</p>
                 <p className="text-[11px] opacity-80">Online agora</p>
               </div>
             </div>

@@ -39,7 +39,7 @@ export default function Teachers() {
       <PageHero
         eyebrow="Corpo Docente"
         title="Educadores que inspiram"
-        description="Conheça os professores apaixonados que conduzem a jornada de aprendizado na Escola Prism."
+        description="Conheça os professores apaixonados que conduzem a jornada de aprendizado no CETI Sebastião Soares Ribeiro."
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">

@@ -46,7 +46,7 @@ export default function About() {
       <PageHero
         eyebrow="Sobre a Escola"
         title="Uma instituição construída sobre o futuro"
-        description="Conheça a história, a missão e a estrutura que fazem da Prism um ecossistema educacional de excelência."
+        description="Conheça a história, a missão e a estrutura que fazem do CETI um ecossistema educacional de excelência."
       />
 
       {/* História */}
@@ -58,13 +58,13 @@ export default function About() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="overflow-hidden rounded-3xl shadow-2xl"
         >
-          <Image src={ABOUT_IMG} alt="Mãos trabalhando em projeto de robótica na Escola Prism" fittingType="fill" className="aspect-[4/3] w-full" />
+          <Image src={ABOUT_IMG} alt="Mãos trabalhando em projeto de robótica no CETI" fittingType="fill" className="aspect-[4/3] w-full" />
         </motion.div>
         <div>
           <SectionHeading align="left" eyebrow="Nossa História" title="Tradição que se reinventa" />
           <div className="mt-6 space-y-4 text-sm leading-relaxed text-muted-foreground">
             <p>
-              Fundada em 2001 por um grupo de educadores visionários, a Escola Prism nasceu com o
+              Fundado em 2001 por um grupo de educadores visionários, o CETI Sebastião Soares Ribeiro nasceu com o
               propósito de transformar a maneira como o conhecimento é compartilhado. Começamos com
               apenas 80 alunos em uma pequena unidade no centro da cidade.
             </p>
@@ -74,9 +74,8 @@ export default function About() {
               pedagógica. Hoje somos referência em metodologias ativas e integração tecnológica.
             </p>
             <p>
-              O nome "Prism" reflete nossa filosofia: assim como um prisma decompõe a luz branca em
-              um espectro de cores, acreditamos que a educação deve revelar o potencial único de cada
-              estudante.
+              O CETI Sebastião Soares Ribeiro homenageia um educador que dedicou a vida ao ensino.
+              Damos continuidade ao seu legado, revelando o potencial único de cada estudante.
             </p>
           </div>
         </div>
@@ -110,7 +109,7 @@ export default function About() {
 
       {/* Diferenciais */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Diferenciais" title="Por que escolher a Prism" />
+        <SectionHeading eyebrow="Diferenciais" title="Por que escolher o CETI" />
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p, i) => (
             <motion.div
@@ -191,7 +190,7 @@ export default function About() {
         <SectionHeading eyebrow="Onde estamos" title="Venha nos visitar" description="Estamos no coração da cidade, com fácil acesso e estrutura completa." />
         <div className="mt-12 overflow-hidden rounded-3xl border border-border shadow-xl">
           <iframe
-            title="Localização da Escola Prism"
+            title="Localização do CETI"
             src="https://www.openstreetmap.org/export/embed.html?bbox=-46.6593%2C-23.5613%2C-46.6373%2C-23.5413&layer=mapnik&marker=-23.5513%2C-46.6483"
             className="h-[400px] w-full grayscale-[20%]"
             loading="lazy"

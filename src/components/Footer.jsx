@@ -35,11 +35,11 @@ export default function Footer() {
                 <GraduationCap className="h-5 w-5" />
               </span>
               <span className="heading-font text-xl font-extrabold tracking-tight">
-                PRISM<span className="text-secondary">.</span>
+                CETI<span className="text-secondary">.</span>
               </span>
             </Link>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
-              O Scholar's Prism é o ecossistema digital da Escola Prism — onde o conhecimento
+              O ecossistema digital do CETI Sebastião Soares Ribeiro — onde o conhecimento
               encontra o futuro. Uma plataforma organizada e acessível para alunos, professores,
               pais e comunidade escolar.
             </p>
@@ -51,7 +51,7 @@ export default function Footer() {
                 <Phone className="h-4 w-4 text-primary" /> (11) 4000-1822
               </p>
               <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" /> contato@escolaprism.edu.br
+                <Mail className="h-4 w-4 text-primary" /> contato@cetisebastiaosoribeiro.edu.br
               </p>
             </div>
           </div>
@@ -80,7 +80,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <p>© {new Date().getFullYear()} Escola Prism · Scholar's Prism. Todos os direitos reservados.</p>
+            <p>© {new Date().getFullYear()} CETI Sebastião Soares Ribeiro. Todos os direitos reservados.</p>
             <Link to="/admin" className="transition-colors hover:text-primary">Painel Admin</Link>
           </div>
           <div className="flex items-center gap-3">

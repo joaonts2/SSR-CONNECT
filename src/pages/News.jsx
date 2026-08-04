@@ -111,7 +111,7 @@ export default function News() {
             <h2 className="heading-font mt-4 text-2xl font-bold leading-tight">{selected.title}</h2>
             <p className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
               <span className="flex items-center gap-1"><Calendar className="h-3.5 w-3.5" /> {selected.date ? new Date(selected.date + "T00:00:00").toLocaleDateString("pt-BR") : ""}</span>
-              <span className="flex items-center gap-1"><User className="h-3.5 w-3.5" /> {selected.author || "Equipe Prism"}</span>
+              <span className="flex items-center gap-1"><User className="h-3.5 w-3.5" /> {selected.author || "Equipe CETI"}</span>
             </p>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{selected.excerpt}</p>
             {selected.content && <p className="mt-4 whitespace-pre-line text-sm leading-relaxed text-muted-foreground">{selected.content}</p>}
