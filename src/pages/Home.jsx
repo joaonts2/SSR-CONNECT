@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, FlaskConical, Calculator, GraduationCap, Megaphone, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
+import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
 import { Image } from "@/components/ui/image";
@@ -18,9 +18,9 @@ const hubTiles = [
 ];
 
 const courses = [
-  { icon: GraduationCap, name: "Ensino Fundamental I", desc: "1º ao 5º ano — base sólida com aprendizado lúdico." },
-  { icon: Calculator, name: "Ensino Fundamental II", desc: "6º ao 9º ano — pensamento crítico e autonomia." },
-  { icon: FlaskConical, name: "Ensino Médio", desc: "Preparação para o vestibular e para a vida." },
+  { icon: Code2, name: "Desenvolvimento de Sistemas", desc: "Programação, banco de dados e projetos reais — formação técnica para o mercado de tecnologia." },
+  { icon: Megaphone, name: "Marketing", desc: "Branding, redes sociais e estratégias de venda — comunicação e mercado para o mundo digital." },
+  { icon: BookOpen, name: "Formação Regular", desc: "Ensino Médio e Fundamental com a base comum que toda escola do Piauí oferece." },
 ];
 
 const MONTHS_SHORT = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
@@ -164,7 +164,7 @@ export default function Home() {
 
       {/* CURSOS */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
-        <SectionHeading eyebrow="Modalidades" title="Níveis de ensino que acolhem cada etapa" />
+        <SectionHeading eyebrow="Nossos Cursos" title="Técnico e formação regular, lado a lado" />
         <div className="mt-14 grid gap-6 md:grid-cols-3">
           {courses.map((c, i) => (
             <motion.div key={c.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="group rounded-3xl border border-border bg-card p-8 transition hover:border-primary/40 hover:shadow-xl">

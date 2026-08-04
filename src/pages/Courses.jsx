@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, GraduationCap, Calculator, FlaskConical, Palette, Globe, Bot, ChevronRight, Clock, Users } from "lucide-react";
+import { Search, Code2, Megaphone, BookOpen, GraduationCap, ChevronRight, Clock, Users } from "lucide-react";
 import PageHero from "@/components/PageHero";
 
 const courses = [
-  { icon: GraduationCap, level: "Fundamental I", name: "1º ao 5º Ano", desc: "Alfabetização sólida com metodologia lúdica, jogos pedagógicos e desenvolvimento socioemocional.", duration: "5 anos", students: "680 alunos", subjects: ["Português", "Matemática", "Ciências", "Artes", "Inglês"] },
-  { icon: Calculator, level: "Fundamental II", name: "6º ao 9º Ano", desc: "Pensamento crítico, autonomia de estudo e introdução a projetos interdisciplinares.", duration: "4 anos", students: "920 alunos", subjects: ["Matemática", "Ciências", "História", "Geografia", "Inglês", "Espanhol"] },
-  { icon: FlaskConical, level: "Ensino Médio", name: "1º ao 3º Ano", desc: "Preparação intensiva para vestibular, ENEM e vida profissional com orientação vocacional.", duration: "3 anos", students: "800 alunos", subjects: ["Química", "Física", "Biologia", "Matemática", "Redação", "Sociologia"] },
-  { icon: Bot, level: "Complementar", name: "Robótica & Programação", desc: "Lógica, eletrônica e programação com projetos práticos e competições.", duration: "Anual", students: "320 alunos", subjects: ["Python", "Arduino", "IA Básica", "Mecatrônica"] },
-  { icon: Globe, level: "Complementar", name: "Idiomas", desc: "Inglês e Espanhol com certificação internacional e intercâmbios.", duration: "Anual", students: "1.100 alunos", subjects: ["Inglês", "Espanhol", "Conversação"] },
-  { icon: Palette, level: "Complementar", name: "Artes & Cultura", desc: "Música, teatro e artes visuais para o desenvolvimento criativo.", duration: "Anual", students: "540 alunos", subjects: ["Música", "Teatro", "Artes Visuais"] },
+  { icon: Code2, level: "Técnico", name: "Desenvolvimento de Sistemas", desc: "Programação, banco de dados e desenvolvimento web. Do back-end ao front-end, construindo projetos reais para o mercado de tecnologia.", duration: "3 anos", students: "Vagas limitadas", subjects: ["Lógica de Programação", "JavaScript", "Python", "Banco de Dados", "APIs REST", "Git"] },
+  { icon: Megaphone, level: "Técnico", name: "Marketing", desc: "Branding, redes sociais, tráfego pago e estratégias de venda. Comunicação e mercado para formar profissionais prontos para o mundo digital.", duration: "3 anos", students: "Vagas limitadas", subjects: ["Branding", "Redes Sociais", "Tráfego Pago", "Copywriting", "Marketing Digital", "Vendas"] },
+  { icon: GraduationCap, level: "Regular", name: "Ensino Médio Integrado", desc: "A formação regular que toda escola do Piauí oferece, integrada aos cursos técnicos. Base comum completa prevista na BNCC.", duration: "3 anos", students: "Turmas regulares", subjects: ["Português", "Matemática", "História", "Geografia", "Ciências", "Inglês"] },
+  { icon: BookOpen, level: "Regular", name: "Ensino Fundamental", desc: "Anos finais do Fundamental com a base comum curricular, igual às demais escolas piauienses, preparando para o Ensino Médio.", duration: "6º ao 9º ano", students: "Turmas regulares", subjects: ["Português", "Matemática", "Ciências", "História", "Geografia", "Inglês"] },
 ];
 
 const fade = {
@@ -21,7 +19,7 @@ export default function Courses() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("Todos");
 
-  const levels = ["Todos", "Fundamental I", "Fundamental II", "Ensino Médio", "Complementar"];
+  const levels = ["Todos", "Técnico", "Regular"];
   const filtered = courses.filter((c) => {
     const matchesQuery =
       c.name.toLowerCase().includes(query.toLowerCase()) ||
@@ -36,7 +34,7 @@ export default function Courses() {
       <PageHero
         eyebrow="Cursos e Turmas"
         title="Uma jornada de aprendizado para cada etapa"
-        description="Da alfabetização à preparação para o vestibular, conheça nossos níveis de ensino e cursos complementares."
+        description="Cursos técnicos em Desenvolvimento de Sistemas e Marketing integrados ao Ensino Médio, além da formação regular comum a toda escola do Piauí."
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
