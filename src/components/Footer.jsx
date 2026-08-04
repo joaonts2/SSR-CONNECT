@@ -1,0 +1,105 @@
+import { Link } from "react-router-dom";
+import { GraduationCap, Mail, Phone, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
+
+const cols = [
+  {
+    title: "Escola",
+    links: [
+      { label: "Sobre a Prism", to: "/sobre" },
+      { label: "Corpo Docente", to: "/professores" },
+      { label: "Cursos e Turmas", to: "/cursos" },
+      { label: "Calendário Escolar", to: "/calendario" },
+    ],
+  },
+  {
+    title: "Recursos",
+    links: [
+      { label: "Biblioteca Digital", to: "/biblioteca" },
+      { label: "Notícias e Avisos", to: "/noticias" },
+      { label: "Galeria de Fotos", to: "/galeria" },
+      { label: "Fale Conosco", to: "/contato" },
+    ],
+  },
+];
+
+// Rodapé institucional completo
+export default function Footer() {
+  return (
+    <footer className="relative mt-24 border-t border-border bg-card/50">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-4">
+          {/* Marca + contato */}
+          <div className="lg:col-span-2">
+            <Link to="/" className="flex items-center gap-2">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white">
+                <GraduationCap className="h-5 w-5" />
+              </span>
+              <span className="heading-font text-xl font-extrabold tracking-tight">
+                PRISM<span className="text-secondary">.</span>
+              </span>
+            </Link>
+            <p className="mt-4 max-w-md text-sm leading-relaxed text-muted-foreground">
+              O Scholar's Prism é o ecossistema digital da Escola Prism — onde o conhecimento
+              encontra o futuro. Uma plataforma organizada e acessível para alunos, professores,
+              pais e comunidade escolar.
+            </p>
+            <div className="mt-6 space-y-2 text-sm text-muted-foreground">
+              <p className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-primary" /> Av. do Conhecimento, 1822 — Centro
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-primary" /> (11) 4000-1822
+              </p>
+              <p className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-primary" /> contato@escolaprism.edu.br
+              </p>
+            </div>
+          </div>
+
+          {/* Colunas de links */}
+          {cols.map((col) => (
+            <div key={col.title}>
+              <h4 className="heading-font text-sm font-semibold uppercase tracking-widest text-foreground">
+                {col.title}
+              </h4>
+              <ul className="mt-4 space-y-3">
+                {col.links.map((l) => (
+                  <li key={l.to}>
+                    <Link
+                      to={l.to}
+                      className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                    >
+                      {l.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Escola Prism · Scholar's Prism. Todos os direitos reservados.
+          </p>
+          <div className="flex items-center gap-3">
+            {[
+              { Icon: Instagram, label: "Instagram" },
+              { Icon: Facebook, label: "Facebook" },
+              { Icon: Youtube, label: "YouTube" },
+            ].map(({ Icon, label }) => (
+              <a
+                key={label}
+                href="#"
+                aria-label={label}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition hover:border-primary hover:text-primary"
+              >
+                <Icon className="h-4 w-4" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}

@@ -6,6 +6,16 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import ScrollToTop from './components/ScrollToTop';
+import Layout from '@/components/Layout';
+import Home from '@/pages/Home';
+import About from '@/pages/About';
+import Courses from '@/pages/Courses';
+import Teachers from '@/pages/Teachers';
+import Library from '@/pages/Library';
+import News from '@/pages/News';
+import Gallery from '@/pages/Gallery';
+import Calendar from '@/pages/Calendar';
+import Contact from '@/pages/Contact';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -34,7 +44,17 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      {/* Add your page Route elements here */}
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/sobre" element={<About />} />
+        <Route path="/cursos" element={<Courses />} />
+        <Route path="/professores" element={<Teachers />} />
+        <Route path="/biblioteca" element={<Library />} />
+        <Route path="/noticias" element={<News />} />
+        <Route path="/galeria" element={<Gallery />} />
+        <Route path="/calendario" element={<Calendar />} />
+        <Route path="/contato" element={<Contact />} />
+      </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
