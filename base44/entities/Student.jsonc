@@ -1,0 +1,49 @@
+{
+  "name": "Student",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "turma": {
+      "type": "string"
+    },
+    "login": {
+      "type": "string"
+    },
+    "password_hash": {
+      "type": "string"
+    },
+    "password_changed": {
+      "type": "boolean",
+      "default": false
+    },
+    "enrollment": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "turma",
+    "login",
+    "password_hash"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

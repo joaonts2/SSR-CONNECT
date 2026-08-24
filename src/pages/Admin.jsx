@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck } from "lucide-react";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
 import EventManager from "@/components/admin/EventManager";
 import TestimonialManager from "@/components/admin/TestimonialManager";
 import AdminAccessManager from "@/components/admin/AdminAccessManager";
+import StudentManager from "@/components/admin/StudentManager";
 
 const SECTIONS = [
   { key: "news", label: "Notícias", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
   { key: "notices", label: "Avisos", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
   { key: "events", label: "Eventos", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
+  { key: "students", label: "Alunos", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
   { key: "testimonials", label: "Depoimentos", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
   { key: "access", label: "Acesso", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
 ];

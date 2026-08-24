@@ -17,6 +17,7 @@ import Gallery from '@/pages/Gallery';
 import Calendar from '@/pages/Calendar';
 import Contact from '@/pages/Contact';
 import Admin from '@/pages/Admin';
+import AlunoPortal from '@/pages/AlunoPortal';
 import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
@@ -65,6 +66,7 @@ const AuthenticatedApp = () => {
         <Route path="/galeria" element={<Gallery />} />
         <Route path="/calendario" element={<Calendar />} />
         <Route path="/contato" element={<Contact />} />
+        <Route path="/portal-aluno" element={<AlunoPortal />} />
         <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
           <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
         </Route>
