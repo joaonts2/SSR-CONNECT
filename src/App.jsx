@@ -22,6 +22,7 @@ import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminGuard from '@/components/AdminGuard';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -65,7 +66,7 @@ const AuthenticatedApp = () => {
         <Route path="/calendario" element={<Calendar />} />
         <Route path="/contato" element={<Contact />} />
         <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
         </Route>
       </Route>
       <Route path="*" element={<PageNotFound />} />

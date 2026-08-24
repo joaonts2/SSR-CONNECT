@@ -5,12 +5,14 @@ import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
 import EventManager from "@/components/admin/EventManager";
 import TestimonialManager from "@/components/admin/TestimonialManager";
+import AdminAccessManager from "@/components/admin/AdminAccessManager";
 
 const SECTIONS = [
   { key: "news", label: "Notícias", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
   { key: "notices", label: "Avisos", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
   { key: "events", label: "Eventos", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
   { key: "testimonials", label: "Depoimentos", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
+  { key: "access", label: "Acesso", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
 ];
 
 export default function Admin() {
@@ -45,7 +47,7 @@ export default function Admin() {
             </div>
             <div className="mt-4 flex items-start gap-2 rounded-2xl border border-border bg-card p-4 text-xs text-muted-foreground">
               <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-              Área protegida — acesso restrito a usuários autenticados. Faça login para gerenciar o conteúdo da escola.
+              Área protegida — apenas o e-mail cadastrado como administrador acessa este painel. Defina o e-mail na seção "Acesso".
             </div>
           </aside>
 
