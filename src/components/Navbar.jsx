@@ -93,6 +93,12 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Link
+            to="/login"
+            className="hidden rounded-full border border-border/70 px-4 py-2.5 text-sm font-semibold text-foreground/80 transition hover:text-primary lg:inline-flex"
+          >
+            Entrar
+          </Link>
+          <Link
             to="/contato"
             className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:bg-primary/90 sm:inline-flex"
           >
@@ -143,6 +149,12 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
+              <NavLink
+                to="/login"
+                className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80"
+              >
+                Entrar
+              </NavLink>
               <NavLink
                 to="/contato"
                 className="mt-2 rounded-xl bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground"
