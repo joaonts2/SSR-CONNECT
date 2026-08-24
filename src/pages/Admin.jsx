@@ -45,7 +45,7 @@ export default function Admin() {
             </div>
             <div className="mt-4 flex items-start gap-2 rounded-2xl border border-border bg-card p-4 text-xs text-muted-foreground">
               <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-              Para acesso exclusivo restrito a administradores, ative o login na plataforma e eu configuro as permissões de segurança.
+              Área protegida — acesso restrito a usuários autenticados. Faça login para gerenciar o conteúdo da escola.
             </div>
           </aside>
 
