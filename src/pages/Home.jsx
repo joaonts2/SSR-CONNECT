@@ -109,9 +109,9 @@ export default function Home() {
           </motion.form>
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
-            <span className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> 2.400+ alunos</span>
-            <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-secondary" /> 50.000 títulos</span>
-            <span className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> 98% aprovação</span>
+            <span className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> 0 alunos</span>
+            <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-secondary" /> 0 títulos</span>
+            <span className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> 0% aprovação</span>
           </motion.div>
         </div>
       </section>
@@ -141,7 +141,7 @@ export default function Home() {
               <Image src={STUDENTS_IMG} alt="Estudantes colaborando em sala de aula moderna" fittingType="fill" className="aspect-[4/3] w-full" />
             </div>
             <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-border bg-card p-6 shadow-xl sm:block">
-              <p className="heading-font text-3xl font-bold text-secondary">+25 anos</p>
+              <p className="heading-font text-3xl font-bold text-secondary">0 anos</p>
               <p className="text-xs text-muted-foreground">formando cidadãos</p>
             </div>
           </motion.div>
@@ -150,7 +150,7 @@ export default function Home() {
             <SectionHeading align="left"               eyebrow="Sobre o CETI" title="Uma instituição construída sobre o futuro"               description="Há mais de duas décadas, o CETI Sebastião Soares Ribeiro une tradição acadêmica e inovação tecnológica para oferecer uma educação transformadora." />
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">Nossa metodologia integra tecnologias emergentes, aprendizado projetivo e um acompanhamento individualizado, preparando cada estudante para os desafios de um mundo em constante transformação.</p>
             <div className="mt-8 grid grid-cols-3 gap-4">
-              {[{ n: "2.400+", l: "Alunos" }, { n: "180", l: "Educadores" }, { n: "98%", l: "Aprovação" }].map((s) => (
+              {[{ n: "0", l: "Alunos" }, { n: "0", l: "Educadores" }, { n: "0%", l: "Aprovação" }].map((s) => (
                 <div key={s.l} className="rounded-2xl border border-border bg-background p-4 text-center">
                   <p className="heading-font text-2xl font-bold text-primary">{s.n}</p>
                   <p className="text-xs text-muted-foreground">{s.l}</p>
