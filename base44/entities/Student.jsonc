@@ -31,19 +31,5 @@
     "turma",
     "login",
     "password_hash"
-  ],
-  "rls": {
-    "read": {},
-    "create": {
-      "user_condition": {
-        "role": "admin"
-      }
-    },
-    "update": {},
-    "delete": {
-      "user_condition": {
-        "role": "admin"
-      }
-    }
-  }
+  ]
 }
