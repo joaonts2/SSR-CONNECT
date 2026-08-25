@@ -5,6 +5,8 @@
 import { base44 } from "@/api/base44Client";
 
 const SESSION_KEY = "aluno_session";
+// Sufixo de e-mail dos logins dos alunos (formato institucional).
+const LOGIN_DOMAIN = "@aluno.cetisebastiaosoribeiro.edu.br";
 
 export async function sha256(text) {
   const data = new TextEncoder().encode(text);
@@ -40,7 +42,7 @@ export function genLogin(name, existing = []) {
     n += 1;
     login = `${base}${n}`;
   }
-  return login;
+  return `${login}${LOGIN_DOMAIN}`;
 }
 
 // Senha aleatória curta, sem caracteres ambíguos (0/O, 1/l).
