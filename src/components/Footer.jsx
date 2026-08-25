@@ -81,7 +81,6 @@ export default function Footer() {
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <p>© {new Date().getFullYear()} CETI Sebastião Soares Ribeiro. Todos os direitos reservados.</p>
-            <Link to="/portal-aluno" className="transition-colors hover:text-primary">Portal do Aluno</Link>
             <Link to="/admin" className="transition-colors hover:text-primary">Painel Admin</Link>
           </div>
           <div className="flex items-center gap-3">
