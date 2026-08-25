@@ -21,6 +21,7 @@ const resourceLinks = [
   { label: "Notícias", to: "/noticias" },
   { label: "Galeria", to: "/galeria" },
   { label: "Calendário Escolar", to: "/calendario" },
+  { label: "Portal do Aluno", to: "/portal-aluno" },
 ];
 
 // Cabeçalho inteligente com glassmorphism e navegação responsiva
