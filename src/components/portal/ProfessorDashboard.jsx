@@ -4,6 +4,7 @@ import MenuCard from "./MenuCard";
 import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
 import EventsCard from "./EventsCard";
+import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
 
 export default function ProfessorDashboard({ session, onLogout }) {
@@ -21,6 +22,7 @@ export default function ProfessorDashboard({ session, onLogout }) {
 
   return (
     <div className="space-y-6">
+      <UrgentAlertBanner audience="Professores" />
       <PortalHeader
         name={session.name}
         meta={session.email}

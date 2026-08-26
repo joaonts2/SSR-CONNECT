@@ -6,6 +6,7 @@ import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
 import QuickLinks from "./QuickLinks";
 import DeadlinesCard from "./DeadlinesCard";
+import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
 
 export default function AlunoDashboard({ session, onLogout }) {
@@ -19,6 +20,7 @@ export default function AlunoDashboard({ session, onLogout }) {
 
   return (
     <div className="space-y-6">
+      <UrgentAlertBanner audience="Alunos" />
       <PortalHeader
         name={session.name}
         meta={session.login}
