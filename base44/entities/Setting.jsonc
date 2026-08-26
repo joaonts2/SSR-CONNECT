@@ -14,11 +14,34 @@
   ],
   "rls": {
     "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
     "update": {
-      "data.value": "{{user.email}}"
+      "$or": [
+        {
+          "data.value": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
     },
     "delete": {
-      "data.value": "{{user.email}}"
+      "$or": [
+        {
+          "data.value": "{{user.email}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
     }
   }
 }
