@@ -1,0 +1,16 @@
+{
+  "name": "Ticker",
+  "type": "object",
+  "properties": {
+    "content": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "content"
+  ]
+}

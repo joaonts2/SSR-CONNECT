@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
+import TickerBanner from "@/components/TickerBanner";
 import { Image } from "@/components/ui/image";
 import { base44 } from "@/api/base44Client";
 
@@ -74,11 +75,8 @@ export default function Home() {
 
   return (
     <div>
-      {/* PULSE BAR */}
-      <div className="bg-gradient-to-r from-primary via-blue-600 to-secondary px-4 py-2.5 text-center text-xs font-medium tracking-wide text-white">
-        <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-white align-middle" />
-        Aulas procedendo normalmente · Resultados do Simulado ENEM publicados · Inscrições abertas para 2027
-      </div>
+      {/* BANNER DE AVISOS (editável pelo admin) */}
+      <TickerBanner />
 
       {/* HERO */}
       <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4">

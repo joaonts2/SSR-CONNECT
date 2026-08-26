@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard } from "lucide-react";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import AdminOverview from "@/components/admin/AdminOverview";
 import NewsManager from "@/components/admin/NewsManager";
@@ -10,6 +10,7 @@ import AdminAccessManager from "@/components/admin/AdminAccessManager";
 import StudentManager from "@/components/admin/StudentManager";
 import MenuManager from "@/components/admin/MenuManager";
 import ContactInfoManager from "@/components/admin/ContactInfoManager";
+import TickerManager from "@/components/admin/TickerManager";
 
 const SECTIONS = [
   { key: "overview", label: "Início", icon: LayoutDashboard, desc: "Visão geral e edição centralizada", Component: AdminOverview },
@@ -20,6 +21,7 @@ const SECTIONS = [
   { key: "menu", label: "Cardápio", icon: UtensilsCrossed, desc: "Almoço e lanche da semana", Component: MenuManager },
   { key: "testimonials", label: "Depoimentos", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
   { key: "contact", label: "Contato", icon: Phone, desc: "Textos e dados da página de contato", Component: ContactInfoManager },
+  { key: "ticker", label: "Banner Avisos", icon: Radio, desc: "Frase do topo da página inicial", Component: TickerManager },
   { key: "access", label: "Acesso", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
 ];
 
