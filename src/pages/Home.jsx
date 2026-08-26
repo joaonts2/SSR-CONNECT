@@ -124,11 +124,11 @@ export default function Home() {
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
             <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }}>
-              <Link to={t.to} className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card p-8 transition-all duration-500 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-primary/10">
-                <span className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${t.color} text-white shadow-lg`}><t.icon className="h-7 w-7" /></span>
-                <h3 className="heading-font mt-6 text-xl font-semibold">{t.title}</h3>
+              <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/8 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
+                <h3 className="heading-font mt-5 text-lg font-semibold">{t.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{t.desc}</p>
-                <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary opacity-0 transition-opacity group-hover:opacity-100">Acessar <ArrowRight className="h-4 w-4" /></span>
+                <span className="mt-5 inline-flex items-center gap-1 text-sm font-medium text-primary">Acessar <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" /></span>
               </Link>
             </motion.div>
           ))}
@@ -142,7 +142,7 @@ export default function Home() {
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <Image src={STUDENTS_IMG} alt="Estudantes colaborando em sala de aula moderna" fittingType="fill" className="aspect-[4/3] w-full" />
             </div>
-            <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-border bg-card p-6 shadow-xl sm:block">
+            <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-border bg-card p-6 shadow-card sm:block">
               <p className="heading-font text-3xl font-bold text-secondary">0 anos</p>
               <p className="text-xs text-muted-foreground">formando cidadãos</p>
             </div>
@@ -196,10 +196,10 @@ export default function Home() {
                 news.map((n, i) => {
                   const p = toParts(n.date);
                   return (
-                    <motion.article key={n.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex gap-5 rounded-2xl border border-border bg-background p-5 transition hover:border-primary/40 hover:shadow-lg">
-                      <div className="flex h-24 w-32 shrink-0 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary/15 to-secondary/15">
-                        <span className="text-xs font-medium text-muted-foreground">{p.month}</span>
-                        <span className="heading-font text-3xl font-bold text-primary">{p.day}</span>
+                    <motion.article key={n.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex gap-5 rounded-2xl border border-border bg-background p-5 transition hover:border-primary/30 hover:shadow-soft">
+                      <div className="flex h-24 w-28 shrink-0 flex-col items-center justify-center rounded-xl border border-border bg-muted/40">
+                        <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{p.month}</span>
+                        <span className="heading-font text-2xl font-bold text-foreground">{p.day}</span>
                       </div>
                       <div>
                         <span className="rounded-full bg-secondary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-secondary">{n.category}</span>
@@ -255,10 +255,10 @@ export default function Home() {
             events.map((e, i) => {
               const p = toParts(e.date);
               return (
-                <motion.div key={e.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg">
-                  <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white">
+                <motion.div key={e.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition hover:-translate-y-1 hover:border-primary/30 hover:shadow-soft">
+                  <div className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-xl bg-primary/8 text-primary">
                     <span className="heading-font text-2xl font-bold leading-none">{p.day}</span>
-                    <span className="text-[11px] uppercase">{p.month}</span>
+                    <span className="text-[11px] uppercase tracking-wide">{p.month}</span>
                   </div>
                   <div>
                     <h3 className="text-sm font-semibold leading-snug">{e.title}</h3>
@@ -276,12 +276,12 @@ export default function Home() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-blue-600 to-secondary px-8 py-16 text-center text-white shadow-2xl sm:px-16">
-          <div className="absolute inset-0 opacity-20 prism-gradient" />
+        <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-primary-foreground shadow-card sm:px-16">
+          <div className="absolute inset-0 opacity-30 prism-gradient" />
           <div className="relative">
             <h2 className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte do CETI?</h2>
-            <p className="mx-auto mt-4 max-w-xl text-white/90 text-balance">Matrículas abertas para 2027. Agende uma visita ou fale com nossa secretaria.</p>
-            <Link to="/contato" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-semibold text-primary shadow-lg transition hover:scale-105">Iniciar matrícula <ArrowRight className="h-4 w-4" /></Link>
+            <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85 text-balance">Matrículas abertas para 2027. Agende uma visita ou fale com nossa secretaria.</p>
+            <Link to="/contato" className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-8 py-4 text-sm font-semibold text-primary shadow-soft transition hover:scale-105">Iniciar matrícula <ArrowRight className="h-4 w-4" /></Link>
           </div>
         </div>
       </section>

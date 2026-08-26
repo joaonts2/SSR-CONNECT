@@ -48,17 +48,17 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ${
-        scrolled ? "py-2 shadow-lg shadow-black/5" : "py-3"
+        scrolled ? "py-2 shadow-soft" : "py-3"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 group">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-secondary text-white shadow-md transition-transform group-hover:scale-105">
+          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground transition-transform group-hover:scale-105">
             <GraduationCap className="h-5 w-5" />
           </span>
           <span className="heading-font text-xl font-extrabold tracking-tight">
-            CETI<span className="text-secondary">.</span>
+            CETI<span className="text-primary">.</span>
           </span>
         </Link>
 
