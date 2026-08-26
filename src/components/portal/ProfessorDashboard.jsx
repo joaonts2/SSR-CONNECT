@@ -6,6 +6,7 @@ import ChangePasswordCard from "./ChangePasswordCard";
 import EventsCard from "./EventsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import TurmaStudentsTable from "./TurmaStudentsTable";
+import LessonManager from "./LessonManager";
 import PortalHeader from "./PortalHeader";
 
 export default function ProfessorDashboard({ session, onLogout }) {
@@ -33,6 +34,8 @@ export default function ProfessorDashboard({ session, onLogout }) {
       />
 
       <TurmaStudentsTable turmas={turmas} />
+
+      <LessonManager turmas={turmas} author={session.name} />
 
       <EventsCard subtitle="Compromissos e datas do calendário escolar" />
 

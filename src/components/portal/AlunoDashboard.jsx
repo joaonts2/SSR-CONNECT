@@ -9,6 +9,7 @@ import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
 import QuickLinks from "./QuickLinks";
 import DeadlinesCard from "./DeadlinesCard";
+import LessonsCard from "./LessonsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
 
@@ -52,6 +53,10 @@ export default function AlunoDashboard({ session, onLogout }) {
       />
 
       <QuickLinks />
+
+      <div id="videoaulas" className="scroll-mt-4">
+        <LessonsCard turma={session.turma} />
+      </div>
 
       {/* Avisos da turma */}
       <div id="avisos" className="scroll-mt-4">

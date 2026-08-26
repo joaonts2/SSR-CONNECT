@@ -1,0 +1,44 @@
+{
+  "name": "Lesson",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "V\u00eddeo",
+        "Link"
+      ],
+      "default": "V\u00eddeo"
+    },
+    "url": {
+      "type": "string"
+    },
+    "turma": {
+      "type": "string"
+    },
+    "discipline": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "title",
+    "url"
+  ]
+}
