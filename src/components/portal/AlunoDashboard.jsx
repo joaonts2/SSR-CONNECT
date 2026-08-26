@@ -1,12 +1,42 @@
-import { GraduationCap, LogOut, AlertCircle, BookOpen, Info, ClipboardList, ExternalLink } from "lucide-react";
+import { GraduationCap, LogOut, AlertCircle, BookOpen, Info, ClipboardList, Megaphone, UtensilsCrossed, ArrowRight } from "lucide-react";
 import { changeAlunoPassword } from "@/lib/alunoAuth";
 import { subjectsForCourse } from "@/lib/courses";
 import MenuCard from "./MenuCard";
 import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
 
+const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
 export default function AlunoDashboard({ session, onLogout }) {
   const subjects = subjectsForCourse(session.course);
+
+  const tiles = [
+    {
+      key: "notas",
+      icon: ClipboardList,
+      title: "Notas e Boletim",
+      desc: "Portal SEDUC-PI",
+      tone: "bg-primary text-primary-foreground",
+      href: "https://estudante.seduc.pi.gov.br/login",
+      external: true,
+    },
+    {
+      key: "avisos",
+      icon: Megaphone,
+      title: "Avisos da turma",
+      desc: "Comunicados oficiais",
+      tone: "bg-amber-500 text-white",
+      target: "avisos",
+    },
+    {
+      key: "cardapio",
+      icon: UtensilsCrossed,
+      title: "Cardápio semanal",
+      desc: "Almoço e lanche",
+      tone: "bg-secondary text-secondary-foreground",
+      target: "cardapio",
+    },
+  ];
 
   return (
     <div className="space-y-6">
@@ -30,21 +60,40 @@ export default function AlunoDashboard({ session, onLogout }) {
         )}
       </div>
 
-      {/* Notas */}
-      <a href="https://estudante.seduc.pi.gov.br/login" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-4 rounded-3xl border border-border bg-gradient-to-br from-primary/10 to-secondary/10 p-5 transition hover:scale-[1.01] sm:p-6">
-        <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground"><ClipboardList className="h-6 w-6" /></span>
-          <div>
-            <h3 className="heading-font text-base font-bold">Notas e Boletim</h3>
-            <p className="text-xs text-muted-foreground">Acesse o portal do estudante da SEDUC-PI para ver suas notas</p>
-          </div>
+      {/* Acessos rápidos */}
+      <div>
+        <h3 className="heading-font mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Acessos rápidos</h3>
+        <div className="grid gap-3 sm:grid-cols-3">
+          {tiles.map((t) => {
+            const inner = (
+              <>
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${t.tone}`}><t.icon className="h-6 w-6" /></span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-bold leading-tight">{t.title}</p>
+                  <p className="text-xs text-muted-foreground">{t.desc}</p>
+                </div>
+                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </>
+            );
+            const cls = "flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition hover:scale-[1.02] hover:border-primary/40";
+            return t.external ? (
+              <a key={t.key} href={t.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>
+            ) : (
+              <button key={t.key} type="button" onClick={() => scrollTo(t.target)} className={cls}>{inner}</button>
+            );
+          })}
         </div>
-        <ExternalLink className="h-5 w-5 shrink-0 text-primary" />
-      </a>
+      </div>
 
-      <NoticesCard title={`Avisos da turma ${session.turma || ""}`} subtitle="Comunicados oficiais e específicos para a sua turma" turmas={[session.turma]} />
+      {/* Avisos da turma */}
+      <div id="avisos" className="scroll-mt-4">
+        <NoticesCard title={`Avisos da turma ${session.turma || ""}`} subtitle="Comunicados oficiais e específicos para a sua turma" turmas={[session.turma]} />
+      </div>
 
-      <MenuCard />
+      {/* Cardápio */}
+      <div id="cardapio" className="scroll-mt-4">
+        <MenuCard />
+      </div>
 
       {/* Disciplinas */}
       <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
