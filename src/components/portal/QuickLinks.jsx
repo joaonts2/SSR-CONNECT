@@ -7,7 +7,7 @@ const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior:
 export default function QuickLinks() {
   const items = [
     { key: "notas", icon: ClipboardList, title: "Notas e Boletim", desc: "Portal SEDUC-PI", tone: "bg-primary text-primary-foreground", href: "https://estudante.seduc.pi.gov.br/login", external: true },
-    { key: "docs", icon: FolderOpen, title: "Documentos e Materiais", desc: "Biblioteca digital e apostilas", tone: "bg-secondary text-secondary-foreground", to: "/biblioteca" },
+    { key: "docs", icon: FolderOpen, title: "Documentos e Materiais", desc: "Biblioteca digital e apostilas", tone: "bg-secondary text-secondary-foreground", target: "materiais" },
     { key: "avisos", icon: Megaphone, title: "Avisos da turma", desc: "Comunicados oficiais", tone: "bg-amber-500 text-white", target: "avisos" },
     { key: "cardapio", icon: UtensilsCrossed, title: "Cardápio semanal", desc: "Refeições da semana", tone: "bg-primary text-primary-foreground", target: "cardapio" },
   ];
