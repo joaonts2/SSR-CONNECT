@@ -1,12 +1,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { Users, Loader2, Search, Check } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { portalApi } from "@/lib/portalApi";
 import { COURSE_OPTIONS } from "@/lib/courses";
 
 // Tabela editável rápida: lista os alunos das turmas do professor e salva
 // alterações (turma, curso, matrícula, situação) direto no cadastro do aluno,
 // refletindo automaticamente no Portal do Aluno.
-export default function TurmaStudentsTable({ turmas }) {
+export default function TurmaStudentsTable({ turmas, teacherId }) {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -16,22 +16,18 @@ export default function TurmaStudentsTable({ turmas }) {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const all = await base44.entities.Student.list();
-      const filtered = (turmas && turmas.length)
-        ? all.filter((s) => turmas.includes(s.turma))
-        : all;
-      filtered.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-      setStudents(filtered);
+      const data = await portalApi({ action: "studentsByTurma", turmas, teacherId });
+      setStudents(data.students);
     } catch (e) { console.error(e); }
     setLoading(false);
-  }, [turmas]);
+  }, [turmas, teacherId]);
 
   useEffect(() => { load(); }, [load]);
 
   const save = async (id, patch) => {
     setSavingId(id);
     try {
-      await base44.entities.Student.update(id, patch);
+      await portalApi({ action: "updateStudent", id, patch, teacherId });
       setStudents((list) => list.map((s) => (s.id === id ? { ...s, ...patch } : s)));
       setSavedAt((m) => ({ ...m, [id]: Date.now() }));
     } catch (e) { console.error(e); }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Users, GraduationCap, BookOpen, UserPlus, Loader2, AlertCircle, Info } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { portalApi } from "@/lib/portalApi";
 import { subjectsForCourse } from "@/lib/courses";
 import { changeParentPassword } from "@/lib/portalAuth";
 import MenuCard from "./MenuCard";
@@ -9,8 +9,6 @@ import ChangePasswordCard from "./ChangePasswordCard";
 import EventsCard from "./EventsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
-
-const LOGIN_DOMAIN = "@aluno.cetisebastiaosoribeiro.edu.br";
 
 export default function PaiDashboard({ session, onLogout }) {
   const [children, setChildren] = useState([]);
@@ -24,8 +22,8 @@ export default function PaiDashboard({ session, onLogout }) {
     try {
       const ids = session.student_ids || [];
       if (ids.length === 0) { setChildren([]); return; }
-      const all = await base44.entities.Student.list();
-      setChildren(all.filter((s) => ids.includes(s.id)));
+      const data = await portalApi({ action: "parentChildren", ids });
+      setChildren(data.students);
     } catch (e) { console.error(e); } finally { setLoading(false); }
   };
   useEffect(() => { loadChildren(); }, []);
@@ -34,15 +32,8 @@ export default function PaiDashboard({ session, onLogout }) {
     e.preventDefault();
     setLinking(true); setLinkErr(null);
     try {
-      let l = childLogin.trim().toLowerCase();
-      if (l && !l.includes("@")) l = `${l}${LOGIN_DOMAIN}`;
-      const rows = await base44.entities.Student.filter({ student_login: l, is_active: true });
-      const s = rows[0];
-      if (!s) throw new Error("Aluno não encontrado. Verifique o login informado.");
-      if ((session.student_ids || []).includes(s.id)) throw new Error("Este filho já está vinculado.");
-      const updated = [...(session.student_ids || []), s.id];
-      await base44.entities.Parent.update(session.id, { student_ids: updated });
-      session.student_ids = updated;
+      const data = await portalApi({ action: "linkChild", parentId: session.id, studentLogin: childLogin });
+      session.student_ids = data.student_ids;
       setChildLogin("");
       await loadChildren();
     } catch (e2) { setLinkErr(e2.message); }

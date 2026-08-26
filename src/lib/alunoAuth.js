@@ -3,6 +3,7 @@
 // senha em texto apenas no momento da geração e a entrega ao aluno em mãos.
 
 import { base44 } from "@/api/base44Client";
+import { portalApi } from "@/lib/portalApi";
 
 const SESSION_KEY = "aluno_session";
 // Sufixo de e-mail dos logins dos alunos (formato institucional).
@@ -82,28 +83,11 @@ function normalizeLogin(login) {
 
 // Login do aluno: busca o cadastro pelo login e compara o hash da senha.
 export async function loginAluno(login, password) {
-  const hash = await sha256(password);
-  const rows = await base44.entities.Student.filter({
-    student_login: normalizeLogin(login),
-    is_active: true,
-  });
-  const aluno = rows[0];
-  if (!aluno || aluno.password_hash !== hash) {
-    throw new Error("Login ou senha incorretos.");
-  }
-  return aluno;
+  const { student } = await portalApi({ action: "studentLogin", login, password });
+  return student;
 }
 
 // Troca de senha pelo próprio aluno: valida a senha atual antes de atualizar.
 export async function changeAlunoPassword(id, current, next) {
-  const curHash = await sha256(current);
-  const aluno = await base44.entities.Student.get(id);
-  if (!aluno || aluno.password_hash !== curHash) {
-    throw new Error("Senha atual incorreta.");
-  }
-  const newHash = await sha256(next);
-  await base44.entities.Student.update(id, {
-    password_hash: newHash,
-    password_changed: true,
-  });
+  await portalApi({ action: "studentChangePassword", id, current, next });
 }

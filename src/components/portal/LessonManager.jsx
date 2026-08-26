@@ -1,10 +1,11 @@
 import { useEffect, useState, useCallback } from "react";
 import { Video, Link as LinkIcon, Plus, Loader2, Trash2, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { portalApi } from "@/lib/portalApi";
 
 // Gerenciador de aulas para o professor: posta vídeo-aulas e links, direcionados
 // a uma turma, com listagem e remoção dos próprios posts.
-export default function LessonManager({ turmas, author }) {
+export default function LessonManager({ turmas, author, teacherId }) {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ title: "", description: "", type: "Vídeo", url: "", turma: turmas?.[0] || "", discipline: "" });
@@ -26,16 +27,18 @@ export default function LessonManager({ turmas, author }) {
     if (!form.title.trim() || !form.url.trim()) return;
     setSaving(true);
     try {
-      const rec = await base44.entities.Lesson.create({
-        title: form.title.trim(),
-        description: form.description.trim(),
-        type: form.type,
-        url: form.url.trim(),
-        turma: form.turma,
-        discipline: form.discipline.trim(),
-        author: author || "Professor",
-        date: new Date().toISOString().slice(0, 10),
-        is_active: true,
+      const { lesson: rec } = await portalApi({
+        action: "createLesson",
+        teacherId,
+        lesson: {
+          title: form.title.trim(),
+          description: form.description.trim(),
+          type: form.type,
+          url: form.url.trim(),
+          turma: form.turma,
+          discipline: form.discipline.trim(),
+          author: author || "Professor",
+        },
       });
       setLessons((l) => [rec, ...l]);
       setForm({ title: "", description: "", type: "Vídeo", url: "", turma: turmas?.[0] || "", discipline: "" });
@@ -44,7 +47,7 @@ export default function LessonManager({ turmas, author }) {
   };
 
   const remove = async (id) => {
-    try { await base44.entities.Lesson.delete(id); setLessons((l) => l.filter((x) => x.id !== id)); } catch (e) { console.error(e); }
+    try { await portalApi({ action: "deleteLesson", id, teacherId }); setLessons((l) => l.filter((x) => x.id !== id)); } catch (e) { console.error(e); }
   };
 
   const inputCls = "w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2";

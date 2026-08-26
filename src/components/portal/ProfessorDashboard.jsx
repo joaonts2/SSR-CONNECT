@@ -33,9 +33,9 @@ export default function ProfessorDashboard({ session, onLogout }) {
         onLogout={onLogout}
       />
 
-      <TurmaStudentsTable turmas={turmas} />
+      <TurmaStudentsTable turmas={turmas} teacherId={session.id} />
 
-      <LessonManager turmas={turmas} author={session.name} />
+      <LessonManager turmas={turmas} author={session.name} teacherId={session.id} />
 
       <EventsCard subtitle="Compromissos e datas do calendário escolar" />
 

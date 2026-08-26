@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { GraduationCap, BookOpen, Info } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { portalApi } from "@/lib/portalApi";
 import { setSession } from "@/lib/portalAuth";
 import { changeAlunoPassword } from "@/lib/alunoAuth";
 import { subjectsForCourse } from "@/lib/courses";
@@ -21,7 +21,7 @@ export default function AlunoDashboard({ session, onLogout }) {
     let active = true;
     (async () => {
       try {
-        const s = await base44.entities.Student.get(session.id);
+        const { student: s } = await portalApi({ action: "studentProfile", id: session.id });
         if (!active || !s) return;
         let changed = false;
         if ((s.name || "") !== (session.name || "")) { session.name = s.name; changed = true; }
