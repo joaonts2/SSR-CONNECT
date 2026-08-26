@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   GraduationCap, KeyRound, LogOut, Loader2, CheckCircle2, AlertCircle, Lock, User,
-  BookOpen, Megaphone, AlertTriangle, Info,
+  BookOpen, Megaphone, AlertTriangle, Info, ClipboardList, ExternalLink,
 } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import {
@@ -159,6 +159,18 @@ export default function AlunoPortal() {
                 </p>
               )}
             </div>
+
+            {/* Acessar notas */}
+            <a href="https://estudante.seduc.pi.gov.br/login" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-4 rounded-3xl border border-border bg-gradient-to-br from-primary/10 to-secondary/10 p-5 transition hover:scale-[1.01] sm:p-6">
+              <div className="flex items-center gap-3">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-primary-foreground"><ClipboardList className="h-6 w-6" /></span>
+                <div>
+                  <h3 className="heading-font text-base font-bold">Notas e Boletim</h3>
+                  <p className="text-xs text-muted-foreground">Acesse o portal do estudante da SEDUC-PI para ver suas notas</p>
+                </div>
+              </div>
+              <ExternalLink className="h-5 w-5 shrink-0 text-primary" />
+            </a>
 
             {/* Avisos da turma */}
             <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
