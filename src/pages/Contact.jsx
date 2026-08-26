@@ -1,15 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { User, Mail, Phone, MessageSquare, Send, CheckCircle2, MapPin, Clock, Loader2 } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { useToast } from "@/components/ui/use-toast";
-
-const departments = [
-  { icon: MapPin, title: "Endereço", value: "Av. do Conhecimento, 1822 — Centro, São Paulo/SP" },
-  { icon: Phone, title: "Telefone", value: "(11) 4000-1822" },
-  { icon: Mail, title: "E-mail", value: "contato@cetisebastiaosoribeiro.edu.br" },
-  { icon: Clock, title: "Horário", value: "Seg a Sex, 7h30 às 17h30" },
-];
+import { base44 } from "@/api/base44Client";
+import { CONTACT_DEFAULTS } from "@/lib/contactDefaults";
 
 export default function Contact() {
   const { toast } = useToast();
@@ -17,6 +12,22 @@ export default function Contact() {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [info, setInfo] = useState(CONTACT_DEFAULTS);
+
+  // Carrega os textos editáveis pelo admin (com fallback para os padrão).
+  useEffect(() => {
+    base44.entities.ContactInfo
+      .list()
+      .then((rows) => { if (rows[0]) setInfo({ ...CONTACT_DEFAULTS, ...rows[0] }); })
+      .catch(() => {});
+  }, []);
+
+  const departments = [
+    { icon: MapPin, title: "Endereço", value: info.address },
+    { icon: Phone, title: "Telefone", value: info.phone },
+    { icon: Mail, title: "E-mail", value: info.email },
+    { icon: Clock, title: "Horário", value: info.hours },
+  ];
 
   const validate = () => {
     const e = {};
@@ -52,18 +63,17 @@ export default function Contact() {
     <div>
       <PageHero
         eyebrow="Contato"
-        title="Vamos conversar"
-        description="Tire dúvidas, agende uma visita ou inicie sua matrícula. Estamos aqui para ajudar."
+        title={info.hero_title}
+        description={info.hero_description}
       />
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-5">
           {/* Informações */}
           <div className="lg:col-span-2">
-            <h2 className="heading-font text-2xl font-bold">Informações de contato</h2>
+            <h2 className="heading-font text-2xl font-bold">{info.intro_heading}</h2>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-              Nossa secretaria atende durante o expediente escolar. Para matrículas, recomendamos agendar
-              uma visita guiada ao campus.
+              {info.intro_paragraph}
             </p>
             <div className="mt-8 space-y-4">
               {departments.map((d, i) => (
@@ -89,7 +99,7 @@ export default function Contact() {
             <div className="mt-8 overflow-hidden rounded-3xl border border-border shadow-xl">
               <iframe
                 title="Mapa do CETI"
-                src="https://www.openstreetmap.org/export/embed.html?bbox=-46.6593%2C-23.5613%2C-46.6373%2C-23.5413&layer=mapnik&marker=-23.5513%2C-46.6483"
+                src={info.map_url}
                 className="h-56 w-full"
                 loading="lazy"
               />
@@ -121,7 +131,7 @@ export default function Contact() {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-5">
-                  <h2 className="heading-font text-2xl font-bold">Envie sua mensagem</h2>
+                  <h2 className="heading-font text-2xl font-bold">{info.form_heading}</h2>
                   <div className="grid gap-5 sm:grid-cols-2">
                     <Field icon={User} label="Nome completo" error={errors.name}>
                       <input value={form.name} onChange={handleChange("name")} placeholder="Seu nome" className="w-full bg-transparent text-sm outline-none" />

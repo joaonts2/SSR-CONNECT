@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { Users, LogOut, GraduationCap, BookOpen, UserPlus, Loader2, AlertCircle, Info } from "lucide-react";
+import { Users, GraduationCap, BookOpen, UserPlus, Loader2, AlertCircle, Info } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { subjectsForCourse } from "@/lib/courses";
 import { changeParentPassword } from "@/lib/portalAuth";
 import MenuCard from "./MenuCard";
 import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
+import EventsCard from "./EventsCard";
+import PortalHeader from "./PortalHeader";
 
 const LOGIN_DOMAIN = "@aluno.cetisebastiaosoribeiro.edu.br";
 
@@ -48,20 +50,22 @@ export default function PaiDashboard({ session, onLogout }) {
 
   const turmas = children.map((c) => c.turma).filter(Boolean);
 
+  const chips = [
+    <span key="n" className="inline-flex items-center gap-1 rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary"><Users className="h-3 w-3" /> {children.length} filho(s)</span>,
+    ...turmas.map((t) => (
+      <span key={`t-${t}`} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"><GraduationCap className="h-3 w-3" /> {t}</span>
+    )),
+  ];
+
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary"><Users className="h-6 w-6" /></span>
-            <div>
-              <h2 className="heading-font text-lg font-bold">Olá, {session.name}</h2>
-              <p className="text-xs text-muted-foreground font-mono">{session.email}</p>
-            </div>
-          </div>
-          <button onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs font-medium transition hover:bg-muted"><LogOut className="h-3.5 w-3.5" /> Sair</button>
-        </div>
-      </div>
+      <PortalHeader
+        name={session.name}
+        meta={session.email}
+        avatarClass="bg-secondary text-secondary-foreground"
+        chips={chips}
+        onLogout={onLogout}
+      />
 
       {/* Vincular filho */}
       <form onSubmit={linkChild} className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
@@ -122,6 +126,8 @@ export default function PaiDashboard({ session, onLogout }) {
           </div>
         )}
       </div>
+
+      <EventsCard subtitle="Datas importantes da escola" />
 
       <NoticesCard title="Avisos" subtitle="Comunicados gerais e das turmas dos seus filhos" turmas={turmas} />
 

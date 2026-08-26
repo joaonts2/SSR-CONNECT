@@ -1,9 +1,11 @@
-import { GraduationCap, LogOut, AlertCircle, BookOpen, Info, ClipboardList, Megaphone, UtensilsCrossed, ArrowRight } from "lucide-react";
+import { GraduationCap, BookOpen, Info, ClipboardList, Megaphone, UtensilsCrossed, ArrowRight } from "lucide-react";
 import { changeAlunoPassword } from "@/lib/alunoAuth";
 import { subjectsForCourse } from "@/lib/courses";
 import MenuCard from "./MenuCard";
 import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
+import EventsCard from "./EventsCard";
+import PortalHeader from "./PortalHeader";
 
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
@@ -38,27 +40,22 @@ export default function AlunoDashboard({ session, onLogout }) {
     },
   ];
 
+  const chips = [
+    <span key="t" className="inline-flex items-center gap-1 rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary"><GraduationCap className="h-3 w-3" /> {session.turma || "Sem turma"}</span>,
+    session.course && <span key="c" className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600">{session.course}</span>,
+    <span key="d" className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"><BookOpen className="h-3 w-3" /> {subjects.length} disciplina(s)</span>,
+  ].filter(Boolean);
+
   return (
     <div className="space-y-6">
-      {/* Saudação */}
-      <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary/10 text-secondary"><GraduationCap className="h-6 w-6" /></span>
-            <div>
-              <h2 className="heading-font text-lg font-bold">Olá, {session.name}</h2>
-              <p className="text-xs text-muted-foreground">{session.turma || "Sem turma"} · {session.course || "Curso não definido"}</p>
-              <p className="text-xs text-muted-foreground font-mono">{session.login}</p>
-            </div>
-          </div>
-          <button onClick={onLogout} className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs font-medium transition hover:bg-muted"><LogOut className="h-3.5 w-3.5" /> Sair</button>
-        </div>
-        {session.mustChange && (
-          <p className="mt-5 flex items-center gap-2 rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-700 dark:bg-amber-500/10 dark:text-amber-400">
-            <AlertCircle className="h-4 w-4" /> Recomendamos que você troque sua senha agora.
-          </p>
-        )}
-      </div>
+      <PortalHeader
+        name={session.name}
+        meta={session.login}
+        avatarClass="bg-secondary text-secondary-foreground"
+        chips={chips}
+        mustChange={session.mustChange}
+        onLogout={onLogout}
+      />
 
       {/* Acessos rápidos */}
       <div>
@@ -120,6 +117,8 @@ export default function AlunoDashboard({ session, onLogout }) {
           </div>
         )}
       </div>
+
+      <EventsCard subtitle="Compromissos e datas importantes da escola" />
 
       <ChangePasswordCard onSubmit={(cur, next) => changeAlunoPassword(session.id, cur, next)} />
     </div>

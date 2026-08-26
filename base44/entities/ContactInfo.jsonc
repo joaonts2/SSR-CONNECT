@@ -1,0 +1,39 @@
+{
+  "name": "ContactInfo",
+  "type": "object",
+  "properties": {
+    "hero_title": {
+      "type": "string"
+    },
+    "hero_description": {
+      "type": "string"
+    },
+    "intro_heading": {
+      "type": "string"
+    },
+    "intro_paragraph": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "hours": {
+      "type": "string"
+    },
+    "map_url": {
+      "type": "string"
+    },
+    "form_heading": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "hero_title"
+  ]
+}

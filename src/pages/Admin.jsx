@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed } from "lucide-react";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
@@ -8,6 +8,7 @@ import TestimonialManager from "@/components/admin/TestimonialManager";
 import AdminAccessManager from "@/components/admin/AdminAccessManager";
 import StudentManager from "@/components/admin/StudentManager";
 import MenuManager from "@/components/admin/MenuManager";
+import ContactInfoManager from "@/components/admin/ContactInfoManager";
 
 const SECTIONS = [
   { key: "news", label: "Notícias", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
@@ -16,6 +17,7 @@ const SECTIONS = [
   { key: "students", label: "Alunos", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
   { key: "menu", label: "Cardápio", icon: UtensilsCrossed, desc: "Almoço e lanche da semana", Component: MenuManager },
   { key: "testimonials", label: "Depoimentos", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
+  { key: "contact", label: "Contato", icon: Phone, desc: "Textos e dados da página de contato", Component: ContactInfoManager },
   { key: "access", label: "Acesso", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
 ];
 

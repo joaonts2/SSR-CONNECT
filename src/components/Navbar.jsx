@@ -14,6 +14,7 @@ const mainLinks = [
   { label: "Sobre", to: "/sobre" },
   { label: "Cursos", to: "/cursos" },
   { label: "Professores", to: "/professores" },
+  { label: "Admin", to: "/admin" },
 ];
 
 const resourceLinks = [
