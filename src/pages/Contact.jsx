@@ -96,14 +96,6 @@ export default function Contact() {
               ))}
             </div>
 
-            <div className="mt-8 overflow-hidden rounded-3xl border border-border shadow-xl">
-              <iframe
-                title="Mapa do CETI"
-                src={info.map_url}
-                className="h-56 w-full"
-                loading="lazy"
-              />
-            </div>
           </div>
 
           {/* Formulário */}
