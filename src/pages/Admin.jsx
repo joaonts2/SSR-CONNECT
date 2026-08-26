@@ -40,7 +40,24 @@ export default function Admin() {
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4">
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            <div className="rounded-3xl border border-border bg-card p-3">
+            {/* Navegação mobile: barra horizontal fixa e rolável */}
+            <div className="sticky top-16 z-30 -mx-4 mb-2 bg-background/80 px-4 py-2 backdrop-blur lg:hidden">
+              <div className="scrollbar-thin flex gap-2 overflow-x-auto pb-1">
+                {SECTIONS.map((s) => (
+                  <button
+                    key={s.key}
+                    onClick={() => setActive(s.key)}
+                    className={`flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold transition ${active === s.key ? "bg-primary text-primary-foreground shadow-soft" : "border border-border bg-card text-muted-foreground"}`}
+                  >
+                    <s.icon className="h-4 w-4 shrink-0" />
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Navegação desktop: sidebar vertical */}
+            <div className="hidden rounded-3xl border border-border bg-card p-3 lg:block">
               {SECTIONS.map((s) => (
                 <button
                   key={s.key}
@@ -54,10 +71,10 @@ export default function Admin() {
                   </div>
                 </button>
               ))}
-            </div>
-            <div className="mt-4 flex items-start gap-2 rounded-2xl border border-border bg-card p-4 text-xs text-muted-foreground">
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-              Área protegida — apenas o e-mail cadastrado como administrador acessa este painel. Defina o e-mail na seção "Acesso".
+              <div className="mt-2 flex items-start gap-2 rounded-2xl border border-border bg-background p-4 text-xs text-muted-foreground">
+                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
+                Área protegida — apenas o e-mail cadastrado como administrador acessa este painel.
+              </div>
             </div>
           </aside>
 
