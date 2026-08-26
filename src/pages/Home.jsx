@@ -75,8 +75,9 @@ export default function Home() {
   return (
     <div>
       {/* PULSE BAR */}
-      <div className="bg-gradient-to-r from-primary via-blue-600 to-secondary px-4 py-2 text-center text-xs font-medium text-white">
-        🟢 Aulas procedendo normalmente · Resultados do Simulado ENEM publicados · Inscrições abertas para 2027
+      <div className="bg-gradient-to-r from-primary via-blue-600 to-secondary px-4 py-2.5 text-center text-xs font-medium tracking-wide text-white">
+        <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-white align-middle" />
+        Aulas procedendo normalmente · Resultados do Simulado ENEM publicados · Inscrições abertas para 2027
       </div>
 
       {/* HERO */}
@@ -88,7 +89,8 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 mx-auto max-w-5xl text-center">
-          <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-block rounded-full glass-ui px-5 py-2 text-xs font-semibold uppercase tracking-widest text-primary">
+          <motion.span initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="inline-flex items-center gap-2 rounded-full glass-ui px-5 py-2 text-xs font-semibold uppercase tracking-widest text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             CETI Sebastião Soares Ribeiro
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="heading-font mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance">

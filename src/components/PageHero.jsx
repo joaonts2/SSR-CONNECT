@@ -13,15 +13,16 @@ export default function PageHero({ eyebrow, title, description }) {
           className="max-w-3xl"
         >
           {eyebrow && (
-            <span className="inline-block rounded-full bg-secondary/15 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-secondary">
+            <span className="inline-flex items-center gap-2 rounded-full bg-secondary/12 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-secondary">
+              <span className="h-1.5 w-1.5 rounded-full bg-secondary" />
               {eyebrow}
             </span>
           )}
-          <h1 className="heading-font mt-5 text-4xl font-extrabold tracking-tight sm:text-5xl text-balance">
+          <h1 className="heading-font mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl text-balance">
             {title}
           </h1>
           {description && (
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground text-balance">
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
               {description}
             </p>
           )}

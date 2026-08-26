@@ -41,8 +41,8 @@ export default function Navbar() {
   useEffect(() => setOpen(false), [location.pathname]);
 
   const linkClass = ({ isActive }) =>
-    `relative text-sm font-medium tracking-wide transition-colors hover:text-primary ${
-      isActive ? "text-primary" : "text-foreground/80"
+    `relative text-sm font-medium tracking-wide transition-colors hover:text-primary after:absolute after:-bottom-1.5 after:left-0 after:h-0.5 after:rounded-full after:bg-primary after:transition-all after:duration-300 hover:after:w-full ${
+      isActive ? "text-primary after:w-full" : "text-foreground/70 after:w-0"
     }`;
 
   return (

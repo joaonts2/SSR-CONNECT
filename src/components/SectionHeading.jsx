@@ -12,15 +12,16 @@ export default function SectionHeading({ eyebrow, title, description, align = "c
       className={`max-w-2xl ${alignment}`}
     >
       {eyebrow && (
-        <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+        <span className="inline-flex items-center gap-2 rounded-full bg-primary/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
           {eyebrow}
         </span>
       )}
-      <h2 className="heading-font mt-4 text-3xl font-bold tracking-tight sm:text-4xl text-balance">
+      <h2 className="heading-font mt-5 text-3xl font-bold tracking-tight sm:text-[2.5rem] text-balance">
         {title}
       </h2>
       {description && (
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground text-balance">
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground text-pretty">
           {description}
         </p>
       )}
