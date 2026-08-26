@@ -1,44 +1,15 @@
-import { GraduationCap, BookOpen, Info, ClipboardList, Megaphone, UtensilsCrossed, ArrowRight } from "lucide-react";
+import { GraduationCap, BookOpen, Info } from "lucide-react";
 import { changeAlunoPassword } from "@/lib/alunoAuth";
 import { subjectsForCourse } from "@/lib/courses";
 import MenuCard from "./MenuCard";
 import NoticesCard from "./NoticesCard";
 import ChangePasswordCard from "./ChangePasswordCard";
-import EventsCard from "./EventsCard";
+import QuickLinks from "./QuickLinks";
+import DeadlinesCard from "./DeadlinesCard";
 import PortalHeader from "./PortalHeader";
-
-const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
 export default function AlunoDashboard({ session, onLogout }) {
   const subjects = subjectsForCourse(session.course);
-
-  const tiles = [
-    {
-      key: "notas",
-      icon: ClipboardList,
-      title: "Notas e Boletim",
-      desc: "Portal SEDUC-PI",
-      tone: "bg-primary text-primary-foreground",
-      href: "https://estudante.seduc.pi.gov.br/login",
-      external: true,
-    },
-    {
-      key: "avisos",
-      icon: Megaphone,
-      title: "Avisos da turma",
-      desc: "Comunicados oficiais",
-      tone: "bg-amber-500 text-white",
-      target: "avisos",
-    },
-    {
-      key: "cardapio",
-      icon: UtensilsCrossed,
-      title: "Cardápio semanal",
-      desc: "Almoço e lanche",
-      tone: "bg-secondary text-secondary-foreground",
-      target: "cardapio",
-    },
-  ];
 
   const chips = [
     <span key="t" className="inline-flex items-center gap-1 rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold text-secondary"><GraduationCap className="h-3 w-3" /> {session.turma || "Sem turma"}</span>,
@@ -57,30 +28,7 @@ export default function AlunoDashboard({ session, onLogout }) {
         onLogout={onLogout}
       />
 
-      {/* Acessos rápidos */}
-      <div>
-        <h3 className="heading-font mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Acessos rápidos</h3>
-        <div className="grid gap-3 sm:grid-cols-3">
-          {tiles.map((t) => {
-            const inner = (
-              <>
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${t.tone}`}><t.icon className="h-6 w-6" /></span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold leading-tight">{t.title}</p>
-                  <p className="text-xs text-muted-foreground">{t.desc}</p>
-                </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-              </>
-            );
-            const cls = "flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition hover:scale-[1.02] hover:border-primary/40";
-            return t.external ? (
-              <a key={t.key} href={t.href} target="_blank" rel="noopener noreferrer" className={cls}>{inner}</a>
-            ) : (
-              <button key={t.key} type="button" onClick={() => scrollTo(t.target)} className={cls}>{inner}</button>
-            );
-          })}
-        </div>
-      </div>
+      <QuickLinks />
 
       {/* Avisos da turma */}
       <div id="avisos" className="scroll-mt-4">
@@ -118,7 +66,7 @@ export default function AlunoDashboard({ session, onLogout }) {
         )}
       </div>
 
-      <EventsCard subtitle="Compromissos e datas importantes da escola" />
+      <DeadlinesCard />
 
       <ChangePasswordCard onSubmit={(cur, next) => changeAlunoPassword(session.id, cur, next)} />
     </div>
