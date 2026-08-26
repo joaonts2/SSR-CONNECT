@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save, Loader2, UtensilsCrossed, CheckCircle2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate } from "@/lib/adminApi";
 
 const DAYS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
@@ -33,9 +34,9 @@ export default function MenuManager() {
       const cur = form[d];
       if (!cur) continue;
       if (cur.id) {
-        await base44.entities.Menu.update(cur.id, { lanche_manha: cur.lanche_manha, almoco: cur.almoco, lanche_tarde: cur.lanche_tarde });
+        await adminUpdate("Menu", cur.id, { lanche_manha: cur.lanche_manha, almoco: cur.almoco, lanche_tarde: cur.lanche_tarde });
       } else {
-        await base44.entities.Menu.create({ weekday: d, lanche_manha: cur.lanche_manha, almoco: cur.almoco, lanche_tarde: cur.lanche_tarde, is_active: true });
+        await adminCreate("Menu", { weekday: d, lanche_manha: cur.lanche_manha, almoco: cur.almoco, lanche_tarde: cur.lanche_tarde, is_active: true });
       }
     }
     setSaving(false); setOk("Cardápio salvo!"); load();

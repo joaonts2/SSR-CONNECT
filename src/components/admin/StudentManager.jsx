@@ -3,6 +3,7 @@ import {
   Plus, Pencil, Trash2, Save, Loader2, Users, RefreshCw, KeyRound, Copy, Check, X,
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate, adminDelete, adminBulkCreate } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 import { genLogin, genPassword, sha256 } from "@/lib/alunoAuth";
 import { COURSE_OPTIONS } from "@/lib/courses";
@@ -53,7 +54,7 @@ export default function StudentManager() {
       const login = genLogin(form.name, existingLogins);
       const password = genPassword();
       const password_hash = await sha256(password);
-      await base44.entities.Student.create({
+      await adminCreate("Student", {
         name: form.name.trim(),
         turma: form.turma.trim(),
         course: form.course,
@@ -64,7 +65,7 @@ export default function StudentManager() {
       });
       setCreds([{ name: form.name.trim(), login, password }]);
     } else {
-      await base44.entities.Student.update(editing, {
+      await adminUpdate("Student", editing, {
         name: form.name.trim(),
         turma: form.turma.trim(),
         course: form.course,
@@ -79,13 +80,13 @@ export default function StudentManager() {
   const regenerate = async (it) => {
     const password = genPassword();
     const password_hash = await sha256(password);
-    await base44.entities.Student.update(it.id, { password_hash, password_changed: false });
+    await adminUpdate("Student", it.id, { password_hash, password_changed: false });
     setCreds([{ name: it.name, login: it.student_login, password }]);
     load();
   };
 
   const remove = async (id) => {
-    if (confirm("Excluir este aluno?")) { await base44.entities.Student.delete(id); load(); }
+    if (confirm("Excluir este aluno?")) { await adminDelete("Student", id); load(); }
   };
 
   // Adicionar uma turma inteira: cola nomes (um por linha), gera login+senha para todos.
@@ -111,7 +112,7 @@ export default function StudentManager() {
         is_active: true,
       });
     }
-    await base44.entities.Student.bulkCreate(records);
+    await adminBulkCreate("Student", records);
     setSaving(false); setBulkOpen(false); setBulk({ turma: "", course: "", names: "" });
     setCreds(generated);
     load();

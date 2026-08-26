@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, Loader2, Check, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
 const ROLES = ["Aluno", "Pai/Mãe", "Ex-Aluno", "Professor"];
@@ -27,15 +28,15 @@ export default function TestimonialManager() {
   const save = async (e) => {
     e.preventDefault();
     setSaving(true);
-    if (editing === "new") await base44.entities.Testimonial.create(form);
-    else await base44.entities.Testimonial.update(editing, form);
+    if (editing === "new") await adminCreate("Testimonial", form);
+    else await adminUpdate("Testimonial", editing, form);
     setSaving(false); setEditing(null); load();
   };
   const remove = async (id) => {
-    if (confirm("Excluir este depoimento?")) { await base44.entities.Testimonial.delete(id); load(); }
+    if (confirm("Excluir este depoimento?")) { await adminDelete("Testimonial", id); load(); }
   };
   const toggleApprove = async (it) => {
-    await base44.entities.Testimonial.update(it.id, { is_approved: !it.is_approved });
+    await adminUpdate("Testimonial", it.id, { is_approved: !it.is_approved });
     load();
   };
   const set = (k) => (e) =>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShieldCheck, Loader2, Mail, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 
 const SLOTS = [
   { key: "admin_email", label: "Administrador principal" },
@@ -49,17 +50,17 @@ export default function AdminAccessManager() {
       if (!trimmed) {
         // remover
         if (rec?.id) {
-          await base44.entities.Setting.delete(rec.id);
+          await adminDelete("Setting", rec.id);
           setRecords((p) => ({ ...p, [slot.key]: null }));
         }
         setMsgs((p) => ({ ...p, [slot.key]: { type: "success", text: "Administrador removido." } }));
         return null;
       }
       if (rec?.id) {
-        const updated = await base44.entities.Setting.update(rec.id, { value: trimmed });
+        const updated = await adminUpdate("Setting", rec.id, { value: trimmed });
         setRecords((p) => ({ ...p, [slot.key]: updated }));
       } else {
-        const created = await base44.entities.Setting.create({ key: slot.key, value: trimmed });
+        const created = await adminCreate("Setting", { key: slot.key, value: trimmed });
         setRecords((p) => ({ ...p, [slot.key]: created }));
       }
       setMsgs((p) => ({ ...p, [slot.key]: { type: "success", text: "Administrador salvo." } }));

@@ -30,10 +30,14 @@ export default function Footer() {
   const [info, setInfo] = useState(null);
 
   useEffect(() => {
-    base44.entities.ContactInfo
-      .list()
-      .then((rows) => setInfo(rows[0] ? { ...CONTACT_DEFAULTS, ...rows[0] } : { ...CONTACT_DEFAULTS }))
-      .catch(() => setInfo({ ...CONTACT_DEFAULTS }));
+    const load = () =>
+      base44.entities.ContactInfo
+        .list()
+        .then((rows) => setInfo(rows[0] ? { ...CONTACT_DEFAULTS, ...rows[0] } : { ...CONTACT_DEFAULTS }))
+        .catch(() => setInfo({ ...CONTACT_DEFAULTS }));
+    load();
+    const unsubscribe = base44.entities.ContactInfo.subscribe(() => load());
+    return unsubscribe;
   }, []);
 
   const c = info || CONTACT_DEFAULTS;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save, Loader2, CheckCircle2, Phone } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate } from "@/lib/adminApi";
 import { Field, inputCls } from "./ui";
 import { CONTACT_DEFAULTS } from "@/lib/contactDefaults";
 
@@ -25,9 +26,9 @@ export default function ContactInfoManager() {
     const { id, created_date, updated_date, created_by_id, ...payload } = info;
     try {
       if (id) {
-        await base44.entities.ContactInfo.update(id, payload);
+        await adminUpdate("ContactInfo", id, payload);
       } else {
-        const created = await base44.entities.ContactInfo.create(payload);
+        const created = await adminCreate("ContactInfo", payload);
         setInfo({ ...CONTACT_DEFAULTS, ...created });
       }
       setOk(true);

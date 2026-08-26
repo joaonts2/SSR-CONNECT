@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
 const CATEGORIES = ["Eventos", "Acadêmico", "Esportes", "Cultura", "Comunicado"];
@@ -33,12 +34,12 @@ export default function NewsManager() {
   const save = async (e) => {
     e.preventDefault();
     setSaving(true);
-    if (editing === "new") await base44.entities.News.create(form);
-    else await base44.entities.News.update(editing, form);
+    if (editing === "new") await adminCreate("News", form);
+    else await adminUpdate("News", editing, form);
     setSaving(false); setEditing(null); load();
   };
   const remove = async (id) => {
-    if (confirm("Excluir esta notícia?")) { await base44.entities.News.delete(id); load(); }
+    if (confirm("Excluir esta notícia?")) { await adminDelete("News", id); load(); }
   };
   const set = (k) => (e) =>
     setForm((f) => ({ ...f, [k]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));

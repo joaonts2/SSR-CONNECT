@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Megaphone, Loader2, Save, CheckCircle2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminCreate, adminUpdate } from "@/lib/adminApi";
 
 export default function TickerManager() {
   const [id, setId] = useState(null);
@@ -26,8 +27,8 @@ export default function TickerManager() {
     e.preventDefault();
     setSaving(true); setSaved(false);
     try {
-      if (id) await base44.entities.Ticker.update(id, { content, is_active: isActive });
-      else { const created = await base44.entities.Ticker.create({ content, is_active: isActive }); setId(created.id); }
+      if (id) await adminUpdate("Ticker", id, { content, is_active: isActive });
+      else { const created = await adminCreate("Ticker", { content, is_active: isActive }); setId(created.id); }
       setSaved(true); setTimeout(() => setSaved(false), 2500);
     } catch (e) { console.error(e); }
     setSaving(false);
