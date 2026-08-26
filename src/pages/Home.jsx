@@ -81,7 +81,7 @@ export default function Home() {
       </div>
 
       {/* HERO */}
-      <section className="relative flex min-h-[88vh] items-center justify-center overflow-hidden px-4">
+      <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4">
         <div className="absolute inset-0">
           <Image src={HERO_IMG} alt="Biblioteca moderna do CETI Sebastião Soares Ribeiro com estudantes colaborando" fittingType="fill" className="h-full w-full" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background" />
@@ -119,9 +119,9 @@ export default function Home() {
       </section>
 
       {/* KNOWLEDGE HUB */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
             <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }}>
               <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card">
@@ -136,7 +136,7 @@ export default function Home() {
       </section>
 
       {/* APRESENTAÇÃO */}
-      <section className="relative overflow-hidden border-y border-border bg-card/30 py-24">
+      <section className="relative overflow-hidden border-y border-border bg-card/30 py-20">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
@@ -165,9 +165,9 @@ export default function Home() {
       </section>
 
       {/* CURSOS */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Nossos Cursos" title="Técnico e formação regular, lado a lado" />
-        <div className="mt-14 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
           {courses.map((c, i) => (
             <motion.div key={c.name} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }} className="group rounded-3xl border border-border bg-card p-8 transition hover:border-primary/40 hover:shadow-xl">
               <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary"><c.icon className="h-6 w-6" /></span>
@@ -180,7 +180,7 @@ export default function Home() {
       </section>
 
       {/* NOTÍCIAS + AVISOS */}
-      <section className="border-y border-border bg-card/30 py-24">
+      <section className="border-y border-border bg-card/30 py-20">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
           <div className="lg:col-span-2">
             <div className="flex items-end justify-between">
@@ -241,12 +241,12 @@ export default function Home() {
       </section>
 
       {/* CALENDÁRIO */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between">
           <SectionHeading align="left" eyebrow="Agenda" title="Próximos eventos" />
           <Link to="/calendario" className="hidden text-sm font-semibold text-primary hover:underline sm:inline-flex">Calendário completo</Link>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {loading ? (
             <div className="col-span-full flex justify-center py-10"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
           ) : events.length === 0 ? (
@@ -275,7 +275,7 @@ export default function Home() {
       <TestimonialSection />
 
       {/* CTA */}
-      <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
         <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-primary-foreground shadow-card sm:px-16">
           <div className="absolute inset-0 opacity-30 prism-gradient" />
           <div className="relative">
