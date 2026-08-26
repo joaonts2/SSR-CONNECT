@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone } from "lucide-react";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import AdminOverview from "@/components/admin/AdminOverview";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
 import EventManager from "@/components/admin/EventManager";
@@ -11,6 +12,7 @@ import MenuManager from "@/components/admin/MenuManager";
 import ContactInfoManager from "@/components/admin/ContactInfoManager";
 
 const SECTIONS = [
+  { key: "overview", label: "Início", icon: LayoutDashboard, desc: "Visão geral e edição centralizada", Component: AdminOverview },
   { key: "news", label: "Notícias", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
   { key: "notices", label: "Avisos", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
   { key: "events", label: "Eventos", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
@@ -22,7 +24,7 @@ const SECTIONS = [
 ];
 
 export default function Admin() {
-  const [active, setActive] = useState("news");
+  const [active, setActive] = useState("overview");
   const Current = SECTIONS.find((s) => s.key === active).Component;
 
   return (
