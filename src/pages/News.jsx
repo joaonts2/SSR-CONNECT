@@ -42,7 +42,7 @@ export default function News() {
     <div>
       <PageHero eyebrow="Notícias e Avisos" title="Fique por dentro de tudo" description="Comunicados oficiais, notícias e avisos importantes para a comunidade escolar." />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-3">
           {/* Lista de notícias */}
           <div className="lg:col-span-2">
@@ -60,7 +60,7 @@ export default function News() {
 
             <div className="mt-8 space-y-5">
               {loading ? (
-                <div className="flex justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
+                <div className="flex justify-center py-12 sm:py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
               ) : (
                 <>
                   {filtered.map((n, i) => (

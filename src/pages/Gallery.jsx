@@ -38,7 +38,7 @@ export default function Gallery() {
       />
 
       {/* Álbuns de fotos */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
         <div className="flex items-center gap-2">
           <Camera className="h-5 w-5 text-primary" />
           <h2 className="heading-font text-2xl font-bold">Álbuns de Fotos</h2>
@@ -68,7 +68,7 @@ export default function Gallery() {
       </section>
 
       {/* Vídeos */}
-      <section className="border-t border-border bg-card/30 py-16">
+      <section className="border-t border-border bg-card/30 py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <Film className="h-5 w-5 text-secondary" />

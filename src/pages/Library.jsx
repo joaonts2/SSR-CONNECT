@@ -71,7 +71,7 @@ export default function Library() {
       </section>
 
       {/* Pesquisa */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full lg:max-w-md">
             <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
@@ -136,7 +136,7 @@ export default function Library() {
       </section>
 
       {/* Links úteis */}
-      <section className="border-t border-border bg-card/30 py-24">
+      <section className="border-t border-border bg-card/30 py-14 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow="Links Úteis" title="Recursos externos recomendados" />
           <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

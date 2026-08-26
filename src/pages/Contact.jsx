@@ -67,7 +67,7 @@ export default function Contact() {
         description={info.hero_description}
       />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-5">
           {/* Informações */}
           <div className="lg:col-span-2">
@@ -113,7 +113,7 @@ export default function Contact() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center py-16 text-center"
+                  className="flex flex-col items-center justify-center py-12 sm:py-16 text-center"
                 >
                   <span className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary/15 text-secondary">
                     <CheckCircle2 className="h-10 w-10" />

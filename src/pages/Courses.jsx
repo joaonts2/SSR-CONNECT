@@ -37,7 +37,7 @@ export default function Courses() {
         description="Cursos técnicos em Desenvolvimento de Sistemas e Marketing integrados ao Ensino Médio, além da formação regular comum a toda escola do Piauí."
       />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
         {/* Pesquisa + filtros */}
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full lg:max-w-md">

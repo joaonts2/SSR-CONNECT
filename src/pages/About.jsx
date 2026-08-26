@@ -50,7 +50,7 @@ export default function About() {
       />
 
       {/* História */}
-      <section className="mx-auto grid max-w-7xl items-center gap-14 px-4 py-24 sm:px-6 lg:grid-cols-2 lg:px-8">
+      <section className="mx-auto grid max-w-7xl items-center gap-14 px-4 py-14 sm:py-24 sm:px-6 lg:grid-cols-2 lg:px-8">
         <motion.div
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -82,7 +82,7 @@ export default function About() {
       </section>
 
       {/* Missão, Visão, Valores */}
-      <section className="border-y border-border bg-card/30 py-24">
+      <section className="border-y border-border bg-card/30 py-14 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading eyebrow="Pilares Institucionais" title="O que nos move" />
           <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -108,7 +108,7 @@ export default function About() {
       </section>
 
       {/* Diferenciais */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:py-24 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Diferenciais" title="Por que escolher o CETI" />
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {pillars.map((p, i) => (
@@ -132,7 +132,7 @@ export default function About() {
       </section>
 
       {/* Estrutura */}
-      <section className="border-y border-border bg-card/30 py-24">
+      <section className="border-y border-border bg-card/30 py-14 sm:py-24">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <div>
             <SectionHeading align="left" eyebrow="Infraestrutura" title="Espaços que inspiram aprendizado" />
@@ -186,7 +186,7 @@ export default function About() {
       </section>
 
       {/* Localização */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-14 sm:py-24 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Onde estamos" title="Venha nos visitar" description="Estamos no coração da cidade, com fácil acesso e estrutura completa." />
         <div className="mt-12 overflow-hidden rounded-3xl border border-border shadow-xl">
           <iframe

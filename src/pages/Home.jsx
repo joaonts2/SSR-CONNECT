@@ -79,7 +79,7 @@ export default function Home() {
       <TickerBanner />
 
       {/* HERO */}
-      <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-4">
+      <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden px-4 sm:min-h-[80vh]">
         <div className="absolute inset-0">
           <Image src={HERO_IMG} alt="Biblioteca moderna do CETI Sebastião Soares Ribeiro com estudantes colaborando" fittingType="fill" className="h-full w-full" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background" />
@@ -117,7 +117,7 @@ export default function Home() {
       </section>
 
       {/* KNOWLEDGE HUB */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
@@ -134,7 +134,7 @@ export default function Home() {
       </section>
 
       {/* APRESENTAÇÃO */}
-      <section className="relative overflow-hidden border-y border-border bg-card/30 py-20">
+      <section className="relative overflow-hidden border-y border-border bg-card/30 py-12 sm:py-20">
         <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
@@ -163,7 +163,7 @@ export default function Home() {
       </section>
 
       {/* CURSOS */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Nossos Cursos" title="Técnico e formação regular, lado a lado" />
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {courses.map((c, i) => (
@@ -178,7 +178,7 @@ export default function Home() {
       </section>
 
       {/* NOTÍCIAS + AVISOS */}
-      <section className="border-y border-border bg-card/30 py-20">
+      <section className="border-y border-border bg-card/30 py-12 sm:py-20">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-3 lg:px-8">
           <div className="lg:col-span-2">
             <div className="flex items-end justify-between">
@@ -239,7 +239,7 @@ export default function Home() {
       </section>
 
       {/* CALENDÁRIO */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
         <div className="flex items-end justify-between">
           <SectionHeading align="left" eyebrow="Agenda" title="Próximos eventos" />
           <Link to="/calendario" className="hidden text-sm font-semibold text-primary hover:underline sm:inline-flex">Calendário completo</Link>

@@ -64,7 +64,7 @@ export default function Calendar() {
     <div>
       <PageHero eyebrow="Calendário Escolar" title="Organize seu ano letivo" description="Provas, eventos, reuniões e feriados — tudo em um calendário claro e acessível." />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:py-16 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-3">
           {/* Calendário */}
           <div className="lg:col-span-2">
@@ -78,7 +78,7 @@ export default function Calendar() {
               </div>
 
               {loading ? (
-                <div className="flex justify-center py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
+                <div className="flex justify-center py-12 sm:py-16"><Loader2 className="h-6 w-6 animate-spin text-primary" /></div>
               ) : (
                 <>
                   <div className="mt-6 grid grid-cols-7 gap-1.5">
