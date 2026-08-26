@@ -41,7 +41,7 @@ export default function TestimonialSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeading
           eyebrow="Comunidade"
-          title="O que dizem sobre a Prism"
+          title="O que dizem sobre o CETI"
           description="Alunos, pais e ex-alunos compartilham suas experiências no colégio."
         />
 
@@ -99,7 +99,7 @@ export default function TestimonialSection() {
                   {ROLES.map((r) => <option key={r}>{r}</option>)}
                 </select>
               </div>
-              <textarea required rows={3} value={form.content} onChange={set("content")} placeholder="Conte sua experiência na Prism..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
+              <textarea required rows={3} value={form.content} onChange={set("content")} placeholder="Conte sua experiência no CETI..." className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <label className="flex items-center gap-3 text-sm">
                   Avaliação:
