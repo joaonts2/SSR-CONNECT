@@ -49,9 +49,10 @@ export default function MenuCard() {
                   <p className={`text-sm font-semibold ${isToday ? "text-primary" : ""}`}>{d}</p>
                   {isToday && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-primary">Hoje</span>}
                 </div>
-                <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  <p className="text-sm"><span className="text-xs font-semibold uppercase text-muted-foreground">Almoço: </span><span className="text-foreground">{item?.almoco || "—"}</span></p>
-                  <p className="text-sm"><span className="text-xs font-semibold uppercase text-muted-foreground">Lanche: </span><span className="text-foreground">{item?.lanche || "—"}</span></p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-3">
+                  <p className="text-sm"><span className="block text-[10px] font-semibold uppercase text-muted-foreground">Lanche da manhã</span><span className="text-foreground">{item?.lanche_manha || "—"}</span></p>
+                  <p className="text-sm"><span className="block text-[10px] font-semibold uppercase text-muted-foreground">Almoço</span><span className="text-foreground">{item?.almoco || "—"}</span></p>
+                  <p className="text-sm"><span className="block text-[10px] font-semibold uppercase text-muted-foreground">Lanche da tarde</span><span className="text-foreground">{item?.lanche_tarde || "—"}</span></p>
                 </div>
               </div>
             );

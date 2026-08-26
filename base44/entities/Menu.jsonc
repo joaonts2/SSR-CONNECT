@@ -15,10 +15,13 @@
       ],
       "default": "Segunda"
     },
+    "lanche_manha": {
+      "type": "string"
+    },
     "almoco": {
       "type": "string"
     },
-    "lanche": {
+    "lanche_tarde": {
       "type": "string"
     },
     "is_active": {

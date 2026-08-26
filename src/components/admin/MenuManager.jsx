@@ -16,7 +16,7 @@ export default function MenuManager() {
     const map = {};
     for (const d of DAYS) {
       const r = all.find((x) => x.weekday === d);
-      map[d] = { id: r?.id, almoco: r?.almoco || "", lanche: r?.lanche || "" };
+      map[d] = { id: r?.id, lanche_manha: r?.lanche_manha || "", almoco: r?.almoco || "", lanche_tarde: r?.lanche_tarde || "" };
     }
     setForm(map);
     setLoading(false);
@@ -33,9 +33,9 @@ export default function MenuManager() {
       const cur = form[d];
       if (!cur) continue;
       if (cur.id) {
-        await base44.entities.Menu.update(cur.id, { almoco: cur.almoco, lanche: cur.lanche });
+        await base44.entities.Menu.update(cur.id, { lanche_manha: cur.lanche_manha, almoco: cur.almoco, lanche_tarde: cur.lanche_tarde });
       } else {
-        await base44.entities.Menu.create({ weekday: d, almoco: cur.almoco, lanche: cur.lanche, is_active: true });
+        await base44.entities.Menu.create({ weekday: d, lanche_manha: cur.lanche_manha, almoco: cur.almoco, lanche_tarde: cur.lanche_tarde, is_active: true });
       }
     }
     setSaving(false); setOk("Cardápio salvo!"); load();
@@ -49,7 +49,7 @@ export default function MenuManager() {
         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><UtensilsCrossed className="h-5 w-5" /></span>
         <div>
           <h2 className="heading-font text-2xl font-bold">Cardápio do refeitório</h2>
-          <p className="text-sm text-muted-foreground">Defina o almoço e o lanche de cada dia da semana</p>
+          <p className="text-sm text-muted-foreground">Defina o lanche da manhã, o almoço e o lanche da tarde de cada dia</p>
         </div>
       </div>
 
@@ -63,14 +63,18 @@ export default function MenuManager() {
         {DAYS.map((d) => (
           <div key={d} className="rounded-2xl border border-border bg-card p-4">
             <h3 className="heading-font text-sm font-bold">{d}</h3>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <div className="mt-3 grid gap-3 sm:grid-cols-3">
+              <div>
+                <label className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Lanche da manhã</label>
+                <textarea rows={2} value={form[d]?.lanche_manha || ""} onChange={set(d, "lanche_manha")} className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none ring-primary transition focus:ring-2" placeholder="Ex.: Pão com manteiga, suco..." />
+              </div>
               <div>
                 <label className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Almoço</label>
                 <textarea rows={2} value={form[d]?.almoco || ""} onChange={set(d, "almoco")} className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none ring-primary transition focus:ring-2" placeholder="Ex.: Arroz, feijão, carne..." />
               </div>
               <div>
-                <label className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Lanche</label>
-                <textarea rows={2} value={form[d]?.lanche || ""} onChange={set(d, "lanche")} className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none ring-primary transition focus:ring-2" placeholder="Ex.: Pão com manteiga, suco..." />
+                <label className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Lanche da tarde</label>
+                <textarea rows={2} value={form[d]?.lanche_tarde || ""} onChange={set(d, "lanche_tarde")} className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none ring-primary transition focus:ring-2" placeholder="Ex.: Bolo, fruta, leite..." />
               </div>
             </div>
           </div>
