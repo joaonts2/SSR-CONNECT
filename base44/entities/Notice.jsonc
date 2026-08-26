@@ -27,6 +27,9 @@
       ],
       "default": "Todos"
     },
+    "turma": {
+      "type": "string"
+    },
     "date": {
       "type": "string",
       "format": "date"

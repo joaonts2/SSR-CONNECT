@@ -5,7 +5,7 @@ import { Modal, Field, inputCls } from "./ui";
 
 const PRIORITIES = ["normal", "alta", "urgente"];
 const AUDIENCES = ["Todos", "Alunos", "Pais", "Professores"];
-const empty = { title: "", content: "", priority: "normal", audience: "Todos", date: "", is_active: true };
+const empty = { title: "", content: "", priority: "normal", audience: "Todos", turma: "", date: "", is_active: true };
 
 export default function NoticeManager() {
   const [items, setItems] = useState([]);
@@ -60,6 +60,7 @@ export default function NoticeManager() {
                 <div className="flex items-center gap-2">
                   <span className={`text-[11px] font-semibold uppercase ${priColor(it.priority)}`}>{it.priority}</span>
                   <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">{it.audience}</span>
+                  {it.turma && <span className="rounded-full bg-secondary/10 px-2 py-0.5 text-[11px] text-secondary">{it.turma}</span>}
                 </div>
                 <h3 className="mt-1 font-semibold">{it.title}</h3>
                 <p className="text-xs text-muted-foreground">{it.content}</p>
@@ -84,6 +85,10 @@ export default function NoticeManager() {
               <Field label="Público"><select value={form.audience} onChange={set("audience")} className={inputCls}>{AUDIENCES.map((a) => <option key={a}>{a}</option>)}</select></Field>
               <Field label="Data"><input type="date" value={form.date} onChange={set("date")} className={inputCls} /></Field>
             </div>
+            <Field label="Turma (opcional — vazio = todos)">
+              <input value={form.turma || ""} onChange={set("turma")} placeholder="Ex.: 3 A sistema" list="notices-turmas" className={inputCls} />
+              <datalist id="notices-turmas">{Array.from(new Set(items.map((i) => i.turma).filter(Boolean))).sort().map((t) => <option key={t} value={t} />)}</datalist>
+            </Field>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} className="h-4 w-4 rounded" /> Ativo no mural</label>
             <div className="flex justify-end gap-2 pt-2">
               <button type="button" onClick={close} className="rounded-full border border-border px-5 py-2.5 text-sm font-medium">Cancelar</button>

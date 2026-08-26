@@ -5,8 +5,9 @@ import {
 import { base44 } from "@/api/base44Client";
 import { Modal, Field, inputCls } from "./ui";
 import { genLogin, genPassword, sha256 } from "@/lib/alunoAuth";
+import { COURSE_OPTIONS } from "@/lib/courses";
 
-const empty = { name: "", turma: "", enrollment: "", is_active: true };
+const empty = { name: "", turma: "", course: "", enrollment: "", is_active: true };
 
 export default function StudentManager() {
   const [items, setItems] = useState([]);
@@ -16,7 +17,7 @@ export default function StudentManager() {
   const [form, setForm] = useState(empty);
   const [saving, setSaving] = useState(false);
   const [bulkOpen, setBulkOpen] = useState(false);
-  const [bulk, setBulk] = useState({ turma: "", names: "" });
+  const [bulk, setBulk] = useState({ turma: "", course: "", names: "" });
   const [creds, setCreds] = useState(null); // [{name, login, password}]
   const [copied, setCopied] = useState(null);
 
@@ -39,7 +40,7 @@ export default function StudentManager() {
   };
 
   const openNew = () => { setForm(empty); setEditing("new"); };
-  const openEdit = (it) => { setForm({ name: it.name, turma: it.turma, enrollment: it.enrollment || "", is_active: it.is_active }); setEditing(it.id); };
+  const openEdit = (it) => { setForm({ name: it.name, turma: it.turma, course: it.course || "", enrollment: it.enrollment || "", is_active: it.is_active }); setEditing(it.id); };
   const close = () => setEditing(null);
   const set = (k) => (e) =>
     setForm((f) => ({ ...f, [k]: e.target.type === "checkbox" ? e.target.checked : e.target.value }));
@@ -55,6 +56,7 @@ export default function StudentManager() {
       await base44.entities.Student.create({
         name: form.name.trim(),
         turma: form.turma.trim(),
+        course: form.course,
         login,
         password_hash,
         enrollment: form.enrollment.trim(),
@@ -65,6 +67,7 @@ export default function StudentManager() {
       await base44.entities.Student.update(editing, {
         name: form.name.trim(),
         turma: form.turma.trim(),
+        course: form.course,
         enrollment: form.enrollment.trim(),
         is_active: form.is_active,
       });
@@ -102,13 +105,14 @@ export default function StudentManager() {
       records.push({
         name,
         turma: bulk.turma.trim(),
+        course: bulk.course,
         login,
         password_hash: await sha256(password),
         is_active: true,
       });
     }
     await base44.entities.Student.bulkCreate(records);
-    setSaving(false); setBulkOpen(false); setBulk({ turma: "", names: "" });
+    setSaving(false); setBulkOpen(false); setBulk({ turma: "", course: "", names: "" });
     setCreds(generated);
     load();
   };
@@ -180,6 +184,7 @@ export default function StudentManager() {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-secondary/10 px-2.5 py-0.5 text-[11px] font-semibold uppercase text-secondary">{it.turma}</span>
+                  {it.course && <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-600">{it.course}</span>}
                   {it.password_changed && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] text-primary">Senha trocada</span>}
                   {!it.is_active && <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">Inativo</span>}
                 </div>
@@ -205,6 +210,7 @@ export default function StudentManager() {
             <Field label="Turma"><input required value={form.turma} onChange={set("turma")} placeholder="Ex.: 1º Ano A" list="turmas-list" className={inputCls} />
               <datalist id="turmas-list">{turmas.filter((t) => t !== "Todas").map((t) => <option key={t} value={t} />)}</datalist>
             </Field>
+            <Field label="Curso"><select value={form.course} onChange={set("course")} className={inputCls}><option value="">Selecione o curso...</option>{COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
             <Field label="Matrícula (opcional)"><input value={form.enrollment} onChange={set("enrollment")} className={inputCls} /></Field>
             <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={form.is_active} onChange={set("is_active")} className="h-4 w-4 rounded" /> Ativo</label>
             <div className="flex justify-end gap-2 pt-2">
@@ -221,6 +227,7 @@ export default function StudentManager() {
         <Modal title="Adicionar turma inteira" onClose={() => setBulkOpen(false)}>
           <form onSubmit={saveBulk} className="space-y-4">
             <Field label="Turma"><input required value={bulk.turma} onChange={(e) => setBulk((b) => ({ ...b, turma: e.target.value }))} placeholder="Ex.: 1º Ano A" className={inputCls} /></Field>
+            <Field label="Curso"><select value={bulk.course} onChange={(e) => setBulk((b) => ({ ...b, course: e.target.value }))} className={inputCls}><option value="">Selecione o curso...</option>{COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
             <Field label="Nomes dos alunos (um por linha)">
               <textarea rows={8} required value={bulk.names} onChange={(e) => setBulk((b) => ({ ...b, names: e.target.value }))} placeholder={"João Silva\nMaria Souza\n..."} className={inputCls} />
             </Field>

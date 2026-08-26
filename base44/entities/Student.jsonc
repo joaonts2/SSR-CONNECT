@@ -8,6 +8,9 @@
     "turma": {
       "type": "string"
     },
+    "course": {
+      "type": "string"
+    },
     "login": {
       "type": "string"
     },
