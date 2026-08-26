@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   GraduationCap, KeyRound, LogOut, Loader2, CheckCircle2, AlertCircle, Lock, User,
-  BookOpen, Megaphone, AlertTriangle, Info, ClipboardList, ExternalLink,
+  BookOpen, Megaphone, AlertTriangle, Info, ClipboardList, ExternalLink, UtensilsCrossed,
 } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import {
@@ -105,6 +105,27 @@ export default function AlunoPortal() {
 
   const subjects = session ? subjectsForCourse(session.course) : [];
 
+  const [menu, setMenu] = useState([]);
+  const [loadingMenu, setLoadingMenu] = useState(false);
+  useEffect(() => {
+    if (!session) { setMenu([]); return; }
+    let active = true;
+    (async () => {
+      setLoadingMenu(true);
+      try {
+        const all = await base44.entities.Menu.filter({ is_active: true });
+        if (active) setMenu(all);
+      } catch (e) { console.error(e); } finally { if (active) setLoadingMenu(false); }
+    })();
+    return () => { active = false; };
+  }, [session]);
+
+  const todayName = () => {
+    const d = new Date().toLocaleDateString("pt-BR", { weekday: "long" });
+    const base = d.replace("-feira", "").trim();
+    return base.charAt(0).toUpperCase() + base.slice(1);
+  };
+
   return (
     <div>
       <PageHero eyebrow="Portal do Aluno" title="Acesse sua conta" description="Entre com o login e a senha que a escola entregou para você. Veja suas disciplinas e os avisos da sua turma." />
@@ -199,6 +220,41 @@ export default function AlunoPortal() {
                           </div>
                           <p className="mt-0.5 text-sm font-semibold">{n.title}</p>
                           <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{n.content}</p>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            {/* Cardápio do refeitório */}
+            <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
+              <div className="flex items-center gap-3">
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><UtensilsCrossed className="h-5 w-5" /></span>
+                <div>
+                  <h3 className="heading-font text-base font-bold">Cardápio do refeitório</h3>
+                  <p className="text-xs text-muted-foreground">O que será servido no almoço e no lanche esta semana</p>
+                </div>
+              </div>
+              <div className="mt-5 space-y-2">
+                {loadingMenu ? (
+                  <div className="flex justify-center py-6"><Loader2 className="h-5 w-5 animate-spin text-primary" /></div>
+                ) : menu.length === 0 ? (
+                  <p className="py-6 text-center text-sm text-muted-foreground">Cardápio ainda não publicado.</p>
+                ) : (
+                  ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"].map((d) => {
+                    const item = menu.find((m) => m.weekday === d);
+                    const isToday = d === todayName();
+                    return (
+                      <div key={d} className={`rounded-2xl border p-4 ${isToday ? "border-primary bg-primary/5" : "border-border bg-background"}`}>
+                        <div className="flex items-center justify-between">
+                          <p className={`text-sm font-semibold ${isToday ? "text-primary" : ""}`}>{d}</p>
+                          {isToday && <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-primary">Hoje</span>}
+                        </div>
+                        <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                          <p className="text-sm"><span className="text-xs font-semibold uppercase text-muted-foreground">Almoço: </span><span className="text-foreground">{item?.almoco || "—"}</span></p>
+                          <p className="text-sm"><span className="text-xs font-semibold uppercase text-muted-foreground">Lanche: </span><span className="text-foreground">{item?.lanche || "—"}</span></p>
                         </div>
                       </div>
                     );

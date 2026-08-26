@@ -1,0 +1,32 @@
+{
+  "name": "Menu",
+  "type": "object",
+  "properties": {
+    "weekday": {
+      "type": "string",
+      "enum": [
+        "Segunda",
+        "Ter\u00e7a",
+        "Quarta",
+        "Quinta",
+        "Sexta",
+        "S\u00e1bado",
+        "Domingo"
+      ],
+      "default": "Segunda"
+    },
+    "almoco": {
+      "type": "string"
+    },
+    "lanche": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "weekday"
+  ]
+}
