@@ -16,6 +16,10 @@ const hubTiles = [
   { icon: CalendarDays, title: "Calendário Escolar", desc: "Provas, eventos, feriados e reuniões em um só lugar.", to: "/calendario", color: "from-emerald-500 to-emerald-600" },
   { icon: Newspaper, title: "Notícias e Avisos", desc: "Comunicados oficiais e atualizações da escola.", to: "/noticias", color: "from-amber-500 to-orange-500" },
   { icon: ImageIcon, title: "Galeria", desc: "Fotos e vídeos dos eventos e do dia a dia escolar.", to: "/galeria", color: "from-sky-500 to-indigo-500" },
+  { icon: GraduationCap, title: "Portal do Aluno", desc: "Acesso a notas, materiais, aulas e avisos da turma.", to: "/portal-aluno", color: "from-violet-500 to-purple-600" },
+  { icon: Users, title: "Sobre a Escola", desc: "Conheça a história, missão e estrutura do CETI.", to: "/sobre", color: "from-rose-500 to-pink-600" },
+  { icon: Code2, title: "Cursos e Turmas", desc: "Cursos técnicos integrados e formação regular.", to: "/cursos", color: "from-emerald-500 to-teal-600" },
+  { icon: Megaphone, title: "Fale Conosco", desc: "Dúvidas, matrículas e contato com a secretaria.", to: "/contato", color: "from-amber-500 to-orange-500" },
 ];
 
 const courses = [
