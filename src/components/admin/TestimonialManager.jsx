@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, Loader2, Check, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
 const ROLES = ["Aluno", "Pai/Mãe", "Ex-Aluno", "Professor"];
@@ -16,7 +16,7 @@ export default function TestimonialManager() {
 
   const load = async () => {
     setLoading(true);
-    setItems(await base44.entities.Testimonial.list("-created_date"));
+    setItems(await adminList("Testimonial", { sort: "-created_date" }));
     setLoading(false);
   };
   useEffect(() => { load(); }, []);

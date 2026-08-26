@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save, Loader2, CheckCircle2, Phone } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate } from "@/lib/adminApi";
 import { Field, inputCls } from "./ui";
 import { CONTACT_DEFAULTS } from "@/lib/contactDefaults";
 
@@ -12,8 +12,7 @@ export default function ContactInfoManager() {
   const [ok, setOk] = useState(false);
 
   useEffect(() => {
-    base44.entities.ContactInfo
-      .list()
+    adminList("ContactInfo")
       .then((rows) => setInfo(rows[0] ? { ...CONTACT_DEFAULTS, ...rows[0] } : { ...CONTACT_DEFAULTS }))
       .catch(() => setInfo({ ...CONTACT_DEFAULTS }));
   }, []);

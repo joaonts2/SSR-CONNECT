@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Megaphone, Loader2, Save, CheckCircle2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate } from "@/lib/adminApi";
 
 export default function TickerManager() {
   const [id, setId] = useState(null);
@@ -14,7 +14,7 @@ export default function TickerManager() {
   useEffect(() => {
     (async () => {
       try {
-        const rows = await base44.entities.Ticker.list();
+        const rows = await adminList("Ticker");
         const t = rows[0];
         if (t) { setId(t.id); setContent(t.content || ""); setIsActive(!!t.is_active); }
         else setContent("Aulas procedendo normalmente · Inscrições abertas para 2027");

@@ -3,7 +3,7 @@ import {
   Plus, Pencil, Trash2, Save, Loader2, Users, RefreshCw, KeyRound, Copy, Check, X,
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate, adminDelete, adminBulkCreate } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate, adminDelete, adminBulkCreate } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 import { genLogin, genPassword, sha256 } from "@/lib/alunoAuth";
 import { COURSE_OPTIONS } from "@/lib/courses";
@@ -24,7 +24,7 @@ export default function StudentManager() {
 
   const load = async () => {
     setLoading(true);
-    const all = await base44.entities.Student.list("turma");
+    const all = await adminList("Student", { sort: "turma" });
     setItems(all);
     setLoading(false);
   };

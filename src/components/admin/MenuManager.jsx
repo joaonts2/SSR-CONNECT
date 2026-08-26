@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Save, Loader2, UtensilsCrossed, CheckCircle2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate } from "@/lib/adminApi";
 
 const DAYS = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
@@ -13,7 +13,7 @@ export default function MenuManager() {
 
   const load = async () => {
     setLoading(true);
-    const all = await base44.entities.Menu.list();
+    const all = await adminList("Menu");
     const map = {};
     for (const d of DAYS) {
       const r = all.find((x) => x.weekday === d);

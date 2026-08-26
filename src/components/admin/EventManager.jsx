@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
 const TYPES = ["Prova", "Evento", "Feriado", "Reunião", "Atividade"];
@@ -16,7 +16,7 @@ export default function EventManager() {
 
   const load = async () => {
     setLoading(true);
-    setItems(await base44.entities.CalendarEvent.list("date"));
+    setItems(await adminList("CalendarEvent", { sort: "date" }));
     setLoading(false);
   };
   useEffect(() => { load(); }, []);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Newspaper, CalendarDays, Users, Megaphone } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { adminList } from "@/lib/adminApi";
 import NewsManager from "./NewsManager";
 import EventManager from "./EventManager";
 import StudentManager from "./StudentManager";
@@ -20,10 +21,10 @@ export default function AdminOverview() {
 
   useEffect(() => {
     Promise.all([
-      base44.entities.News.list().then((r) => r.length).catch(() => 0),
-      base44.entities.CalendarEvent.list().then((r) => r.length).catch(() => 0),
-      base44.entities.Student.list().then((r) => r.length).catch(() => 0),
-      base44.entities.Notice.filter({ is_active: true }).then((r) => r.length).catch(() => 0),
+      adminList("News").then((r) => r.length).catch(() => 0),
+      adminList("CalendarEvent").then((r) => r.length).catch(() => 0),
+      adminList("Student").then((r) => r.length).catch(() => 0),
+      adminList("Notice", { filter: { is_active: true } }).then((r) => r.length).catch(() => 0),
     ]).then(([news, events, students, notices]) => setCounts({ news, events, students, notices }));
   }, []);
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Pencil, Trash2, Save, Loader2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
+import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
 import { Modal, Field, inputCls } from "./ui";
 
 const PRIORITIES = ["normal", "alta", "urgente"];
@@ -17,7 +17,7 @@ export default function NoticeManager() {
 
   const load = async () => {
     setLoading(true);
-    setItems(await base44.entities.Notice.list("-created_date"));
+    setItems(await adminList("Notice", { sort: "-created_date" }));
     setLoading(false);
   };
   useEffect(() => { load(); }, []);
