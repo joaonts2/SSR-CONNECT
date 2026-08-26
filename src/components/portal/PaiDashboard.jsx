@@ -33,7 +33,7 @@ export default function PaiDashboard({ session, onLogout }) {
     try {
       let l = childLogin.trim().toLowerCase();
       if (l && !l.includes("@")) l = `${l}${LOGIN_DOMAIN}`;
-      const rows = await base44.entities.Student.filter({ login: l, is_active: true });
+      const rows = await base44.entities.Student.filter({ student_login: l, is_active: true });
       const s = rows[0];
       if (!s) throw new Error("Aluno não encontrado. Verifique o login informado.");
       if ((session.student_ids || []).includes(s.id)) throw new Error("Este filho já está vinculado.");
@@ -108,7 +108,7 @@ export default function PaiDashboard({ session, onLogout }) {
                     {c.course && <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-600">{c.course}</span>}
                   </div>
                   <p className="mt-1 font-semibold">{c.name}</p>
-                  <p className="text-xs text-muted-foreground font-mono">{c.login}</p>
+                  <p className="text-xs text-muted-foreground font-mono">{c.student_login}</p>
                   {subjects.length > 0 && (
                     <div className="mt-3 flex flex-wrap gap-1.5">
                       {subjects.map((s) => (

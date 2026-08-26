@@ -34,7 +34,7 @@ export default function AlunoPortal() {
     try {
       const a = await loginAluno(login, password);
       setSession({
-        type: "aluno", id: a.id, name: a.name, login: a.login,
+        type: "aluno", id: a.id, name: a.name, login: a.student_login,
         turma: a.turma, course: a.course || "", mustChange: !a.password_changed,
       });
       setSessionState(getSession());

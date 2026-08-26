@@ -84,7 +84,7 @@ function normalizeLogin(login) {
 export async function loginAluno(login, password) {
   const hash = await sha256(password);
   const rows = await base44.entities.Student.filter({
-    login: normalizeLogin(login),
+    student_login: normalizeLogin(login),
     is_active: true,
   });
   const aluno = rows[0];

@@ -31,7 +31,7 @@ export default function StudentManager() {
 
   const turmas = ["Todas", ...Array.from(new Set(items.map((i) => i.turma).filter(Boolean))).sort()];
   const filtered = turmaFilter === "Todas" ? items : items.filter((i) => i.turma === turmaFilter);
-  const existingLogins = items.map((i) => i.login);
+  const existingLogins = items.map((i) => i.student_login);
 
   const copy = (text, key) => {
     navigator.clipboard?.writeText(text);
@@ -57,7 +57,7 @@ export default function StudentManager() {
         name: form.name.trim(),
         turma: form.turma.trim(),
         course: form.course,
-        login,
+        student_login: login,
         password_hash,
         enrollment: form.enrollment.trim(),
         is_active: form.is_active,
@@ -80,7 +80,7 @@ export default function StudentManager() {
     const password = genPassword();
     const password_hash = await sha256(password);
     await base44.entities.Student.update(it.id, { password_hash, password_changed: false });
-    setCreds([{ name: it.name, login: it.login, password }]);
+    setCreds([{ name: it.name, login: it.student_login, password }]);
     load();
   };
 
@@ -106,7 +106,7 @@ export default function StudentManager() {
         name,
         turma: bulk.turma.trim(),
         course: bulk.course,
-        login,
+        student_login: login,
         password_hash: await sha256(password),
         is_active: true,
       });
@@ -189,7 +189,7 @@ export default function StudentManager() {
                   {!it.is_active && <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">Inativo</span>}
                 </div>
                 <h3 className="mt-1 font-semibold">{it.name}</h3>
-                <p className="text-xs text-muted-foreground font-mono">login: {it.login}{it.enrollment ? ` · matrícula: ${it.enrollment}` : ""}</p>
+                <p className="text-xs text-muted-foreground font-mono">login: {it.student_login}{it.enrollment ? ` · matrícula: ${it.enrollment}` : ""}</p>
               </div>
               <div className="flex shrink-0 gap-2">
                 <button onClick={() => regenerate(it)} title="Gerar nova senha" className="rounded-lg border border-border p-2 transition hover:bg-primary/10 hover:text-primary"><KeyRound className="h-4 w-4" /></button>

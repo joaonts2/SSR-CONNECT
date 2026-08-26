@@ -11,7 +11,7 @@
     "course": {
       "type": "string"
     },
-    "login": {
+    "student_login": {
       "type": "string"
     },
     "password_hash": {
@@ -32,7 +32,7 @@
   "required": [
     "name",
     "turma",
-    "login",
+    "student_login",
     "password_hash"
   ]
 }
