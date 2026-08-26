@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck, Loader2, Mail, Trash2, UserPlus } from "lucide-react";
+import { ShieldCheck, Loader2, Mail, Trash2 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 
 const SLOTS = [
