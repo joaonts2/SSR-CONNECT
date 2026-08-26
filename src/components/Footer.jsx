@@ -5,7 +5,7 @@ const cols = [
   {
     title: "Escola",
     links: [
-      { label: "Sobre a Prism", to: "/sobre" },
+      { label: "Sobre o CETI", to: "/sobre" },
       { label: "Corpo Docente", to: "/professores" },
       { label: "Cursos e Turmas", to: "/cursos" },
       { label: "Calendário Escolar", to: "/calendario" },

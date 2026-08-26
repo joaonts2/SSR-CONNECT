@@ -27,7 +27,7 @@
     },
     "author": {
       "type": "string",
-      "default": "Equipe Prism"
+      "default": "Equipe CETI"
     },
     "date": {
       "type": "string",

@@ -82,7 +82,7 @@ export default function Home() {
       {/* HERO */}
       <section className="relative flex min-h-[88vh] items-center justify-center overflow-hidden px-4">
         <div className="absolute inset-0">
-          <Image src={HERO_IMG} alt="Biblioteca moderna da Escola Prism com estudantes colaborando" fittingType="fill" className="h-full w-full" />
+          <Image src={HERO_IMG} alt="Biblioteca moderna do CETI Sebastião Soares Ribeiro com estudantes colaborando" fittingType="fill" className="h-full w-full" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/60 to-background" />
           <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
         </div>
