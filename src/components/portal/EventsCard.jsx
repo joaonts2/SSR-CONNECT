@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { CalendarDays, Loader2, MapPin } from "lucide-react";
+import { CalendarDays, Loader2, MapPin, CalendarPlus } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { googleCalendarLink } from "@/lib/googleCalendar";
 
 const fmt = (d) => {
   if (!d) return "";
@@ -57,6 +58,7 @@ export default function EventsCard({ title = "Próximos eventos", subtitle, limi
                   </div>
                   <p className="mt-0.5 text-sm font-semibold">{ev.title}</p>
                   {ev.description && <p className="mt-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">{ev.description}</p>}
+                  <a href={googleCalendarLink(ev)} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"><CalendarPlus className="h-3 w-3" /> Adicionar ao Google Agenda</a>
                 </div>
               </div>
             );

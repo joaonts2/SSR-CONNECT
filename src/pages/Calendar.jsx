@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, MapPin, GraduationCap, Megaphone, Loader2 } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { base44 } from "@/api/base44Client";
+import { googleCalendarLink } from "@/lib/googleCalendar";
 
 const typeColors = {
   Prova: "bg-amber-500",
@@ -123,6 +124,7 @@ export default function Calendar() {
                         {ev.description && <span>{ev.description}</span>}
                       </p>
                     </div>
+                    <a href={googleCalendarLink(ev)} target="_blank" rel="noreferrer" className="shrink-0 self-center rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-primary transition hover:bg-primary/10">Google Agenda</a>
                   </motion.div>
                 );
               })}
