@@ -180,6 +180,25 @@
 }
 .animate-float { animation: floatY 4s ease-in-out infinite; }
 
+/* Fundo animado — blobs de gradiente flutuantes, sutis */
+@keyframes blob1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -30px) scale(1.1); }
+  66% { transform: translate(-30px, 25px) scale(0.95); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-45px, 30px) scale(1.08); }
+  66% { transform: translate(30px, -25px) scale(1.12); }
+}
+@keyframes blob3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(25px, 35px) scale(1.1); }
+}
+.animate-blob1 { animation: blob1 22s ease-in-out infinite; }
+.animate-blob2 { animation: blob2 28s ease-in-out infinite; }
+.animate-blob3 { animation: blob3 24s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
