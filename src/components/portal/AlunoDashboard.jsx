@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import { GraduationCap, BookOpen, Info } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { setSession } from "@/lib/portalAuth";
 import { changeAlunoPassword } from "@/lib/alunoAuth";
 import { subjectsForCourse } from "@/lib/courses";
 import MenuCard from "./MenuCard";
@@ -10,6 +13,24 @@ import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
 
 export default function AlunoDashboard({ session, onLogout }) {
+  const [, setTick] = useState(0);
+  // Atualiza automaticamente o perfil quando o professor edita o cadastro.
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const s = await base44.entities.Student.get(session.id);
+        if (!active || !s) return;
+        let changed = false;
+        if ((s.name || "") !== (session.name || "")) { session.name = s.name; changed = true; }
+        if ((s.turma || "") !== (session.turma || "")) { session.turma = s.turma || ""; changed = true; }
+        if ((s.course || "") !== (session.course || "")) { session.course = s.course || ""; changed = true; }
+        if (changed) { setSession(session); setTick((t) => t + 1); }
+      } catch { /* offline ou indisponível — mantém sessão atual */ }
+    })();
+    return () => { active = false; };
+  }, [session.id]);
+
   const subjects = subjectsForCourse(session.course);
 
   const chips = [
