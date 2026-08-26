@@ -29,20 +29,23 @@ function slugifyName(name) {
 }
 
 // Gera um login único no padrão "primeiro.último" evitando colisões.
+// Compara o login COMPLETO (com sufixo de e-mail) contra os já existentes,
+// caso contrário "joao.silva" nunca colidiria com "joao.silva@..." e alunos
+// homônimos receberiam logins duplicados, quebrando o acesso ao portal.
 export function genLogin(name, existing = []) {
   const parts = slugifyName(name);
   const base =
     parts.length >= 2
       ? `${parts[0]}.${parts[parts.length - 1]}`
       : parts[0] || "aluno";
-  const taken = new Set(existing.map((l) => (l || "").toLowerCase()));
-  let login = base;
+  const taken = new Set((existing || []).map((l) => (l || "").toLowerCase()));
+  let login = `${base}${LOGIN_DOMAIN}`;
   let n = 1;
   while (taken.has(login.toLowerCase())) {
     n += 1;
-    login = `${base}${n}`;
+    login = `${base}${n}${LOGIN_DOMAIN}`;
   }
-  return `${login}${LOGIN_DOMAIN}`;
+  return login;
 }
 
 // Senha aleatória curta, sem caracteres ambíguos (0/O, 1/l).
@@ -69,11 +72,19 @@ export function clearAluno() {
   localStorage.removeItem(SESSION_KEY);
 }
 
+// Normaliza o login digitado: se o aluno informou só o "joao.silva" sem o
+// domínio institucional, completa automaticamente antes de buscar no banco.
+function normalizeLogin(login) {
+  let l = (login || "").trim().toLowerCase();
+  if (l && !l.includes("@")) l = `${l}${LOGIN_DOMAIN}`;
+  return l;
+}
+
 // Login do aluno: busca o cadastro pelo login e compara o hash da senha.
 export async function loginAluno(login, password) {
   const hash = await sha256(password);
   const rows = await base44.entities.Student.filter({
-    login: (login || "").trim().toLowerCase(),
+    login: normalizeLogin(login),
     is_active: true,
   });
   const aluno = rows[0];
