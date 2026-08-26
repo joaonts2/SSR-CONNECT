@@ -5,16 +5,17 @@ import NewsManager from "./NewsManager";
 import EventManager from "./EventManager";
 import StudentManager from "./StudentManager";
 
-const TABS = [
-  { key: "news", label: "Notícias", icon: Newspaper, Component: NewsManager },
-  { key: "events", label: "Eventos", icon: CalendarDays, Component: EventManager },
-  { key: "students", label: "Alunos", icon: Users, Component: StudentManager },
+const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+const SECTIONS = [
+  { key: "news", label: "Notícias", icon: Newspaper, Manager: NewsManager, desc: "Publicar e editar notícias do portal" },
+  { key: "events", label: "Eventos", icon: CalendarDays, Manager: EventManager, desc: "Calendário escolar, provas e atividades" },
+  { key: "students", label: "Alunos", icon: Users, Manager: StudentManager, desc: "Turmas, logins e senhas" },
 ];
 
-// Tela central do painel: contagem rápida + abas para editar notícias, eventos
-// e alunos sem precisar navegar pela barra lateral.
+// Tela centralizada do painel: todas as áreas de gestão visíveis ao mesmo tempo
+// em seções empilhadas, com navegação rápida por âncora para edição ágil.
 export default function AdminOverview() {
-  const [tab, setTab] = useState("news");
   const [counts, setCounts] = useState({ news: 0, events: 0, students: 0, notices: 0 });
 
   useEffect(() => {
@@ -33,13 +34,11 @@ export default function AdminOverview() {
     { key: "notices", icon: Megaphone, label: "Avisos ativos", tone: "text-primary bg-primary/10" },
   ];
 
-  const Active = TABS.find((t) => t.key === tab).Component;
-
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="heading-font text-2xl font-bold">Visão geral</h2>
-        <p className="text-sm text-muted-foreground">Edite notícias, eventos e alunos em uma única tela central.</p>
+        <h2 className="heading-font text-2xl font-bold">Painel central</h2>
+        <p className="text-sm text-muted-foreground">Gerencie notícias, eventos e alunos em uma única tela — tudo visível para edição rápida.</p>
       </div>
 
       {/* Cards de contagem */}
@@ -55,22 +54,33 @@ export default function AdminOverview() {
         ))}
       </div>
 
-      {/* Abas centrais */}
-      <div className="flex flex-wrap gap-2 border-b border-border pb-3">
-        {TABS.map((t) => (
+      {/* Navegação rápida por âncora */}
+      <div className="flex flex-wrap gap-2 border-b border-border pb-4">
+        {SECTIONS.map((s) => (
           <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition ${tab === t.key ? "bg-primary text-primary-foreground shadow-sm" : "border border-border bg-card text-muted-foreground hover:text-primary"}`}
+            key={s.key}
+            onClick={() => scrollTo(s.key)}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-primary"
           >
-            <t.icon className="h-4 w-4" /> {t.label}
-            <span className={`rounded-full px-2 py-0.5 text-[11px] font-bold ${tab === t.key ? "bg-primary-foreground/20 text-primary-foreground" : "bg-muted text-muted-foreground"}`}>{counts[t.key]}</span>
+            <s.icon className="h-4 w-4" /> {s.label}
+            <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-bold text-muted-foreground">{counts[s.key]}</span>
           </button>
         ))}
       </div>
 
-      {/* Gerenciador ativo */}
-      <Active />
+      {/* Seções empilhadas — todas editáveis na mesma tela */}
+      {SECTIONS.map((s) => (
+        <section key={s.key} id={s.key} className="scroll-mt-4 space-y-3">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary"><s.icon className="h-5 w-5" /></span>
+            <div>
+              <h3 className="heading-font text-lg font-bold">{s.label}</h3>
+              <p className="text-xs text-muted-foreground">{s.desc}</p>
+            </div>
+          </div>
+          <s.Manager />
+        </section>
+      ))}
     </div>
   );
 }
