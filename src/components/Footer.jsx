@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { GraduationCap, Mail, Phone, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { CONTACT_DEFAULTS } from "@/lib/contactDefaults";
 
 const cols = [
   {
@@ -24,6 +27,16 @@ const cols = [
 
 // Rodapé institucional completo
 export default function Footer() {
+  const [info, setInfo] = useState(null);
+
+  useEffect(() => {
+    base44.entities.ContactInfo
+      .list()
+      .then((rows) => setInfo(rows[0] ? { ...CONTACT_DEFAULTS, ...rows[0] } : { ...CONTACT_DEFAULTS }))
+      .catch(() => setInfo({ ...CONTACT_DEFAULTS }));
+  }, []);
+
+  const c = info || CONTACT_DEFAULTS;
   return (
     <footer className="relative mt-24 border-t border-border bg-card/50">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -45,13 +58,13 @@ export default function Footer() {
             </p>
             <div className="mt-6 space-y-2 text-sm text-muted-foreground">
               <p className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-primary" /> Av. do Conhecimento, 1822 — Centro
+                <MapPin className="h-4 w-4 text-primary" /> {c.address}
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-primary" /> (11) 4000-1822
+                <Phone className="h-4 w-4 text-primary" /> {c.phone}
               </p>
               <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" /> contato@cetisebastiaosoribeiro.edu.br
+                <Mail className="h-4 w-4 text-primary" /> {c.email}
               </p>
             </div>
           </div>
