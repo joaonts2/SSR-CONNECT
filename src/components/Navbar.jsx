@@ -13,7 +13,6 @@ const mainLinks = [
   { label: "Início", to: "/" },
   { label: "Sobre", to: "/sobre" },
   { label: "Cursos", to: "/cursos" },
-  { label: "Professores", to: "/professores" },
   { label: "Admin", to: "/admin" },
 ];
 
