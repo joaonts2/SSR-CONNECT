@@ -46,7 +46,7 @@ export default function NoticeManager() {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="heading-font text-2xl font-bold">Avisos</h2>
         <button onClick={openNew} className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:scale-105"><Plus className="h-4 w-4" /> Novo aviso</button>
       </div>
@@ -57,7 +57,7 @@ export default function NoticeManager() {
         <div className="mt-6 space-y-3">
           {items.map((it) => (
             <div key={it.id} className="flex items-start justify-between gap-4 rounded-2xl border border-border bg-card p-4">
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span className={`text-[11px] font-semibold uppercase ${priColor(it.priority)}`}>{it.priority}</span>
                   <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">{it.audience}</span>

@@ -122,7 +122,7 @@ export default function StudentManager() {
     <div>
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h2 className="heading-font text-2xl font-bold">Alunos</h2>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button onClick={() => setBulkOpen(true)} className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold transition hover:bg-muted">
             <Users className="h-4 w-4" /> Adicionar turma
           </button>
@@ -140,21 +140,21 @@ export default function StudentManager() {
             <button onClick={() => setCreds(null)} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
           </div>
           <div className="mt-3 overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full min-w-[26rem] text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase text-muted-foreground">
-                  <th className="py-2 pr-4">Aluno</th>
-                  <th className="py-2 pr-4">Login</th>
-                  <th className="py-2 pr-4">Senha</th>
+                  <th className="whitespace-nowrap py-2 pr-4">Aluno</th>
+                  <th className="whitespace-nowrap py-2 pr-4">Login</th>
+                  <th className="whitespace-nowrap py-2 pr-4">Senha</th>
                   <th className="py-2"></th>
                 </tr>
               </thead>
               <tbody>
                 {creds.map((c, i) => (
                   <tr key={i} className="border-t border-border">
-                    <td className="py-2 pr-4">{c.name}</td>
-                    <td className="py-2 pr-4 font-mono">{c.login}</td>
-                    <td className="py-2 pr-4 font-mono">{c.password}</td>
+                    <td className="whitespace-nowrap py-2 pr-4">{c.name}</td>
+                    <td className="whitespace-nowrap py-2 pr-4 font-mono">{c.login}</td>
+                    <td className="whitespace-nowrap py-2 pr-4 font-mono">{c.password}</td>
                     <td className="py-2">
                       <button onClick={() => copy(`${c.login} / ${c.password}`, i)} className="inline-flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs hover:bg-muted">
                         {copied === i ? <Check className="h-3.5 w-3.5 text-secondary" /> : <Copy className="h-3.5 w-3.5" />} Copiar
