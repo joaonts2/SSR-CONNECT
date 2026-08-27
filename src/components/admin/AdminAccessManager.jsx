@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ShieldCheck, Loader2, Mail, Trash2 } from "lucide-react";
-import { base44 } from "@/api/base44Client";
-import { adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
+import { adminCreate, adminUpdate, adminDelete, adminEmails } from "@/lib/adminApi";
 
 const SLOTS = [
   { key: "admin_email", label: "Administrador principal" },
@@ -19,7 +18,7 @@ export default function AdminAccessManager() {
   useEffect(() => {
     (async () => {
       try {
-        const rows = await base44.entities.Setting.list();
+        const rows = await adminEmails();
         const recMap = {};
         const mailMap = {};
         SLOTS.forEach((s) => {

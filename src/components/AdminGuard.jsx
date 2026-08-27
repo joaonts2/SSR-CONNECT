@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ShieldX, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
-import { base44 } from "@/api/base44Client";
+import { adminEmails } from "@/lib/adminApi";
 
 // Permite o acesso aos e-mails cadastrados como administrador (Setting keys admin_email, admin_email_2, admin_email_3).
 // Proteção extra: se nada foi configurado ainda, um usuário com role "admin" ainda entra para configurar.
@@ -17,9 +17,8 @@ export default function AdminGuard({ children }) {
     if (!isAuthenticated || !user) { setLoading(false); return; }
     (async () => {
       try {
-        const rows = await base44.entities.Setting.list();
+        const rows = await adminEmails();
         const emails = rows
-          .filter((r) => ADMIN_KEYS.includes(r.key))
           .map((r) => (r.value || "").toLowerCase().trim())
           .filter(Boolean);
         setAllowedEmails(emails);

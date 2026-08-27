@@ -32,13 +32,25 @@ export default async function (req) {
   try {
     const base44 = createClientFromRequest(req);
     const svc = base44.asServiceRole;
+    const body = await req.json();
+    const { action, entity } = body;
+
+    // Leitura da lista de e-mails administradores — accessível a qualquer chamador
+    // autenticado, pois o AdminGuard precisa dela para decidir o acesso. O RLS
+    // admin-only de Setting bloquearia a leitura pelo client do próprio usuário,
+    // trancando fora quem não tem role "admin" mas foi autorizado por e-mail.
+    if (action === "adminEmails") {
+      const rows = await svc.entities.Setting.list();
+      const out = rows
+        .filter((r) => ADMIN_KEYS.includes(r.key))
+        .map((r) => ({ id: r.id, key: r.key, value: r.value || "" }));
+      return Response.json({ rows: out });
+    }
 
     if (!(await isAdmin(base44, svc))) {
       return Response.json({ error: "Acesso restrito ao administrador." }, { status: 403 });
     }
 
-    const body = await req.json();
-    const { action, entity } = body;
     if (!ALLOWED.includes(entity)) {
       return Response.json({ error: "Entidade não permitida." }, { status: 400 });
     }

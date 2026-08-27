@@ -27,3 +27,6 @@ export function adminDelete(entity, id) {
 export function adminBulkCreate(entity, records) {
   return call({ action: "bulkCreate", entity, records }).then((d) => d.records);
 }
+export function adminEmails() {
+  return call({ action: "adminEmails" }).then((d) => d.rows);
+}
