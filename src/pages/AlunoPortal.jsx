@@ -35,7 +35,7 @@ export default function AlunoPortal() {
       const a = await loginAluno(login, password);
       setSession({
         type: "aluno", id: a.id, name: a.name, login: a.student_login,
-        turma: a.turma, course: a.course || "", mustChange: !a.password_changed,
+        turma: a.turma, course: a.course || "", mustChange: !a.password_changed, token: a.token,
       });
       setSessionState(getSession());
       setLogin(""); setPassword("");
@@ -45,23 +45,23 @@ export default function AlunoPortal() {
 
   const profLogin = async (email, pw) => {
     const t = await loginTeacher(email, pw);
-    setSession({ type: "professor", id: t.id, name: t.name, email: t.email, disciplines: t.disciplines || "", turmas: t.turmas || "" });
+    setSession({ type: "professor", id: t.id, name: t.name, email: t.email, disciplines: t.disciplines || "", turmas: t.turmas || "", token: t.token });
     setSessionState(getSession());
   };
   const profRegister = async ({ name, email, password, disciplines, turmas }) => {
     const t = await registerTeacher({ name, email, password, disciplines, turmas });
-    setSession({ type: "professor", id: t.id, name: t.name, email: t.email, disciplines: t.disciplines || "", turmas: t.turmas || "" });
+    setSession({ type: "professor", id: t.id, name: t.name, email: t.email, disciplines: t.disciplines || "", turmas: t.turmas || "", token: t.token });
     setSessionState(getSession());
   };
 
   const paiLogin = async (email, pw) => {
     const p = await loginParent(email, pw);
-    setSession({ type: "pai", id: p.id, name: p.name, email: p.email, student_ids: p.student_ids || [] });
+    setSession({ type: "pai", id: p.id, name: p.name, email: p.email, student_ids: p.student_ids || [], token: p.token });
     setSessionState(getSession());
   };
   const paiRegister = async ({ name, email, password }) => {
     const p = await registerParent({ name, email, password });
-    setSession({ type: "pai", id: p.id, name: p.name, email: p.email, student_ids: p.student_ids || [] });
+    setSession({ type: "pai", id: p.id, name: p.name, email: p.email, student_ids: p.student_ids || [], token: p.token });
     setSessionState(getSession());
   };
 

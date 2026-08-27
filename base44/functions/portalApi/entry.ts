@@ -3,9 +3,14 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 // Camada de autenticação e dados do Portal Escolar (aluno / professor / pai).
 // Roda com service role para contornar o RLS admin-only de Student/Parent/Teacher,
 // valida as credenciais e sessões no servidor e NUNCA retorna password_hash.
-// Grava apenas no backend; o cliente recebe objetos sanitizados.
+//
+// SEGURANÇA: nenhuma ação privilegiada confia em IDs enviados pelo cliente.
+// No login/registro o servidor emite um token de sessão assinado (HMAC-SHA256)
+// com { sub, role, exp }. Todas as ações subsequentes exigem esse token e usam
+// `sub` como identidade — o cliente não pode escolher o ID de outro usuário.
 
 const LOGIN_DOMAIN = "@aluno.cetisebastiaosoribeiro.edu.br";
+const TOKEN_TTL_MS = 1000 * 60 * 60 * 24 * 30; // 30 dias
 
 async function sha256(text) {
   const data = new TextEncoder().encode(text);
@@ -23,6 +28,71 @@ function normalizeLogin(login) {
 function normEmail(e) {
   return (e || "").trim().toLowerCase();
 }
+
+function parseTurmas(str) {
+  return (str || "").split(/[,;]/).map((s) => s.trim()).filter(Boolean);
+}
+
+// ---------- Tokens de sessão (HMAC-SHA256) ----------
+
+function b64url(bytes) {
+  const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  let s = "";
+  for (const b of arr) s += String.fromCharCode(b);
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function b64urlDecode(str) {
+  const norm = String(str).replace(/-/g, "+").replace(/_/g, "/");
+  const pad = norm.length % 4 ? "=".repeat(4 - (norm.length % 4)) : "";
+  const bin = atob(norm + pad);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes;
+}
+
+async function hmacKey(secret) {
+  return crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign", "verify"]
+  );
+}
+async function signToken(payload, secret) {
+  const data = b64url(new TextEncoder().encode(JSON.stringify(payload)));
+  const key = await hmacKey(secret);
+  const sig = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(data));
+  return data + "." + b64url(new Uint8Array(sig));
+}
+async function verifyToken(token, secret) {
+  if (!token || typeof token !== "string") return null;
+  const parts = token.split(".");
+  if (parts.length !== 2) return null;
+  const [data, sig] = parts;
+  const key = await hmacKey(secret);
+  let valid = false;
+  try {
+    valid = await crypto.subtle.verify(
+      "HMAC",
+      key,
+      b64urlDecode(sig),
+      new TextEncoder().encode(data)
+    );
+  } catch {
+    return null;
+  }
+  if (!valid) return null;
+  try {
+    const payload = JSON.parse(new TextDecoder().decode(b64urlDecode(data)));
+    if (payload.exp && Date.now() > payload.exp) return null;
+    return payload;
+  } catch {
+    return null;
+  }
+}
+
+// ---------- Sanitização (nunca expõe password_hash) ----------
 
 function sanitizeStudent(s) {
   if (!s) return null;
@@ -59,12 +129,33 @@ function sanitizeParent(p) {
   };
 }
 
+const UNAUTHORIZED = () =>
+  Response.json({ error: "Sessão inválida ou expirada. Faça login novamente." }, { status: 401 });
+
 export default async function (req) {
   try {
     const base44 = createClientFromRequest(req);
     const svc = base44.asServiceRole;
     const body = await req.json();
     const action = body.action;
+
+    const SECRET = process.env.PORTAL_TOKEN_SECRET;
+    if (!SECRET) {
+      return Response.json(
+        { error: "Servidor sem segredo de sessão configurado (PORTAL_TOKEN_SECRET)." },
+        { status: 500 }
+      );
+    }
+
+    // Verifica o token e garante o papel esperado. Retorna o payload ou null.
+    const auth = async (role) => {
+      const payload = await verifyToken(body.token, SECRET);
+      if (!payload) return null;
+      if (role && payload.role !== role) return null;
+      return payload;
+    };
+    const issue = (sub, role) =>
+      signToken({ sub, role, exp: Date.now() + TOKEN_TTL_MS }, SECRET);
 
     // ---------- Aluno ----------
     if (action === "studentLogin") {
@@ -77,22 +168,27 @@ export default async function (req) {
       if (!s || s.password_hash !== hash) {
         return Response.json({ error: "Login ou senha incorretos." }, { status: 401 });
       }
-      return Response.json({ student: sanitizeStudent(s) });
+      const token = await issue(s.id, "student");
+      return Response.json({ student: { ...sanitizeStudent(s), token } });
     }
 
     if (action === "studentProfile") {
-      const s = await svc.entities.Student.get(body.id);
+      const a = await auth("student");
+      if (!a) return UNAUTHORIZED();
+      const s = await svc.entities.Student.get(a.sub);
       if (!s) return Response.json({ error: "Aluno não encontrado." }, { status: 404 });
       return Response.json({ student: sanitizeStudent(s) });
     }
 
     if (action === "studentChangePassword") {
+      const a = await auth("student");
+      if (!a) return UNAUTHORIZED();
       const cur = await sha256(body.current);
-      const s = await svc.entities.Student.get(body.id);
+      const s = await svc.entities.Student.get(a.sub);
       if (!s || s.password_hash !== cur) {
         return Response.json({ error: "Senha atual incorreta." }, { status: 400 });
       }
-      await svc.entities.Student.update(body.id, {
+      await svc.entities.Student.update(a.sub, {
         password_hash: await sha256(body.next),
         password_changed: true,
       });
@@ -110,7 +206,8 @@ export default async function (req) {
       if (!t || t.password_hash !== hash) {
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      return Response.json({ teacher: sanitizeTeacher(t) });
+      const token = await issue(t.id, "teacher");
+      return Response.json({ teacher: { ...sanitizeTeacher(t), token } });
     }
 
     if (action === "teacherRegister") {
@@ -129,16 +226,19 @@ export default async function (req) {
         is_active: true,
         password_changed: true,
       });
-      return Response.json({ teacher: sanitizeTeacher(t) });
+      const token = await issue(t.id, "teacher");
+      return Response.json({ teacher: { ...sanitizeTeacher(t), token } });
     }
 
     if (action === "teacherChangePassword") {
+      const a = await auth("teacher");
+      if (!a) return UNAUTHORIZED();
       const cur = await sha256(body.current);
-      const t = await svc.entities.Teacher.get(body.id);
+      const t = await svc.entities.Teacher.get(a.sub);
       if (!t || t.password_hash !== cur) {
         return Response.json({ error: "Senha atual incorreta." }, { status: 400 });
       }
-      await svc.entities.Teacher.update(body.id, {
+      await svc.entities.Teacher.update(a.sub, {
         password_hash: await sha256(body.next),
         password_changed: true,
       });
@@ -156,7 +256,8 @@ export default async function (req) {
       if (!p || p.password_hash !== hash) {
         return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
       }
-      return Response.json({ parent: sanitizeParent(p) });
+      const token = await issue(p.id, "parent");
+      return Response.json({ parent: { ...sanitizeParent(p), token } });
     }
 
     if (action === "parentRegister") {
@@ -174,40 +275,65 @@ export default async function (req) {
         is_active: true,
         password_changed: true,
       });
-      return Response.json({ parent: sanitizeParent(p) });
+      const token = await issue(p.id, "parent");
+      return Response.json({ parent: { ...sanitizeParent(p), token } });
     }
 
     if (action === "parentChangePassword") {
+      const a = await auth("parent");
+      if (!a) return UNAUTHORIZED();
       const cur = await sha256(body.current);
-      const p = await svc.entities.Parent.get(body.id);
+      const p = await svc.entities.Parent.get(a.sub);
       if (!p || p.password_hash !== cur) {
         return Response.json({ error: "Senha atual incorreta." }, { status: 400 });
       }
-      await svc.entities.Parent.update(body.id, {
+      await svc.entities.Parent.update(a.sub, {
         password_hash: await sha256(body.next),
         password_changed: true,
       });
       return Response.json({ ok: true });
     }
 
-    // ---------- Dados (professor / pai) ----------
+    // ---------- Dados (professor) ----------
     if (action === "studentsByTurma") {
-      if (body.teacherId) {
-        const t = await svc.entities.Teacher.get(body.teacherId);
-        if (!t) return Response.json({ error: "Sessão inválida." }, { status: 401 });
+      const a = await auth("teacher");
+      if (!a) return UNAUTHORIZED();
+      const t = await svc.entities.Teacher.get(a.sub);
+      if (!t) return UNAUTHORIZED();
+      const teacherTurmas = parseTurmas(t.turmas);
+      if (!teacherTurmas.length) {
+        return Response.json({ students: [] });
       }
       const all = await svc.entities.Student.list();
-      const turmas = body.turmas || [];
-      const filtered = turmas.length
-        ? all.filter((s) => turmas.includes(s.turma))
-        : all;
-      filtered.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+      let filtered = all.filter((s) => teacherTurmas.includes(s.turma));
+      // O cliente pode refinar ainda mais, mas nunca ampliar além das turmas do professor.
+      if (Array.isArray(body.turmas) && body.turmas.length) {
+        filtered = filtered.filter((s) => body.turmas.includes(s.turma));
+      }
+      filtered.sort((x, y) => (x.name || "").localeCompare(y.name || ""));
       return Response.json({ students: filtered.map(sanitizeStudent) });
     }
 
     if (action === "updateStudent") {
-      const t = await svc.entities.Teacher.get(body.teacherId);
-      if (!t) return Response.json({ error: "Sessão inválida." }, { status: 401 });
+      const a = await auth("teacher");
+      if (!a) return UNAUTHORIZED();
+      const t = await svc.entities.Teacher.get(a.sub);
+      if (!t) return UNAUTHORIZED();
+      const teacherTurmas = parseTurmas(t.turmas);
+      if (!teacherTurmas.length) {
+        return Response.json(
+          { error: "Defina suas turmas no cadastro para editar alunos." },
+          { status: 403 }
+        );
+      }
+      const s = await svc.entities.Student.get(body.id);
+      if (!s) return Response.json({ error: "Aluno não encontrado." }, { status: 404 });
+      if (!teacherTurmas.includes(s.turma)) {
+        return Response.json(
+          { error: "Este aluno não pertence às suas turmas." },
+          { status: 403 }
+        );
+      }
       const allowed = ["turma", "course", "enrollment", "is_active"];
       const patch = {};
       for (const k of allowed) {
@@ -217,8 +343,13 @@ export default async function (req) {
       return Response.json({ ok: true });
     }
 
+    // ---------- Dados (pai) ----------
     if (action === "parentChildren") {
-      const ids = body.ids || [];
+      const a = await auth("parent");
+      if (!a) return UNAUTHORIZED();
+      const p = await svc.entities.Parent.get(a.sub);
+      if (!p) return UNAUTHORIZED();
+      const ids = p.student_ids || [];
       if (!ids.length) return Response.json({ students: [] });
       const all = await svc.entities.Student.list();
       return Response.json({
@@ -227,8 +358,10 @@ export default async function (req) {
     }
 
     if (action === "linkChild") {
-      const p = await svc.entities.Parent.get(body.parentId);
-      if (!p) return Response.json({ error: "Sessão inválida." }, { status: 401 });
+      const a = await auth("parent");
+      if (!a) return UNAUTHORIZED();
+      const p = await svc.entities.Parent.get(a.sub);
+      if (!p) return UNAUTHORIZED();
       const rows = await svc.entities.Student.filter({
         student_login: normalizeLogin(body.studentLogin),
         is_active: true,
@@ -245,14 +378,16 @@ export default async function (req) {
         return Response.json({ error: "Este filho já está vinculado." }, { status: 400 });
       }
       const updated = [...cur, s.id];
-      await svc.entities.Parent.update(body.parentId, { student_ids: updated });
+      await svc.entities.Parent.update(a.sub, { student_ids: updated });
       return Response.json({ student_ids: updated });
     }
 
     // ---------- Aulas (professor) ----------
     if (action === "createLesson") {
-      const t = await svc.entities.Teacher.get(body.teacherId);
-      if (!t) return Response.json({ error: "Sessão inválida." }, { status: 401 });
+      const a = await auth("teacher");
+      if (!a) return UNAUTHORIZED();
+      const t = await svc.entities.Teacher.get(a.sub);
+      if (!t) return UNAUTHORIZED();
       const l = body.lesson || {};
       const rec = await svc.entities.Lesson.create({
         title: (l.title || "").trim(),
@@ -261,7 +396,8 @@ export default async function (req) {
         url: (l.url || "").trim(),
         turma: l.turma || "",
         discipline: (l.discipline || "").trim(),
-        author: l.author || t.name || "Professor",
+        // O autor é sempre o professor autenticado — não pode ser forjado.
+        author: t.name || "Professor",
         date: new Date().toISOString().slice(0, 10),
         is_active: true,
       });
@@ -269,8 +405,19 @@ export default async function (req) {
     }
 
     if (action === "deleteLesson") {
-      const t = await svc.entities.Teacher.get(body.teacherId);
-      if (!t) return Response.json({ error: "Sessão inválida." }, { status: 401 });
+      const a = await auth("teacher");
+      if (!a) return UNAUTHORIZED();
+      const t = await svc.entities.Teacher.get(a.sub);
+      if (!t) return UNAUTHORIZED();
+      const l = await svc.entities.Lesson.get(body.id);
+      if (!l) return Response.json({ error: "Aula não encontrada." }, { status: 404 });
+      // Só pode excluir as próprias aulas (mesmo autor).
+      if ((l.author || "") !== (t.name || "")) {
+        return Response.json(
+          { error: "Você só pode excluir suas próprias aulas." },
+          { status: 403 }
+        );
+      }
       await svc.entities.Lesson.delete(body.id);
       return Response.json({ ok: true });
     }
