@@ -12,7 +12,7 @@ export default function Layout() {
       <AnimatedBackground />
       <div className="relative z-10 flex flex-1 flex-col">
         <Navbar />
-        <main className="flex-1 pt-16">
+        <main className="flex-1 pt-[calc(4rem+env(safe-area-inset-top))]">
           <Outlet />
         </main>
         <Footer />
