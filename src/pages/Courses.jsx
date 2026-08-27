@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Code2, Megaphone, BookOpen, GraduationCap, ChevronRight, Clock, Users } from "lucide-react";
+import { Search, Code2, Megaphone, GraduationCap, ChevronRight, Clock, Users } from "lucide-react";
 import PageHero from "@/components/PageHero";
 
 const courses = [
   { icon: Code2, level: "Técnico", name: "Desenvolvimento de Sistemas", desc: "Programação, banco de dados e desenvolvimento web. Do back-end ao front-end, construindo projetos reais para o mercado de tecnologia.", duration: "3 anos", students: "Vagas limitadas", subjects: ["Lógica de Programação", "JavaScript", "Python", "Banco de Dados", "APIs REST", "Git"] },
   { icon: Megaphone, level: "Técnico", name: "Marketing", desc: "Branding, redes sociais, tráfego pago e estratégias de venda. Comunicação e mercado para formar profissionais prontos para o mundo digital.", duration: "3 anos", students: "Vagas limitadas", subjects: ["Branding", "Redes Sociais", "Tráfego Pago", "Copywriting", "Marketing Digital", "Vendas"] },
   { icon: GraduationCap, level: "Regular", name: "Ensino Médio Integrado", desc: "A formação regular que toda escola do Piauí oferece, integrada aos cursos técnicos. Base comum completa prevista na BNCC.", duration: "3 anos", students: "Turmas regulares", subjects: ["Português", "Matemática", "História", "Geografia", "Ciências", "Inglês"] },
-  { icon: BookOpen, level: "Regular", name: "Ensino Fundamental", desc: "Anos finais do Fundamental com a base comum curricular, igual às demais escolas piauienses, preparando para o Ensino Médio.", duration: "6º ao 9º ano", students: "Turmas regulares", subjects: ["Português", "Matemática", "Ciências", "História", "Geografia", "Inglês"] },
 ];
 
 const fade = {
