@@ -78,7 +78,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       {/* BANNER DE AVISOS (editável pelo admin) */}
       <TickerBanner />
 
@@ -95,7 +95,7 @@ export default function Home() {
             <span className="h-1.5 w-1.5 rounded-full bg-primary" />
             CETI Sebastião Soares Ribeiro
           </motion.span>
-          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="heading-font mt-6 text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance">
+          <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="heading-font mt-6 text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance">
             Onde o Conhecimento <br className="hidden sm:block" /> Encontra o <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent italic">Futuro.</span>
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg text-balance">
@@ -112,7 +112,7 @@ export default function Home() {
             </button>
           </motion.form>
 
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm text-muted-foreground">
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="mt-8 flex flex-wrap justify-center gap-x-5 sm:gap-x-8 gap-y-3 text-sm text-muted-foreground">
             <span className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> 0 alunos</span>
             <span className="flex items-center gap-2"><BookOpen className="h-4 w-4 text-secondary" /> 0 títulos</span>
             <span className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> 0% aprovação</span>
@@ -123,10 +123,10 @@ export default function Home() {
       {/* KNOWLEDGE HUB */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:py-20 sm:px-6 lg:px-8">
         <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
             <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }}>
-              <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-7 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card">
+              <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card sm:p-7">
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/8 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
                 <h3 className="heading-font mt-5 text-lg font-semibold">{t.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{t.desc}</p>
@@ -139,7 +139,7 @@ export default function Home() {
 
       {/* APRESENTAÇÃO */}
       <section className="relative overflow-hidden border-y border-border bg-card/30 py-12 sm:py-20">
-        <div className="mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:gap-14 sm:px-6 lg:grid-cols-2 lg:px-8">
           <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative">
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <Image src={STUDENTS_IMG} alt="Estudantes colaborando em sala de aula moderna" fittingType="fill" className="aspect-[4/3] w-full" />
@@ -198,8 +198,8 @@ export default function Home() {
                 news.map((n, i) => {
                   const p = toParts(n.date);
                   return (
-                    <motion.article key={n.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex gap-5 rounded-2xl border border-border bg-background p-5 transition hover:border-primary/30 hover:shadow-soft">
-                      <div className="flex h-24 w-28 shrink-0 flex-col items-center justify-center rounded-xl border border-border bg-muted/40">
+                    <motion.article key={n.id} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="group flex gap-4 rounded-2xl border border-border bg-background p-4 transition hover:border-primary/30 hover:shadow-soft sm:p-5">
+                      <div className="flex h-20 w-20 shrink-0 flex-col items-center justify-center rounded-xl border border-border bg-muted/40 sm:h-24 sm:w-28">
                         <span className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{p.month}</span>
                         <span className="heading-font text-2xl font-bold text-foreground">{p.day}</span>
                       </div>
@@ -278,7 +278,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-primary-foreground shadow-card sm:px-16">
+        <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-12 text-center text-primary-foreground shadow-card sm:px-16 sm:py-16">
           <div className="absolute inset-0 opacity-30 prism-gradient" />
           <div className="relative">
             <h2 className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte do CETI?</h2>
