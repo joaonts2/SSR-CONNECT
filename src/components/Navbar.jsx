@@ -51,7 +51,7 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 z-50 w-full transition-all duration-300 glass-nav ${
-        scrolled ? "pb-2 pt-[calc(0.5rem+env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))]"
+        scrolled ? "pb-2 pt-[calc(0.5rem_+_env(safe-area-inset-top))] shadow-soft" : "pb-3 pt-[calc(0.75rem_+_env(safe-area-inset-top))]"
       }`}
     >
       <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -121,7 +121,7 @@ export default function Navbar() {
       {/* Menu mobile */}
       {open && (
         <div className="lg:hidden">
-          <div className="mx-4 mt-2 max-h-[calc(100dvh-7rem-env(safe-area-inset-top))] overflow-y-auto rounded-2xl border border-border/60 bg-card/95 p-4 shadow-xl backdrop-blur-xl">
+          <div className="mx-4 mt-2 max-h-[calc(100dvh_-_7rem_-_env(safe-area-inset-top))] overflow-y-auto rounded-2xl border border-border/60 bg-card/95 p-4 shadow-xl backdrop-blur-xl">
             <div className="flex flex-col gap-1">
               {mainLinks.map((l) => (
                 <NavLink
