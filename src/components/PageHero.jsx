@@ -18,11 +18,11 @@ export default function PageHero({ eyebrow, title, description }) {
               {eyebrow}
             </span>
           )}
-          <h1 className="heading-font mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl text-balance">
+          <h1 className="heading-font mt-6 text-3xl font-extrabold tracking-tight sm:text-5xl text-balance">
             {title}
           </h1>
           {description && (
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted-foreground text-pretty">
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground text-pretty sm:text-lg">
               {description}
             </p>
           )}

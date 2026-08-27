@@ -31,7 +31,10 @@ export default function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+      setOpen(false);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -118,7 +121,7 @@ export default function Navbar() {
       {/* Menu mobile */}
       {open && (
         <div className="lg:hidden">
-          <div className="mx-4 mt-2 rounded-2xl border border-border/60 bg-card/95 p-4 shadow-xl backdrop-blur-xl">
+          <div className="mx-4 mt-2 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-2xl border border-border/60 bg-card/95 p-4 shadow-xl backdrop-blur-xl">
             <div className="flex flex-col gap-1">
               {mainLinks.map((l) => (
                 <NavLink
