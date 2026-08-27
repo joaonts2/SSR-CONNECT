@@ -204,6 +204,36 @@
 .animate-blob2 { animation: blob2 28s ease-in-out infinite; }
 .animate-blob3 { animation: blob3 24s ease-in-out infinite; }
 
+/* Animações adicionais — shimmer, gradiente animado, indicador de scroll, flutuação suave, brilho pulsante */
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes gradientPan {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+@keyframes scrollDown {
+  0% { opacity: 0; transform: translateY(0); }
+  40% { opacity: 1; }
+  80% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.35); }
+  50% { box-shadow: 0 0 0 12px hsl(var(--primary) / 0); }
+}
+
+.animate-shimmer { background-size: 200% auto; animation: shimmer 3s linear infinite; }
+.animate-gradient-pan { background-size: 200% 200%; animation: gradientPan 8s ease infinite; }
+.animate-scroll-down { animation: scrollDown 1.8s ease-in-out infinite; }
+.animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulseGlow 2.4s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

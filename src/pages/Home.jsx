@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, Loader2 } from "lucide-react";
+import { Search, ArrowRight, BookOpen, CalendarDays, Newspaper, Image as ImageIcon, Users, GraduationCap, Megaphone, Code2, AlertTriangle, ChevronRight, ChevronDown, Loader2 } from "lucide-react";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialSection from "@/components/TestimonialSection";
 import TickerBanner from "@/components/TickerBanner";
@@ -96,7 +96,7 @@ export default function Home() {
             CETI Sebastião Soares Ribeiro
           </motion.span>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }} className="heading-font mt-6 text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl text-balance">
-            Onde o Conhecimento <br className="hidden sm:block" /> Encontra o <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent italic">Futuro.</span>
+            Onde o Conhecimento <br className="hidden sm:block" /> Encontra o <span className="bg-gradient-to-r from-secondary to-primary bg-clip-text bg-[length:200%_auto] text-transparent italic animate-shimmer">Futuro.</span>
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg text-balance">
             Um ecossistema educacional completo, projetado para moldar mentes críticas e líderes globais através da tecnologia, inovação e acessibilidade para toda a comunidade escolar.
@@ -118,6 +118,12 @@ export default function Home() {
             <span className="flex items-center gap-2"><GraduationCap className="h-4 w-4 text-primary" /> 0% aprovação</span>
           </motion.div>
         </div>
+
+        <div className="pointer-events-none absolute bottom-5 left-1/2 hidden -translate-x-1/2 sm:block">
+          <span className="flex h-9 w-5 items-start justify-center rounded-full border-2 border-foreground/30 p-1">
+            <span className="h-2 w-1 rounded-full bg-foreground/50 animate-scroll-down" />
+          </span>
+        </div>
       </section>
 
       {/* KNOWLEDGE HUB */}
@@ -125,8 +131,8 @@ export default function Home() {
         <SectionHeading eyebrow="Hub do Conhecimento" title="Tudo o que você precisa, em um só lugar" description="Centralize o acesso às ferramentas e informações essenciais da vida escolar — para alunos, professores, pais e comunidade." />
         <div className="mt-10 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {hubTiles.map((t, i) => (
-            <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true, margin: "-60px" }}>
-              <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card sm:p-7">
+            <motion.div key={t.title} custom={i} variants={fadeUp} initial="hidden" whileInView="show" whileHover={{ y: -6, scale: 1.02 }} viewport={{ once: true, margin: "-60px" }} transition={{ type: "spring", stiffness: 300, damping: 20 }}>
+              <Link to={t.to} className="group flex h-full flex-col rounded-3xl border border-border bg-card p-5 transition-all duration-300 hover:border-primary/30 hover:shadow-card sm:p-7">
                 <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/8 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground"><t.icon className="h-6 w-6" /></span>
                 <h3 className="heading-font mt-5 text-lg font-semibold">{t.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{t.desc}</p>
@@ -144,7 +150,7 @@ export default function Home() {
             <div className="overflow-hidden rounded-3xl shadow-2xl">
               <Image src={STUDENTS_IMG} alt="Estudantes colaborando em sala de aula moderna" fittingType="fill" className="aspect-[4/3] w-full" />
             </div>
-            <div className="absolute -bottom-6 -right-6 hidden rounded-2xl border border-border bg-card p-6 shadow-card sm:block">
+            <div className="absolute -bottom-6 -right-6 hidden animate-float-slow rounded-2xl border border-border bg-card p-6 shadow-card sm:block">
               <p className="heading-font text-3xl font-bold text-secondary">0 anos</p>
               <p className="text-xs text-muted-foreground">formando cidadãos</p>
             </div>
@@ -278,14 +284,14 @@ export default function Home() {
 
       {/* CTA */}
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-primary px-6 py-12 text-center text-primary-foreground shadow-card sm:px-16 sm:py-16">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }} className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary to-secondary px-6 py-12 text-center text-primary-foreground shadow-card animate-gradient-pan sm:px-16 sm:py-16">
           <div className="absolute inset-0 opacity-30 prism-gradient" />
           <div className="relative">
-            <h2 className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte do CETI?</h2>
+            <motion.h2 initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1, duration: 0.5 }} className="heading-font text-3xl font-bold sm:text-4xl text-balance">Pronto para fazer parte do CETI?</motion.h2>
             <p className="mx-auto mt-4 max-w-xl text-primary-foreground/85 text-balance">Matrículas abertas para 2027. Agende uma visita ou fale com nossa secretaria.</p>
             <Link to="/contato" className="mt-8 inline-flex items-center gap-2 rounded-full bg-background px-8 py-4 text-sm font-semibold text-primary shadow-soft transition hover:scale-105">Iniciar matrícula <ArrowRight className="h-4 w-4" /></Link>
           </div>
-        </div>
+        </motion.div>
       </section>
     </div>
   );
