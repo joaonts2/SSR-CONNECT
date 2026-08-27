@@ -68,7 +68,7 @@ export default function Calendar() {
         <div className="grid gap-10 lg:grid-cols-3">
           {/* Calendário */}
           <div className="lg:col-span-2">
-            <div className="rounded-3xl border border-border bg-card p-6 sm:p-8">
+            <div className="rounded-3xl border border-border bg-card p-4 sm:p-8">
               <div className="flex items-center justify-between">
                 <h2 className="heading-font text-xl font-bold">{months[month]} {year}</h2>
                 <div className="flex gap-2">

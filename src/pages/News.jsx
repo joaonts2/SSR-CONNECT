@@ -106,7 +106,7 @@ export default function News() {
       {/* Modal de leitura */}
       {selected && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm" onClick={() => setSelected(null)}>
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border bg-card p-8 shadow-2xl scrollbar-thin" onClick={(e) => e.stopPropagation()}>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl border border-border bg-card p-6 shadow-2xl scrollbar-thin sm:p-8" onClick={(e) => e.stopPropagation()}>
             <span className="rounded-full bg-secondary/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-secondary">{selected.category}</span>
             <h2 className="heading-font mt-4 text-2xl font-bold leading-tight">{selected.title}</h2>
             <p className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">

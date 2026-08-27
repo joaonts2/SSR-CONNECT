@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 sm:flex-row">
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-center text-xs text-muted-foreground sm:justify-start">
             <p>© {new Date().getFullYear()} CETI Sebastião Soares Ribeiro. Todos os direitos reservados.</p>
             <Link to="/admin" className="transition-colors hover:text-primary">Painel Admin</Link>
           </div>
