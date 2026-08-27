@@ -30,3 +30,6 @@ export function adminBulkCreate(entity, records) {
 export function adminEmails() {
   return call({ action: "adminEmails" }).then((d) => d.rows);
 }
+export function amIAdmin() {
+  return call({ action: "amIAdmin" }).then((d) => !!d.isAdmin);
+}

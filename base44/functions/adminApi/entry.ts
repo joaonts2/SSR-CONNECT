@@ -8,7 +8,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 // role "user" — pois a checagem de permissão acontece aqui no servidor.
 
 const ADMIN_KEYS = ["admin_email", "admin_email_2", "admin_email_3"];
-const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Menu", "ContactInfo", "Ticker", "Setting"];
+const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Teacher", "Menu", "ContactInfo", "Ticker", "Setting"];
 
 async function isAdmin(base44, svc) {
   let user;
@@ -35,20 +35,25 @@ export default async function (req) {
     const body = await req.json();
     const { action, entity } = body;
 
-    // Leitura da lista de e-mails administradores — accessível a qualquer chamador
-    // autenticado, pois o AdminGuard precisa dela para decidir o acesso. O RLS
-    // admin-only de Setting bloquearia a leitura pelo client do próprio usuário,
-    // trancando fora quem não tem role "admin" mas foi autorizado por e-mail.
+    // Booleano seguro: o chamador só descobre se ELE é admin, sem expor a lista
+    // de e-mails administradores. Usado pelo AdminGuard para decidir o acesso.
+    if (action === "amIAdmin") {
+      return Response.json({ isAdmin: await isAdmin(base44, svc) });
+    }
+
+    // A partir daqui, toda ação exige que o chamador seja administrador.
+    if (!(await isAdmin(base44, svc))) {
+      return Response.json({ error: "Acesso restrito ao administrador." }, { status: 403 });
+    }
+
+    // Lista de e-mails administradores — só retornada a quem já é administrador,
+    // para alimentar o gerenciador de acesso dentro do painel.
     if (action === "adminEmails") {
       const rows = await svc.entities.Setting.list();
       const out = rows
         .filter((r) => ADMIN_KEYS.includes(r.key))
         .map((r) => ({ id: r.id, key: r.key, value: r.value || "" }));
       return Response.json({ rows: out });
-    }
-
-    if (!(await isAdmin(base44, svc))) {
-      return Response.json({ error: "Acesso restrito ao administrador." }, { status: 403 });
     }
 
     if (!ALLOWED.includes(entity)) {

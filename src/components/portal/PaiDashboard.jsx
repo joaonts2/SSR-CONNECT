@@ -14,6 +14,7 @@ export default function PaiDashboard({ session, onLogout }) {
   const [children, setChildren] = useState([]);
   const [loading, setLoading] = useState(true);
   const [childLogin, setChildLogin] = useState("");
+  const [childPwd, setChildPwd] = useState("");
   const [linking, setLinking] = useState(false);
   const [linkErr, setLinkErr] = useState(null);
 
@@ -32,9 +33,9 @@ export default function PaiDashboard({ session, onLogout }) {
     e.preventDefault();
     setLinking(true); setLinkErr(null);
     try {
-      const data = await portalApi({ action: "linkChild", parentId: session.id, studentLogin: childLogin });
+      const data = await portalApi({ action: "linkChild", parentId: session.id, studentLogin: childLogin, studentPassword: childPwd });
       session.student_ids = data.student_ids;
-      setChildLogin("");
+      setChildLogin(""); setChildPwd("");
       await loadChildren();
     } catch (e2) { setLinkErr(e2.message); }
     setLinking(false);
@@ -69,12 +70,14 @@ export default function PaiDashboard({ session, onLogout }) {
             <p className="text-xs text-muted-foreground">Informe o login escolar do aluno para ver dados e avisos</p>
           </div>
         </div>
-        <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-          <input value={childLogin} onChange={(e) => setChildLogin(e.target.value)} placeholder="login do aluno (ex.: joao.silva)" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
-          <button type="submit" disabled={linking} className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-60">
-            {linking ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />} Vincular
-          </button>
+        <div className="mt-4 grid gap-2 sm:grid-cols-2">
+          <input value={childLogin} onChange={(e) => setChildLogin(e.target.value)} placeholder="Login do aluno (ex.: joao.silva)" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
+          <input type="password" value={childPwd} onChange={(e) => setChildPwd(e.target.value)} placeholder="Senha do aluno" className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm outline-none ring-primary transition focus:ring-2" />
         </div>
+        <p className="mt-2 text-xs text-muted-foreground">Para vincular, informe o login e a senha escolar do aluno (comprovação de parentesco).</p>
+        <button type="submit" disabled={linking} className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-60">
+          {linking ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />} Vincular
+        </button>
         {linkErr && <p className="mt-3 flex items-center gap-2 text-sm text-destructive"><AlertCircle className="h-4 w-4" /> {linkErr}</p>}
       </form>
 

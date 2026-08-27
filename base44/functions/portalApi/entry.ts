@@ -217,17 +217,23 @@ export default async function (req) {
         return Response.json({ error: "E-mail já cadastrado." }, { status: 400 });
       }
       const password_hash = await sha256(body.password);
-      const t = await svc.entities.Teacher.create({
+      // Cadastro pendente de aprovação: sem turmas (atribuídas pelo admin) e
+      // inativo até a coordenação aprovar. Nenhum token é emitido — o professor
+      // só acessa o portal após um administrador ativar a conta e definir turmas.
+      await svc.entities.Teacher.create({
         name: (body.name || "").trim(),
         email: e,
         password_hash,
-        disciplines: body.disciplines || "",
-        turmas: body.turmas || "",
-        is_active: true,
-        password_changed: true,
+        disciplines: (body.disciplines || "").trim(),
+        turmas: "",
+        is_active: false,
+        password_changed: false,
       });
-      const token = await issue(t.id, "teacher");
-      return Response.json({ teacher: { ...sanitizeTeacher(t), token } });
+      return Response.json({
+        pending: true,
+        message:
+          "Cadastro recebido! Aguarde a aprovação da coordenação para acessar o portal.",
+      });
     }
 
     if (action === "teacherChangePassword") {
@@ -299,7 +305,7 @@ export default async function (req) {
       const a = await auth("teacher");
       if (!a) return UNAUTHORIZED();
       const t = await svc.entities.Teacher.get(a.sub);
-      if (!t) return UNAUTHORIZED();
+      if (!t || !t.is_active) return UNAUTHORIZED();
       const teacherTurmas = parseTurmas(t.turmas);
       if (!teacherTurmas.length) {
         return Response.json({ students: [] });
@@ -318,7 +324,7 @@ export default async function (req) {
       const a = await auth("teacher");
       if (!a) return UNAUTHORIZED();
       const t = await svc.entities.Teacher.get(a.sub);
-      if (!t) return UNAUTHORIZED();
+      if (!t || !t.is_active) return UNAUTHORIZED();
       const teacherTurmas = parseTurmas(t.turmas);
       if (!teacherTurmas.length) {
         return Response.json(
@@ -373,6 +379,19 @@ export default async function (req) {
           { status: 400 }
         );
       }
+      // Comprovação de parentesco: exige a senha escolar do aluno, que a escola
+      // entrega à família. Impede que alguém vincule alunos sabendo só o login
+      // (que segue padrão enumerável). A senha nunca é retornada.
+      if (!body.studentPassword) {
+        return Response.json(
+          { error: "Informe a senha do aluno para vincular." },
+          { status: 400 }
+        );
+      }
+      const pwdHash = await sha256(body.studentPassword);
+      if (s.password_hash !== pwdHash) {
+        return Response.json({ error: "Senha do aluno incorreta." }, { status: 401 });
+      }
       const cur = p.student_ids || [];
       if (cur.includes(s.id)) {
         return Response.json({ error: "Este filho já está vinculado." }, { status: 400 });
@@ -387,7 +406,7 @@ export default async function (req) {
       const a = await auth("teacher");
       if (!a) return UNAUTHORIZED();
       const t = await svc.entities.Teacher.get(a.sub);
-      if (!t) return UNAUTHORIZED();
+      if (!t || !t.is_active) return UNAUTHORIZED();
       const l = body.lesson || {};
       const rec = await svc.entities.Lesson.create({
         title: (l.title || "").trim(),
@@ -408,7 +427,7 @@ export default async function (req) {
       const a = await auth("teacher");
       if (!a) return UNAUTHORIZED();
       const t = await svc.entities.Teacher.get(a.sub);
-      if (!t) return UNAUTHORIZED();
+      if (!t || !t.is_active) return UNAUTHORIZED();
       const l = await svc.entities.Lesson.get(body.id);
       if (!l) return Response.json({ error: "Aula não encontrada." }, { status: 404 });
       // Só pode excluir as próprias aulas (mesmo autor).

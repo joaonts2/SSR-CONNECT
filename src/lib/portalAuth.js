@@ -22,16 +22,20 @@ export async function loginTeacher(email, password) {
   return teacher;
 }
 
-export async function registerTeacher({ name, email, password, disciplines, turmas }) {
-  const { teacher } = await portalApi({
+export async function registerTeacher({ name, email, password, disciplines }) {
+  const data = await portalApi({
     action: "teacherRegister",
     name,
     email,
     password,
     disciplines,
-    turmas,
   });
-  return teacher;
+  // Cadastro pendente de aprovação: não há sessão nem token. Retorna uma
+  // mensagem informativa para o formulário exibir ao professor.
+  return {
+    pending: true,
+    message: data.message || "Cadastro recebido. Aguarde a aprovação da coordenação.",
+  };
 }
 
 export async function changeTeacherPassword(id, current, next) {

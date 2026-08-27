@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Lock, User, Loader2, KeyRound, AlertCircle, UserPlus } from "lucide-react";
+import { Mail, Lock, User, Loader2, KeyRound, AlertCircle, UserPlus, Info } from "lucide-react";
 
 const inputCls = "w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2";
 
@@ -14,16 +14,23 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
   const [extra, setExtra] = useState({});
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const submit = async (e) => {
     e.preventDefault();
-    setBusy(true); setErr(null);
+    setBusy(true); setErr(null); setSuccess(null);
     try {
       if (mode === "login") {
         await onLogin(email, password);
       } else {
         if (password.length < 6) throw new Error("A senha deve ter ao menos 6 caracteres.");
-        await onRegister({ name, email, password, ...extra });
+        const res = await onRegister({ name, email, password, ...extra });
+        // Cadastro pendente (ex.: professor): não loga, só confirma ao usuário.
+        if (res?.pending) {
+          setSuccess(res.message || "Cadastro recebido. Aguarde aprovação.");
+          setMode("login");
+          setName(""); setEmail(""); setPassword(""); setExtra({});
+        }
       }
     } catch (e2) { setErr(e2.message); }
     setBusy(false);
@@ -63,6 +70,7 @@ export default function EmailAuthForm({ title, subtitle, onLogin, onRegister, ex
       </div>
 
       {err && <p className="mt-4 flex items-center gap-2 text-sm text-destructive"><AlertCircle className="h-4 w-4" /> {err}</p>}
+      {success && <p className="mt-4 flex items-center gap-2 text-sm text-secondary"><Info className="h-4 w-4" /> {success}</p>}
 
       <button type="submit" disabled={busy} className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02] disabled:opacity-60">
         {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : mode === "login" ? <KeyRound className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}

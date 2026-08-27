@@ -48,10 +48,9 @@ export default function AlunoPortal() {
     setSession({ type: "professor", id: t.id, name: t.name, email: t.email, disciplines: t.disciplines || "", turmas: t.turmas || "", token: t.token });
     setSessionState(getSession());
   };
-  const profRegister = async ({ name, email, password, disciplines, turmas }) => {
-    const t = await registerTeacher({ name, email, password, disciplines, turmas });
-    setSession({ type: "professor", id: t.id, name: t.name, email: t.email, disciplines: t.disciplines || "", turmas: t.turmas || "", token: t.token });
-    setSessionState(getSession());
+  const profRegister = async ({ name, email, password, disciplines }) => {
+    // Cadastro de professor fica pendente de aprovação: não cria sessão.
+    return await registerTeacher({ name, email, password, disciplines });
   };
 
   const paiLogin = async (email, pw) => {
@@ -124,7 +123,6 @@ export default function AlunoPortal() {
             onRegister={profRegister}
             extraFields={[
               { key: "disciplines", label: "Disciplinas", placeholder: "Ex.: Matemática, Física" },
-              { key: "turmas", label: "Turmas", placeholder: "Ex.: 1º Ano A, 2º Ano B" },
             ]}
           />
         )}

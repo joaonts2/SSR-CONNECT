@@ -8,6 +8,7 @@ import EventManager from "@/components/admin/EventManager";
 import TestimonialManager from "@/components/admin/TestimonialManager";
 import AdminAccessManager from "@/components/admin/AdminAccessManager";
 import StudentManager from "@/components/admin/StudentManager";
+import TeacherManager from "@/components/admin/TeacherManager";
 import MenuManager from "@/components/admin/MenuManager";
 import ContactInfoManager from "@/components/admin/ContactInfoManager";
 import TickerManager from "@/components/admin/TickerManager";
@@ -18,6 +19,7 @@ const SECTIONS = [
   { key: "notices", label: "Avisos", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
   { key: "events", label: "Eventos", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
   { key: "students", label: "Alunos", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
+  { key: "teachers", label: "Professores", icon: Users, desc: "Aprovar cadastros e definir turmas", Component: TeacherManager },
   { key: "menu", label: "Cardápio", icon: UtensilsCrossed, desc: "Almoço e lanche da semana", Component: MenuManager },
   { key: "testimonials", label: "Depoimentos", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
   { key: "contact", label: "Contato", icon: Phone, desc: "Textos e dados da página de contato", Component: ContactInfoManager },
