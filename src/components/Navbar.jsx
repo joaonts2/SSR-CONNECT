@@ -153,6 +153,7 @@ export default function Navbar() {
                   {l.label}
                 </NavLink>
               ))}
+              <div className="my-1 border-t border-border/60" />
               <NavLink
                 to="/login"
                 className="rounded-xl border border-border/70 px-4 py-3 text-center text-sm font-semibold text-foreground/80"

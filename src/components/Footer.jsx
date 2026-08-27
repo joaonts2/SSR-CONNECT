@@ -43,7 +43,7 @@ export default function Footer() {
   const c = info || CONTACT_DEFAULTS;
   return (
     <footer className="relative mt-24 border-t border-border bg-card/50">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-16 pb-28 sm:px-6 sm:pb-20 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-4">
           {/* Marca + contato */}
           <div className="lg:col-span-2">
