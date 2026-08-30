@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
 import BackToTop from "@/components/BackToTop";
 import AnimatedBackground from "@/components/AnimatedBackground";
+import MobileNav from "@/components/MobileNav";
 
 // Shell compartilhado: navbar + conteúdo + rodapé + ferramentas flutuantes
 export default function Layout() {
@@ -19,6 +20,7 @@ export default function Layout() {
       </div>
       <BackToTop />
       <Chatbot />
+      <MobileNav />
     </div>
   );
 }

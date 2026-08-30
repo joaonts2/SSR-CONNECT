@@ -13,6 +13,7 @@ import LessonsCard from "./LessonsCard";
 import MaterialsCard from "./MaterialsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
+import DeleteAccountCard from "./DeleteAccountCard";
 
 export default function AlunoDashboard({ session, onLogout }) {
   const [, setTick] = useState(0);
@@ -102,6 +103,7 @@ export default function AlunoDashboard({ session, onLogout }) {
       <DeadlinesCard />
 
       <ChangePasswordCard onSubmit={(cur, next) => changeAlunoPassword(session.id, cur, next)} />
+      <DeleteAccountCard session={session} onLogout={onLogout} />
     </div>
   );
 }

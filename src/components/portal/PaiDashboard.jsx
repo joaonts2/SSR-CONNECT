@@ -9,6 +9,7 @@ import ChangePasswordCard from "./ChangePasswordCard";
 import EventsCard from "./EventsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
+import DeleteAccountCard from "./DeleteAccountCard";
 
 export default function PaiDashboard({ session, onLogout }) {
   const [children, setChildren] = useState([]);
@@ -130,6 +131,7 @@ export default function PaiDashboard({ session, onLogout }) {
       <MenuCard />
 
       <ChangePasswordCard onSubmit={(cur, next) => changeParentPassword(session.id, cur, next)} />
+      <DeleteAccountCard session={session} onLogout={onLogout} />
     </div>
   );
 }

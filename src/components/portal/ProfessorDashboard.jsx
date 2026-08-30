@@ -8,6 +8,7 @@ import UrgentAlertBanner from "./UrgentAlertBanner";
 import TurmaStudentsTable from "./TurmaStudentsTable";
 import LessonManager from "./LessonManager";
 import PortalHeader from "./PortalHeader";
+import DeleteAccountCard from "./DeleteAccountCard";
 
 export default function ProfessorDashboard({ session, onLogout }) {
   const disciplines = session.disciplines ? session.disciplines.split(",").map((s) => s.trim()).filter(Boolean) : [];
@@ -44,6 +45,7 @@ export default function ProfessorDashboard({ session, onLogout }) {
       <MenuCard />
 
       <ChangePasswordCard onSubmit={(cur, next) => changeTeacherPassword(session.id, cur, next)} />
+      <DeleteAccountCard session={session} onLogout={onLogout} />
     </div>
   );
 }

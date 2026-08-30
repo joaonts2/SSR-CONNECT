@@ -441,6 +441,17 @@ export default async function (req) {
       return Response.json({ ok: true });
     }
 
+    // ---------- Exclusão da própria conta (aluno/professor/pai) ----------
+    if (action === "deleteAccount") {
+      const a = await auth(null);
+      if (!a) return UNAUTHORIZED();
+      const entityMap = { student: "Student", teacher: "Teacher", parent: "Parent" };
+      const entity = entityMap[a.role];
+      if (!entity) return Response.json({ error: "Perfil inválido." }, { status: 400 });
+      await svc.entities[entity].delete(a.sub);
+      return Response.json({ ok: true });
+    }
+
     return Response.json({ error: "Ação desconhecida." }, { status: 400 });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
