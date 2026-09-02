@@ -15,6 +15,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <title>CETI Sebastião Soares Ribeiro | Ecossistema Educacional</title>
+    <script>
+      // GitHub Pages (SPA): restaura a rota original após o 404 voltar para a raiz
+      (function () {
+        if (window.sessionStorage && sessionStorage.redirect) {
+          var redirect = sessionStorage.redirect;
+          delete sessionStorage.redirect;
+          if (redirect !== window.location.pathname + window.location.search) {
+            window.history.replaceState(null, "", redirect);
+          }
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

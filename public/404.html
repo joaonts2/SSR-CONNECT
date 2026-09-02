@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>CETI Sebastião Soares Ribeiro</title>
+    <script>
+      // GitHub Pages não reescreve URLs para aplicativos de página única:
+      // guarda a rota pedida e volta para a raiz do site, onde o índice
+      // restaura o caminho original no histórico do navegador.
+      (function () {
+        if (window.sessionStorage) {
+          sessionStorage.redirect =
+            window.location.pathname + window.location.search + window.location.hash;
+        }
+        window.location.replace("/SSR-CONNECT/");
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
