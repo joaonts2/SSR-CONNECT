@@ -20,10 +20,21 @@ async function sha256(text) {
     .join("");
 }
 
-function normalizeLogin(login) {
-  let l = (login || "").trim().toLowerCase();
-  if (l && !l.includes("@")) l = `${l}${LOGIN_DOMAIN}`;
-  return l;
+const GMAIL_DOMAIN = "@gmail.com";
+
+// Busca aluno pelo login. Logins novos são e-mails Gmail aleatórios; os
+// antigos usam o domínio institucional. Aceita o login com ou sem domínio.
+async function findStudentByLogin(base44, raw) {
+  const l = (raw || "").trim().toLowerCase();
+  if (!l) return null;
+  const candidates = l.includes("@")
+    ? [l]
+    : [`${l}${LOGIN_DOMAIN}`, `${l}${GMAIL_DOMAIN}`];
+  for (const c of candidates) {
+    const rows = await base44.entities.Student.filter({ student_login: c, is_active: true });
+    if (rows[0]) return rows[0];
+  }
+  return null;
 }
 function normEmail(e) {
   return (e || "").trim().toLowerCase();
@@ -160,11 +171,7 @@ export default async function (req) {
     // ---------- Aluno ----------
     if (action === "studentLogin") {
       const hash = await sha256(body.password);
-      const rows = await svc.entities.Student.filter({
-        student_login: normalizeLogin(body.login),
-        is_active: true,
-      });
-      const s = rows[0];
+      const s = await findStudentByLogin(svc, body.login);
       if (!s || s.password_hash !== hash) {
         return Response.json({ error: "Login ou senha incorretos." }, { status: 401 });
       }
@@ -368,11 +375,7 @@ export default async function (req) {
       if (!a) return UNAUTHORIZED();
       const p = await svc.entities.Parent.get(a.sub);
       if (!p) return UNAUTHORIZED();
-      const rows = await svc.entities.Student.filter({
-        student_login: normalizeLogin(body.studentLogin),
-        is_active: true,
-      });
-      const s = rows[0];
+      const s = await findStudentByLogin(svc, body.studentLogin);
       if (!s) {
         return Response.json(
           { error: "Aluno não encontrado. Verifique o login informado." },

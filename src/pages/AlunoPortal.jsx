@@ -79,7 +79,7 @@ export default function AlunoPortal() {
 
   return (
     <div>
-      <PageHero eyebrow="Portal Escolar" title="Acesse sua conta" description="Selecione seu perfil para entrar. Alunos usam o login escolar; professores e pais usam e-mail e senha." />
+      <PageHero eyebrow="Portal Escolar" title="Acesse sua conta" description="Selecione seu perfil para entrar. Alunos usam o e-mail gerado pela escola; professores e pais usam e-mail e senha." />
       <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
         <div className="mx-auto mb-6 grid max-w-md grid-cols-3 gap-2">
           {TABS.map((t) => (
@@ -95,13 +95,13 @@ export default function AlunoPortal() {
               <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><GraduationCap className="h-6 w-6" /></span>
               <div>
                 <h2 className="heading-font text-lg font-bold">Portal do Aluno</h2>
-                <p className="text-xs text-muted-foreground">Use seu login e senha escolar</p>
+                <p className="text-xs text-muted-foreground">Entre com seu e-mail e senha</p>
               </div>
             </div>
             <div className="space-y-4">
               <div className="relative">
                 <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder="Login" className={inputCls} required />
+                <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder="E-mail (Gmail)" className={inputCls} type="email" required />
               </div>
               <div className="relative">
                 <Lock className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
