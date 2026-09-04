@@ -82,7 +82,7 @@ export default function Chatbot() {
   const suggestions = ["Como faço matrícula?", "Calendário de provas", "Biblioteca digital"];
 
   return (
-    <div className="fixed bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))] right-[calc(1.25rem_+_env(safe-area-inset-right))] z-50 flex flex-col items-end gap-3">
+    <div className="fixed bottom-[calc(4.75rem_+_env(safe-area-inset-bottom))] lg:bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))] right-[calc(1.25rem_+_env(safe-area-inset-right))] z-50 flex flex-col items-end gap-3">
       {open && (
         <div className="flex h-[440px] w-[calc(100vw-2.5rem)] max-w-sm flex-col overflow-hidden rounded-3xl border border-border bg-card/95 shadow-2xl backdrop-blur-xl">
           {/* Header */}

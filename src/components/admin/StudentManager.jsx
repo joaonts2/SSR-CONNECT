@@ -190,7 +190,7 @@ export default function StudentManager() {
                   {!it.is_active && <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">Inativo</span>}
                 </div>
                 <h3 className="mt-1 font-semibold">{it.name}</h3>
-                <p className="text-xs text-muted-foreground font-mono">login: {it.student_login}{it.enrollment ? ` · matrícula: ${it.enrollment}` : ""}</p>
+                <p className="break-all text-xs text-muted-foreground font-mono">login: {it.student_login}{it.enrollment ? ` · matrícula: ${it.enrollment}` : ""}</p>
               </div>
               <div className="flex shrink-0 gap-2">
                 <button onClick={() => regenerate(it)} title="Gerar nova senha" className="rounded-lg border border-border p-2 transition hover:bg-primary/10 hover:text-primary"><KeyRound className="h-4 w-4" /></button>
