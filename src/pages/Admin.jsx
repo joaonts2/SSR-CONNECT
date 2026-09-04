@@ -15,18 +15,20 @@ import TickerManager from "@/components/admin/TickerManager";
 import AdminSectionNav from "@/components/admin/AdminSectionNav";
 
 const SECTIONS = [
-  { key: "overview", label: "Início", icon: LayoutDashboard, desc: "Visão geral e edição centralizada", Component: AdminOverview },
-  { key: "news", label: "Notícias", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
-  { key: "notices", label: "Avisos", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
-  { key: "events", label: "Eventos", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
-  { key: "students", label: "Alunos", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
-  { key: "teachers", label: "Professores", icon: Users, desc: "Aprovar cadastros e definir turmas", Component: TeacherManager },
-  { key: "menu", label: "Cardápio", icon: UtensilsCrossed, desc: "Almoço e lanche da semana", Component: MenuManager },
-  { key: "testimonials", label: "Depoimentos", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
-  { key: "contact", label: "Contato", icon: Phone, desc: "Textos e dados da página de contato", Component: ContactInfoManager },
-  { key: "ticker", label: "Banner Avisos", icon: Radio, desc: "Frase do topo da página inicial", Component: TickerManager },
-  { key: "access", label: "Acesso", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
+  { key: "overview", label: "Início", group: "Início", icon: LayoutDashboard, desc: "Visão geral do portal", Component: AdminOverview },
+  { key: "news", label: "Notícias", group: "Conteúdo", icon: Newspaper, desc: "Publicar e editar notícias", Component: NewsManager },
+  { key: "notices", label: "Avisos", group: "Conteúdo", icon: Megaphone, desc: "Mural de avisos e comunicados", Component: NoticeManager },
+  { key: "events", label: "Eventos", group: "Conteúdo", icon: CalendarDays, desc: "Calendário escolar e provas", Component: EventManager },
+  { key: "menu", label: "Cardápio", group: "Conteúdo", icon: UtensilsCrossed, desc: "Almoço e lanche da semana", Component: MenuManager },
+  { key: "testimonials", label: "Depoimentos", group: "Conteúdo", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
+  { key: "contact", label: "Contato", group: "Conteúdo", icon: Phone, desc: "Textos e dados da página de contato", Component: ContactInfoManager },
+  { key: "ticker", label: "Banner Avisos", group: "Conteúdo", icon: Radio, desc: "Frase do topo da página inicial", Component: TickerManager },
+  { key: "students", label: "Alunos", group: "Pessoas", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
+  { key: "teachers", label: "Professores", group: "Pessoas", icon: Users, desc: "Aprovar cadastros e definir turmas", Component: TeacherManager },
+  { key: "access", label: "Acesso", group: "Configurações", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
 ];
+
+const NAV_GROUPS = ["Início", "Conteúdo", "Pessoas", "Configurações"];
 
 export default function Admin() {
   const [active, setActive] = useState("overview");
@@ -48,18 +50,15 @@ export default function Admin() {
 
             {/* Navegação desktop: sidebar vertical */}
             <div className="hidden rounded-3xl border border-border bg-card p-3 lg:block">
-              {SECTIONS.map((s) => (
-                <button
-                  key={s.key}
-                  onClick={() => setActive(s.key)}
-                  className={`mb-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition ${active === s.key ? "bg-primary text-primary-foreground shadow-soft" : "hover:bg-muted"}`}
-                >
-                  <s.icon className="h-5 w-5 shrink-0" />
-                  <div>
-                    <p className="text-sm font-semibold">{s.label}</p>
-                    <p className={`text-xs ${active === s.key ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{s.desc}</p>
-                  </div>
-                </button>
+              {NAV_GROUPS.map((group) => (
+                <div key={group} className="mb-4 last:mb-1">
+                  <p className="px-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{group}</p>
+                  {SECTIONS.filter((section) => section.group === group).map((s) => (
+                    <button key={s.key} onClick={() => setActive(s.key)} className={`mb-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition ${active === s.key ? "bg-primary text-primary-foreground shadow-soft" : "hover:bg-muted"}`}>
+                      <s.icon className="h-5 w-5 shrink-0" /><div><p className="text-sm font-semibold">{s.label}</p><p className={`text-xs ${active === s.key ? "text-primary-foreground/80" : "text-muted-foreground"}`}>{s.desc}</p></div>
+                    </button>
+                  ))}
+                </div>
               ))}
               <div className="mt-2 flex items-start gap-2 rounded-2xl border border-border bg-background p-4 text-xs text-muted-foreground">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
@@ -69,7 +68,7 @@ export default function Admin() {
           </aside>
 
           <div className="lg:col-span-3">
-            <Current />
+            <Current onNavigate={setActive} />
           </div>
         </div>
       </section>
