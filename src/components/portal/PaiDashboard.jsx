@@ -10,6 +10,7 @@ import EventsCard from "./EventsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
 import DeleteAccountCard from "./DeleteAccountCard";
+import PortalSectionTitle from "./PortalSectionTitle";
 
 export default function PaiDashboard({ session, onLogout }) {
   const [children, setChildren] = useState([]);
@@ -57,10 +58,13 @@ export default function PaiDashboard({ session, onLogout }) {
       <PortalHeader
         name={session.name}
         meta={session.email}
+        role="Painel dos Pais"
         avatarClass="bg-secondary text-secondary-foreground"
         chips={chips}
         onLogout={onLogout}
       />
+
+      <PortalSectionTitle>Família</PortalSectionTitle>
 
       {/* Vincular filho */}
       <form onSubmit={linkChild} className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
@@ -124,11 +128,15 @@ export default function PaiDashboard({ session, onLogout }) {
         )}
       </div>
 
+      <PortalSectionTitle>Comunicações da escola</PortalSectionTitle>
+
       <EventsCard subtitle="Datas importantes da escola" />
 
       <NoticesCard title="Avisos" subtitle="Comunicados gerais e das turmas dos seus filhos" turmas={turmas} />
 
       <MenuCard />
+
+      <PortalSectionTitle>Conta e segurança</PortalSectionTitle>
 
       <ChangePasswordCard onSubmit={(cur, next) => changeParentPassword(session.id, cur, next)} />
       <DeleteAccountCard session={session} onLogout={onLogout} />

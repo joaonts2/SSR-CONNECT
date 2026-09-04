@@ -14,6 +14,7 @@ import MaterialsCard from "./MaterialsCard";
 import UrgentAlertBanner from "./UrgentAlertBanner";
 import PortalHeader from "./PortalHeader";
 import DeleteAccountCard from "./DeleteAccountCard";
+import PortalSectionTitle from "./PortalSectionTitle";
 
 export default function AlunoDashboard({ session, onLogout }) {
   const [, setTick] = useState(0);
@@ -48,6 +49,7 @@ export default function AlunoDashboard({ session, onLogout }) {
       <PortalHeader
         name={session.name}
         meta={session.login}
+        role="Painel do Aluno"
         avatarClass="bg-secondary text-secondary-foreground"
         chips={chips}
         mustChange={session.mustChange}
@@ -56,6 +58,8 @@ export default function AlunoDashboard({ session, onLogout }) {
 
       <QuickLinks />
 
+      <PortalSectionTitle>Recursos de estudo</PortalSectionTitle>
+
       <div id="materiais" className="scroll-mt-4">
         <MaterialsCard />
       </div>
@@ -63,6 +67,8 @@ export default function AlunoDashboard({ session, onLogout }) {
       <div id="videoaulas" className="scroll-mt-4">
         <LessonsCard turma={session.turma} />
       </div>
+
+      <PortalSectionTitle>Comunicações da escola</PortalSectionTitle>
 
       {/* Avisos da turma */}
       <div id="avisos" className="scroll-mt-4">
@@ -73,6 +79,8 @@ export default function AlunoDashboard({ session, onLogout }) {
       <div id="cardapio" className="scroll-mt-4">
         <MenuCard />
       </div>
+
+      <PortalSectionTitle>Acadêmico</PortalSectionTitle>
 
       {/* Disciplinas */}
       <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
@@ -101,6 +109,8 @@ export default function AlunoDashboard({ session, onLogout }) {
       </div>
 
       <DeadlinesCard />
+
+      <PortalSectionTitle>Conta e segurança</PortalSectionTitle>
 
       <ChangePasswordCard onSubmit={(cur, next) => changeAlunoPassword(session.id, cur, next)} />
       <DeleteAccountCard session={session} onLogout={onLogout} />

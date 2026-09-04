@@ -2,7 +2,7 @@ import { LogOut, AlertCircle } from "lucide-react";
 
 // Cabeçalho padronizado dos dashboards do portal: avatar com iniciais,
 // nome + meta, chips de contexto e alerta de troca de senha.
-export default function PortalHeader({ name, meta, avatarClass = "bg-primary text-primary-foreground", icon: Icon, chips, mustChange, onLogout }) {
+export default function PortalHeader({ name, meta, role, avatarClass = "bg-primary text-primary-foreground", icon: Icon, chips, mustChange, onLogout }) {
   const initials = (name || "")
     .split(" ").filter(Boolean).map((p) => p[0]).slice(0, 2).join("").toUpperCase();
 
@@ -15,6 +15,7 @@ export default function PortalHeader({ name, meta, avatarClass = "bg-primary tex
             {initials || (Icon && <Icon className="h-6 w-6" />)}
           </span>
           <div>
+            {role && <p className="mb-0.5 text-[11px] font-bold uppercase tracking-widest text-primary">{role}</p>}
             <h2 className="heading-font text-xl font-bold">Olá, {name}</h2>
             {meta && <p className="text-xs text-muted-foreground">{meta}</p>}
           </div>
