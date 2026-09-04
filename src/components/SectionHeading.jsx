@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 // Cabeçalho de seção reutilizável com eyebrow + título + descrição
 export default function SectionHeading({ eyebrow, title, description, align = "center" }) {
   const alignment = align === "left" ? "text-left" : "text-center mx-auto";
+  const accent = align === "left" ? "" : "mx-auto";
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -20,8 +21,9 @@ export default function SectionHeading({ eyebrow, title, description, align = "c
       <h2 className="heading-font mt-5 text-3xl font-bold tracking-tight sm:text-[2.5rem] text-balance">
         {title}
       </h2>
+      <div className={`mt-5 h-1 w-12 rounded-full bg-gradient-to-r from-primary to-secondary ${accent}`} />
       {description && (
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground text-pretty">
+        <p className="mt-5 text-base leading-relaxed text-muted-foreground text-pretty">
           {description}
         </p>
       )}
