@@ -91,14 +91,7 @@ export default function AlunoPortal() {
 
         {tab === "aluno" && (
           <motion.form initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} onSubmit={doAlunoLogin} className="mx-auto max-w-md rounded-3xl border border-border bg-card p-8 shadow-sm">
-            <div className="mb-6 flex items-center gap-3">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><GraduationCap className="h-6 w-6" /></span>
-              <div>
-                <h2 className="heading-font text-lg font-bold">Portal do Aluno</h2>
-                <p className="text-xs text-muted-foreground">Entre com seu e-mail e senha</p>
-              </div>
-            </div>
-            <div className="space-y-4">
+            <div className="mb-2 space-y-4">
               <div className="relative">
                 <User className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <input value={login} onChange={(e) => setLogin(e.target.value)} placeholder="E-mail (Gmail)" className={inputCls} type="email" required />
