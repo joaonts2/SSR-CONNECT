@@ -7,6 +7,7 @@ import { adminList, adminCreate, adminUpdate, adminDelete, adminBulkCreate } fro
 import { Modal, Field, inputCls } from "./ui";
 import { genLogin, genPassword, sha256 } from "@/lib/alunoAuth";
 import { COURSE_OPTIONS } from "@/lib/courses";
+import PdfNamesImport from "./PdfNamesImport";
 
 const empty = { name: "", turma: "", course: "", enrollment: "", is_active: true };
 
@@ -229,6 +230,9 @@ export default function StudentManager() {
           <form onSubmit={saveBulk} className="space-y-4">
             <Field label="Turma"><input required value={bulk.turma} onChange={(e) => setBulk((b) => ({ ...b, turma: e.target.value }))} placeholder="Ex.: 1º Ano A" className={inputCls} /></Field>
             <Field label="Curso"><select value={bulk.course} onChange={(e) => setBulk((b) => ({ ...b, course: e.target.value }))} className={inputCls}><option value="">Selecione o curso...</option>{COURSE_OPTIONS.map((c) => <option key={c} value={c}>{c}</option>)}</select></Field>
+            <Field label="Importar ficha em PDF (opcional)">
+              <PdfNamesImport onExtracted={(names) => setBulk((b) => ({ ...b, names: names.join("\n") }))} />
+            </Field>
             <Field label="Nomes dos alunos (um por linha)">
               <textarea rows={8} required value={bulk.names} onChange={(e) => setBulk((b) => ({ ...b, names: e.target.value }))} placeholder={"João Silva\nMaria Souza\n..."} className={inputCls} />
             </Field>
