@@ -1,85 +1,96 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Bot, User } from "lucide-react";
-
-// Chatbot "Campus Concierge" — responde dúvidas frequentes com base em respostas pré-definidas
-const KNOWLEDGE = [
-  {
-    keys: ["matricula", "matrícula", "inscri", "como entrar", "vaga"],
-    answer:
-      "As matrículas para o próximo ano letivo estão abertas até 15 de dezembro. Acesse a página de Contato e preencha o formulário ou ligue para (11) 4000-1822.",
-    links: [{ label: "Ir para Contato", to: "/contato" }],
-  },
-  {
-    keys: ["calendario", "calendário", "feriado", "recesso", "letivo"],
-    answer:
-      "O calendário escolar completo está disponível na página de Calendário, com provas, eventos, feriados e reuniões.",
-    links: [{ label: "Ver Calendário", to: "/calendario" }],
-  },
-  {
-    keys: ["biblioteca", "livro", "acervo", "ebook", "e-book", "material"],
-    answer:
-      "Nossa biblioteca digital possui mais de 50.000 títulos. Acesse a seção Biblioteca Digital para baixar livros, apostilas e materiais de apoio.",
-    links: [{ label: "Biblioteca Digital", to: "/biblioteca" }],
-  },
-  {
-    keys: ["prova", "simulado", "avaliação", "nota"],
-    answer:
-      "O calendário de provas e os simulados estão no Calendário Escolar. Consulte também o mural de avisos para comunicados de última hora.",
-    links: [{ label: "Calendário de Provas", to: "/calendario" }],
-  },
-  {
-    keys: ["horario", "horário", "aula", "expediente"],
-    answer: "O expediente escolar é de segunda a sexta, das 7h30 às 17h30. Os horários por turma estão disponíveis no portal do aluno.",
-  },
-  {
-    keys: ["contato", "telefone", "email", "e-mail", "endereco", "endereço"],
-    answer: "Telefone: (11) 4000-1822 · E-mail: contato@cetisebastiaosoribeiro.edu.br · Endereço: Av. do Conhecimento, 1822 — Centro.",
-    links: [{ label: "Fale Conosco", to: "/contato" }],
-  },
-  {
-    keys: ["curso", "turma", "ensino", "modalidade"],
-    answer:
-      "Oferecemos Ensino Fundamental I e II e Ensino Médio, com cursos complementares de robótica, idiomas e preparatório vestibular.",
-    links: [{ label: "Ver Cursos", to: "/cursos" }],
-  },
-  {
-    keys: ["olá", "ola", "oi", "bom dia", "boa tarde", "boa noite", "ajuda"],
-    answer:
-      "Olá! Sou o assistente virtual do CETI. Posso ajudar com matrículas, calendário, biblioteca, provas e mais. Sobre o que você gostaria de saber?",
-  },
-];
-
-function findAnswer(text) {
-  const lower = text.toLowerCase();
-  const match = KNOWLEDGE.find((k) => k.keys.some((key) => lower.includes(key)));
-  if (match) return match.answer + (match.links ? "" : "");
-  return "Desculpe, não encontrei uma resposta exata. Tente perguntar sobre matrículas, calendário, biblioteca, provas ou contato. Você também pode usar a página de Contato para falar com a secretaria.";
-}
+import { useNavigate } from "react-router-dom";
+import { MessageCircle, X, Send, Bot, User, ArrowRight, Sparkles } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { loadChatContext, findAnswer, buildContextText, todayISO } from "@/lib/chatbotKnowledge";
 
 const initialMessage = {
   from: "bot",
-  text: "Olá! 👋 Sou o Concierge CETI, seu assistente virtual. Como posso ajudar hoje?",
+  text: "Olá! 👋 Sou o Concierge CETI, seu assistente virtual. Posso falar sobre matrículas, calendário, cardápio, eventos, avisos, portal do aluno e mais. Como posso ajudar?",
 };
+
+// Fallback com IA: pergunta + contexto real da escola para o modelo responder.
+async function askAI(question, ctx) {
+  const today = todayISO().split("-").reverse().join("/");
+  const prompt = `Você é o "Concierge CETI", o assistente virtual do site do CETI Sebastião Soares Ribeiro (plataforma SSR-Connect), uma escola pública estadual do Piauí, no Brasil.
+
+Regras:
+- Responda SEMPRE em português do Brasil, de forma cordial, objetiva e em no máximo 3 frases.
+- Use APENAS as informações do CONTEXTO abaixo. NÃO invente telefones, datas, valores, nomes ou endereços.
+- Se o contexto não tiver a resposta, diga que não tem essa informação e sugira falar com a secretaria pela página de Contato (/contato).
+- Perguntas sobre acesso de alunos, professores ou responsáveis devem direcionar ao Portal Escolar (/portal-aluno), cujo login e senha são fornecidos pela escola.
+
+Data de hoje: ${today}
+
+CONTEXTO DA ESCOLA:
+${buildContextText(ctx)}
+
+PERGUNTA DO USUÁRIO: ${question}
+
+Resposta:`;
+
+  const res = await base44.integrations.Core.InvokeLLM({ prompt });
+  const text =
+    typeof res === "string" ? res : res?.response || res?.text || res?.content || "";
+  if (text && typeof text === "string") return text.trim();
+  throw new Error("Sem resposta");
+}
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([initialMessage]);
   const [input, setInput] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [ctx, setCtx] = useState(null);
   const bodyRef = useRef(null);
+  const navigate = useNavigate();
+
+  // Carrega o contexto real (cardápio, eventos, avisos...) ao abrir o chat.
+  useEffect(() => {
+    if (open && !ctx) {
+      loadChatContext().then(setCtx).catch(() => setCtx({}));
+    }
+  }, [open, ctx]);
 
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [messages, open]);
 
-  const send = (override) => {
+  const send = async (override) => {
     const text = (override ?? input).trim();
-    if (!text) return;
-    const answer = findAnswer(text);
-    setMessages((m) => [...m, { from: "user", text }, { from: "bot", text: answer }]);
+    if (!text || busy) return;
     setInput("");
+    setMessages((m) => [...m, { from: "user", text }]);
+
+    const match = findAnswer(text, ctx || {});
+    if (match) {
+      setMessages((m) => [...m, { from: "bot", text: match.answer, links: match.links }]);
+      return;
+    }
+
+    // Sem resposta na base → usa a IA com o contexto da escola.
+    setBusy(true);
+    setMessages((m) => [...m, { from: "bot", typing: true }]);
+    try {
+      const answer = await askAI(text, ctx || {});
+      setMessages((m) => [
+        ...m.slice(0, -1),
+        { from: "bot", text: answer, ai: true },
+      ]);
+    } catch {
+      setMessages((m) => [
+        ...m.slice(0, -1),
+        {
+          from: "bot",
+          text: "Desculpe, tive um problema para responder agora. Você pode tentar de novo em instantes ou falar com a secretaria pela página de Contato.",
+          links: [{ label: "Fale Conosco", to: "/contato" }],
+        },
+      ]);
+    }
+    setBusy(false);
   };
 
-  const suggestions = ["Como faço matrícula?", "Calendário de provas", "Biblioteca digital"];
+  const suggestions = ["Como faço matrícula?", "Cardápio de hoje", "Próximos eventos"];
 
   return (
     <div className="fixed bottom-[calc(4.75rem_+_env(safe-area-inset-bottom))] lg:bottom-[calc(1.25rem_+_env(safe-area-inset-bottom))] right-[calc(1.25rem_+_env(safe-area-inset-right))] z-50 flex flex-col items-end gap-3">
@@ -93,7 +104,9 @@ export default function Chatbot() {
               </span>
               <div>
                 <p className="text-sm font-semibold leading-tight">Concierge CETI</p>
-                <p className="text-[11px] opacity-80">Online agora</p>
+                <p className="flex items-center gap-1 text-[11px] opacity-80">
+                  <Sparkles className="h-3 w-3" /> Responde sobre a escola
+                </p>
               </div>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Fechar chat" className="rounded-full p-1 transition hover:bg-white/20">
@@ -110,15 +123,42 @@ export default function Chatbot() {
                     <Bot className="h-4 w-4" />
                   </span>
                 )}
-                <p
-                  className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm leading-relaxed ${
-                    m.from === "user"
-                      ? "rounded-br-sm bg-primary text-primary-foreground"
-                      : "rounded-bl-sm bg-muted text-foreground"
-                  }`}
-                >
-                  {m.text}
-                </p>
+                <div className="flex max-w-[75%] flex-col gap-2">
+                  <p
+                    className={`whitespace-pre-line rounded-2xl px-4 py-2 text-sm leading-relaxed ${
+                      m.from === "user"
+                        ? "rounded-br-sm bg-primary text-primary-foreground"
+                        : "rounded-bl-sm bg-muted text-foreground"
+                    }`}
+                  >
+                    {m.typing ? (
+                      <span className="flex items-center gap-1 py-1">
+                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
+                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
+                        <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
+                      </span>
+                    ) : (
+                      m.text
+                    )}
+                  </p>
+                  {m.links?.length > 0 && (
+                    <div className="flex flex-wrap gap-1.5">
+                      {m.links.map((l) => (
+                        <button
+                          key={l.to + l.label}
+                          onClick={() => {
+                            navigate(l.to);
+                            setOpen(false);
+                          }}
+                          className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/10"
+                        >
+                          {l.label}
+                          <ArrowRight className="h-3 w-3" />
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 {m.from === "user" && (
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/15 text-primary">
                     <User className="h-4 w-4" />
@@ -151,9 +191,10 @@ export default function Chatbot() {
               className="flex-1 rounded-full bg-muted px-4 py-2.5 text-sm outline-none ring-primary transition focus:ring-2"
             />
             <button
-              onClick={send}
+              onClick={() => send()}
+              disabled={busy}
               aria-label="Enviar"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition hover:scale-105"
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition hover:scale-105 disabled:opacity-50"
             >
               <Send className="h-4 w-4" />
             </button>
