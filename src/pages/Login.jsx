@@ -4,7 +4,7 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LogIn, Mail, Lock, Loader2 } from "lucide-react";
+import { LogIn, Mail, Lock, Loader2, GraduationCap, ArrowRight } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
@@ -53,6 +53,21 @@ export default function Login() {
         </>
       }
     >
+      {/* Direcionamento: alunos, professores e responsáveis usam o Portal Escolar */}
+      <Link
+        to="/portal-aluno"
+        className="group mb-6 flex items-center gap-3 rounded-xl border border-primary/30 bg-primary/5 p-4 transition hover:border-primary/60 hover:bg-primary/10"
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <GraduationCap className="h-5 w-5" />
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-semibold text-foreground">Aluno, professor ou responsável?</span>
+          <span className="block text-xs text-muted-foreground">Seu acesso é pelo Portal Escolar, com o login escolar.</span>
+        </span>
+        <ArrowRight className="h-4 w-4 shrink-0 text-primary transition-transform group-hover:translate-x-0.5" />
+      </Link>
+
       <Button
         variant="outline"
         className="w-full h-12 text-sm font-medium mb-6"
