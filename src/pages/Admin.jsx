@@ -12,6 +12,7 @@ import TeacherManager from "@/components/admin/TeacherManager";
 import MenuManager from "@/components/admin/MenuManager";
 import ContactInfoManager from "@/components/admin/ContactInfoManager";
 import TickerManager from "@/components/admin/TickerManager";
+import AdminSectionNav from "@/components/admin/AdminSectionNav";
 
 const SECTIONS = [
   { key: "overview", label: "Início", icon: LayoutDashboard, desc: "Visão geral e edição centralizada", Component: AdminOverview },
@@ -42,19 +43,8 @@ export default function Admin() {
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-4">
           <aside className="lg:sticky lg:top-24 lg:self-start">
-            {/* Navegação mobile: grid que envolve, sem cortar itens */}
-            <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:hidden">
-              {SECTIONS.map((s) => (
-                <button
-                  key={s.key}
-                  onClick={() => setActive(s.key)}
-                  className={`flex items-center justify-center gap-2 rounded-full px-3 py-2 text-sm font-semibold transition ${active === s.key ? "bg-primary text-primary-foreground shadow-soft" : "border border-border bg-card text-muted-foreground"}`}
-                >
-                  <s.icon className="h-4 w-4 shrink-0" />
-                  {s.label}
-                </button>
-              ))}
-            </div>
+            {/* Navegação mobile: grid compacto com ícone + rótulo */}
+            <AdminSectionNav sections={SECTIONS} active={active} onSelect={setActive} />
 
             {/* Navegação desktop: sidebar vertical */}
             <div className="hidden rounded-3xl border border-border bg-card p-3 lg:block">
@@ -62,7 +52,7 @@ export default function Admin() {
                 <button
                   key={s.key}
                   onClick={() => setActive(s.key)}
-                  className={`mb-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition ${active === s.key ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                  className={`mb-1 flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left transition ${active === s.key ? "bg-primary text-primary-foreground shadow-soft" : "hover:bg-muted"}`}
                 >
                   <s.icon className="h-5 w-5 shrink-0" />
                   <div>
