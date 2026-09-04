@@ -3,11 +3,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 // Camada de escrita do Painel Administrativo.
 // Roda com service role para contornar o RLS (que restringe create/update/delete
 // a role "admin") e valida o acesso pelo e-mail cadastrado em Setting
-// (admin_email / admin_email_2 / admin_email_3) ou pela role "admin" do sistema.
+// (admin_email até admin_email_5) ou pela role "admin" do sistema.
 // Assim, qualquer conta autorizada pelo AdminGuard consegue salvar — mesmo com
 // role "user" — pois a checagem de permissão acontece aqui no servidor.
 
-const ADMIN_KEYS = ["admin_email", "admin_email_2", "admin_email_3"];
+const ADMIN_KEYS = ["admin_email", "admin_email_2", "admin_email_3", "admin_email_4", "admin_email_5"];
 const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Teacher", "Menu", "ContactInfo", "Ticker", "Setting"];
 
 async function isAdmin(base44, svc) {

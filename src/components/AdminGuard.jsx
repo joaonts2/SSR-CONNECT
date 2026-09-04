@@ -4,7 +4,7 @@ import { useAuth } from "@/lib/AuthContext";
 import { amIAdmin } from "@/lib/adminApi";
 
 // Permite o acesso apenas a quem o servidor confirma como administrador
-// (role "admin" do sistema OU e-mail cadastrado em admin_email/_2/_3).
+// (role "admin" do sistema OU e-mail cadastrado em admin_email até admin_email_5).
 // A checagem acontece no adminApi (service role) e retorna só um booleano,
 // sem expor a lista de e-mails administradores ao cliente.
 export default function AdminGuard({ children }) {

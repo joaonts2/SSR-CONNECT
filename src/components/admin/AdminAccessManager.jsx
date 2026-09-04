@@ -6,6 +6,8 @@ const SLOTS = [
   { key: "admin_email", label: "Administrador principal" },
   { key: "admin_email_2", label: "Administrador 2" },
   { key: "admin_email_3", label: "Administrador 3" },
+  { key: "admin_email_4", label: "Administrador 4" },
+  { key: "admin_email_5", label: "Administrador 5" },
 ];
 
 export default function AdminAccessManager() {
@@ -94,7 +96,7 @@ export default function AdminAccessManager() {
         </span>
         <div>
           <h2 className="heading-font text-xl font-bold">Acesso dos administradores</h2>
-          <p className="text-sm text-muted-foreground">Defina até 3 e-mails que podem acessar este painel. Apenas o administrador atual pode alterá-los.</p>
+          <p className="text-sm text-muted-foreground">Defina até 5 e-mails que podem acessar este painel. Apenas o administrador atual pode alterá-los.</p>
         </div>
       </div>
 
