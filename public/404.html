@@ -1,20 +1,23 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <title>CETI Sebastião Soares Ribeiro</title>
     <script>
-      // GitHub Pages não reescreve URLs para aplicativos de página única:
-      // guarda a rota pedida e volta para a raiz do site, onde o índice
-      // restaura o caminho original no histórico do navegador.
+      // GitHub Pages (SPA): quando um link direto (ex.: /admin ou /login) não
+      // existe como arquivo físico, o GitHub serve esta página. Ela guarda a
+      // rota original na sessão e volta para a raiz do site, onde o index.html
+      // restaura a rota no histórico e o React Router abre a tela certa.
       (function () {
-        if (window.sessionStorage) {
-          sessionStorage.redirect =
-            window.location.pathname + window.location.search + window.location.hash;
-        }
-        window.location.replace("/SSR-CONNECT/");
+        var base = window.location.pathname.indexOf("/SSR-CONNECT") === 0 ? "/SSR-CONNECT" : "";
+        try {
+          sessionStorage.redirect = window.location.pathname + window.location.search + window.location.hash;
+        } catch (e) {}
+        window.location.replace(base + "/");
       })();
     </script>
   </head>
-  <body></body>
+  <body>
+    <p>Redirecionando…</p>
+  </body>
 </html>
