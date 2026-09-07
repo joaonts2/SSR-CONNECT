@@ -1,10 +1,22 @@
 import { base44 } from "@/api/base44Client";
 
-// Chamadas ao backend function adminApi (service role) — contornam o RLS admin-only
-// e validam o acesso no servidor. Lança Error com a mensagem retornada.
-async function call(payload) {
+// Chamadas ao backend function adminApi (service role) — contornam o RLS
+// admin-only e validam o acesso no servidor. O token de sessão do
+// administrador (login por e-mail e senha) é anexado a toda chamada.
+const SESSION_KEY = "ceti_admin_session";
+function readToken() {
   try {
-    const res = await base44.functions.invoke("adminApi", payload);
+    const s = JSON.parse(localStorage.getItem(SESSION_KEY) || "null");
+    return s?.token || null;
+  } catch {
+    return null;
+  }
+}
+
+async function call(payload) {
+  const token = readToken();
+  try {
+    const res = await base44.functions.invoke("adminApi", token ? { ...payload, token } : payload);
     return res.data;
   } catch (e) {
     const msg = e?.response?.data?.error || e?.message || "Erro de comunicação.";
@@ -27,9 +39,9 @@ export function adminDelete(entity, id) {
 export function adminBulkCreate(entity, records) {
   return call({ action: "bulkCreate", entity, records }).then((d) => d.records);
 }
-export function adminEmails() {
-  return call({ action: "adminEmails" }).then((d) => d.rows);
+export function adminLogin(email, password) {
+  return call({ action: "adminLogin", email, password }).then((d) => d.admin);
 }
-export function amIAdmin() {
-  return call({ action: "amIAdmin" }).then((d) => !!d.isAdmin);
+export function adminMe() {
+  return call({ action: "adminMe" }).then((d) => d.admin);
 }

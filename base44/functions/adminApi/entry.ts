@@ -1,32 +1,33 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
+import { sha256, signToken, verifyToken, TOKEN_TTL_MS } from "../../shared/session-tokens.ts";
 
-// Camada de escrita do Painel Administrativo.
-// Roda com service role para contornar o RLS (que restringe create/update/delete
-// a role "admin") e valida o acesso pelo e-mail cadastrado em Setting
-// (admin_email até admin_email_5) ou pela role "admin" do sistema.
-// Assim, qualquer conta autorizada pelo AdminGuard consegue salvar — mesmo com
-// role "user" — pois a checagem de permissão acontece aqui no servidor.
+// Camada de autenticação e escrita do Painel Administrativo.
+// O acesso é por conta própria (e-mail + senha, igual ao Portal Escolar):
+// o login valida o hash da senha no AdminAccount e emite um token de sessão
+// assinado (HMAC-SHA256) com { sub, role: "admin", exp }. Todas as demais
+// ações aceitam esse token — ou, na transição, uma conta admin da plataforma.
+// Roda com service role para contornar o RLS admin-only das entidades.
 
 const ADMIN_KEYS = ["admin_email", "admin_email_2", "admin_email_3", "admin_email_4", "admin_email_5"];
-const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Teacher", "Menu", "ContactInfo", "Ticker", "Setting", "GalleryImage"];
+const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Teacher", "Menu", "ContactInfo", "Ticker", "Setting", "GalleryImage", "AdminAccount"];
 
-async function isAdmin(base44, svc) {
-  let user;
-  try {
-    user = await base44.auth.me();
-  } catch {
-    return false;
-  }
-  const email = (user?.email || "").toLowerCase().trim();
-  const role = user?.role;
-  if (role === "admin") return true;
-  const rows = await svc.entities.Setting.list();
-  const emails = rows
-    .filter((r) => ADMIN_KEYS.includes(r.key))
-    .map((r) => (r.value || "").toLowerCase().trim())
-    .filter(Boolean);
-  return emails.length > 0 && emails.includes(email);
+function normEmail(e) {
+  return (e || "").trim().toLowerCase();
 }
+
+// Nunca expõe password_hash.
+function sanitizeAdmin(a) {
+  if (!a) return null;
+  return {
+    id: a.id,
+    email: a.email,
+    is_active: a.is_active,
+    password_changed: a.password_changed,
+  };
+}
+
+const NO_SECRET = () =>
+  Response.json({ error: "Servidor sem segredo de sessão configurado (PORTAL_TOKEN_SECRET)." }, { status: 500 });
 
 export default async function (req) {
   try {
@@ -35,25 +36,72 @@ export default async function (req) {
     const body = await req.json();
     const { action, entity } = body;
 
-    // Booleano seguro: o chamador só descobre se ELE é admin, sem expor a lista
-    // de e-mails administradores. Usado pelo AdminGuard para decidir o acesso.
-    if (action === "amIAdmin") {
-      return Response.json({ isAdmin: await isAdmin(base44, svc) });
+    const SECRET = process.env.PORTAL_TOKEN_SECRET;
+
+    // ---------- Sessão do administrador (e-mail + senha) ----------
+    if (action === "adminLogin") {
+      if (!SECRET) return NO_SECRET();
+      const hash = await sha256(body.password);
+      const rows = await svc.entities.AdminAccount.filter({
+        email: normEmail(body.email),
+        is_active: true,
+      });
+      const acc = rows[0];
+      if (!acc || acc.password_hash !== hash) {
+        return Response.json({ error: "E-mail ou senha incorretos." }, { status: 401 });
+      }
+      const token = await signToken(
+        { sub: acc.id, role: "admin", exp: Date.now() + TOKEN_TTL_MS },
+        SECRET
+      );
+      return Response.json({ admin: { ...sanitizeAdmin(acc), token } });
     }
 
-    // A partir daqui, toda ação exige que o chamador seja administrador.
-    if (!(await isAdmin(base44, svc))) {
-      return Response.json({ error: "Acesso restrito ao administrador." }, { status: 403 });
+    if (action === "adminMe") {
+      if (!SECRET) return NO_SECRET();
+      const payload = await verifyToken(body.token, SECRET);
+      if (!payload || payload.role !== "admin") {
+        return Response.json({ error: "Sessão inválida ou expirada. Faça login novamente." }, { status: 401 });
+      }
+      let acc = null;
+      try { acc = await svc.entities.AdminAccount.get(payload.sub); } catch { acc = null; }
+      if (!acc || acc.is_active === false) {
+        return Response.json({ error: "Conta de administrador desativada." }, { status: 401 });
+      }
+      return Response.json({ admin: sanitizeAdmin(acc) });
     }
 
-    // Lista de e-mails administradores — só retornada a quem já é administrador,
-    // para alimentar o gerenciador de acesso dentro do painel.
-    if (action === "adminEmails") {
+    // A partir daqui, toda ação exige que o chamador seja administrador:
+    // sessão própria válida (token) ou, na transição, conta da plataforma com
+    // role "admin" ou e-mail cadastrado em Setting (admin_email até admin_email_5).
+    const isAdmin = async () => {
+      if (SECRET && body.token) {
+        const payload = await verifyToken(body.token, SECRET);
+        if (payload && payload.role === "admin") {
+          let acc = null;
+          try { acc = await svc.entities.AdminAccount.get(payload.sub); } catch { acc = null; }
+          if (acc && acc.is_active !== false) return true;
+        }
+      }
+      let user;
+      try {
+        user = await base44.auth.me();
+      } catch {
+        return false;
+      }
+      const email = (user?.email || "").toLowerCase().trim();
+      const role = user?.role;
+      if (role === "admin") return true;
       const rows = await svc.entities.Setting.list();
-      const out = rows
+      const emails = rows
         .filter((r) => ADMIN_KEYS.includes(r.key))
-        .map((r) => ({ id: r.id, key: r.key, value: r.value || "" }));
-      return Response.json({ rows: out });
+        .map((r) => (r.value || "").toLowerCase().trim())
+        .filter(Boolean);
+      return emails.length > 0 && emails.includes(email);
+    };
+
+    if (!(await isAdmin())) {
+      return Response.json({ error: "Acesso restrito ao administrador." }, { status: 403 });
     }
 
     if (!ALLOWED.includes(entity)) {

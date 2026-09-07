@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images, LogOut } from "lucide-react";
 import AdminOverview from "@/components/admin/AdminOverview";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
@@ -13,6 +14,7 @@ import ContactInfoManager from "@/components/admin/ContactInfoManager";
 import TickerManager from "@/components/admin/TickerManager";
 import AdminSectionNav from "@/components/admin/AdminSectionNav";
 import GalleryManager from "@/components/admin/GalleryManager";
+import { clearAdmin } from "@/lib/adminAuth";
 
 const SECTIONS = [
   { key: "overview", label: "Início", group: "Início", icon: LayoutDashboard, desc: "Visão geral do portal", Component: AdminOverview },
@@ -26,14 +28,19 @@ const SECTIONS = [
   { key: "gallery", label: "Galeria", group: "Conteúdo", icon: Images, desc: "Fotos da escola publicadas no site", Component: GalleryManager },
   { key: "students", label: "Alunos", group: "Pessoas", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
   { key: "teachers", label: "Professores", group: "Pessoas", icon: Users, desc: "Aprovar cadastros e definir turmas", Component: TeacherManager },
-  { key: "access", label: "Acesso", group: "Configurações", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
+  { key: "access", label: "Acesso", group: "Configurações", icon: ShieldCheck, desc: "Contas de administrador (e-mail e senha)", Component: AdminAccessManager },
 ];
 
 const NAV_GROUPS = ["Início", "Conteúdo", "Pessoas", "Configurações"];
 
 export default function Admin() {
   const [active, setActive] = useState("overview");
+  const navigate = useNavigate();
   const Current = SECTIONS.find((s) => s.key === active).Component;
+  const logout = () => {
+    clearAdmin();
+    navigate("/admin-login", { replace: true });
+  };
 
   return (
     <div>
@@ -42,16 +49,24 @@ export default function Admin() {
         <div className="absolute inset-0 prism-gradient" />
         <div className="absolute -right-24 -top-32 h-72 w-72 rounded-full bg-secondary/10 blur-3xl" />
         <div className="absolute -left-16 bottom-0 h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
-        <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-          <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
-            <ShieldCheck className="h-3.5 w-3.5" /> Painel Administrativo
-          </span>
-          <h1 className="heading-font mt-5 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
-            Gestão de conteúdo
-          </h1>
-          <p className="mt-3 max-w-2xl text-muted-foreground text-pretty">
-            Edite notícias, avisos, eventos e cardápio — tudo se atualiza no site na hora, sem precisar de código.
-          </p>
+        <div className="relative mx-auto flex max-w-7xl items-end justify-between gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-primary">
+              <ShieldCheck className="h-3.5 w-3.5" /> Painel Administrativo
+            </span>
+            <h1 className="heading-font mt-5 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl">
+              Gestão de conteúdo
+            </h1>
+            <p className="mt-3 max-w-2xl text-muted-foreground text-pretty">
+              Edite notícias, avisos, eventos e cardápio — tudo se atualiza no site na hora, sem precisar de código.
+            </p>
+          </div>
+          <button
+            onClick={logout}
+            className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-card px-5 py-2.5 text-sm font-semibold text-foreground/80 transition hover:border-destructive/40 hover:text-destructive"
+          >
+            <LogOut className="h-4 w-4" /> Sair
+          </button>
         </div>
       </section>
 
@@ -96,7 +111,7 @@ export default function Admin() {
               ))}
               <div className="mt-2 flex items-start gap-2 rounded-2xl border border-border bg-background p-4 text-xs text-muted-foreground">
                 <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-secondary" />
-                Área protegida — apenas o e-mail cadastrado como administrador acessa este painel.
+                Área protegida — apenas contas de administrador (e-mail e senha) acessam este painel.
               </div>
             </div>
           </aside>

@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster"
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 const ROUTER_BASE = import.meta.env.BASE_URL === "/" ? "/" : "/SSR-CONNECT";
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
@@ -23,8 +23,8 @@ import Login from '@/pages/Login';
 import Register from '@/pages/Register';
 import ForgotPassword from '@/pages/ForgotPassword';
 import ResetPassword from '@/pages/ResetPassword';
-import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminGuard from '@/components/AdminGuard';
+import AdminLogin from '@/pages/AdminLogin';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -68,9 +68,8 @@ const AuthenticatedApp = () => {
         <Route path="/calendario" element={<Calendar />} />
         <Route path="/contato" element={<Contact />} />
         <Route path="/portal-aluno" element={<AlunoPortal />} />
-        <Route element={<ProtectedRoute unauthenticatedElement={<Navigate to="/login" replace />} />}>
-          <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
-        </Route>
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminGuard><Admin /></AdminGuard>} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

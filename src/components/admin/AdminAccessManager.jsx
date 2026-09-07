@@ -1,83 +1,86 @@
 import { useEffect, useState } from "react";
-import { ShieldCheck, Loader2, Mail, Trash2 } from "lucide-react";
-import { adminCreate, adminUpdate, adminDelete, adminEmails } from "@/lib/adminApi";
+import { ShieldCheck, Loader2, Mail, Trash2, KeyRound, UserPlus } from "lucide-react";
+import { adminList, adminCreate, adminUpdate, adminDelete } from "@/lib/adminApi";
+import { sha256, genPassword } from "@/lib/alunoAuth";
 
-const SLOTS = [
-  { key: "admin_email", label: "Administrador principal" },
-  { key: "admin_email_2", label: "Administrador 2" },
-  { key: "admin_email_3", label: "Administrador 3" },
-  { key: "admin_email_4", label: "Administrador 4" },
-  { key: "admin_email_5", label: "Administrador 5" },
-];
+const MAX_ADMINS = 5;
 
 export default function AdminAccessManager() {
-  const [records, setRecords] = useState({}); // { key: record|null }
-  const [emails, setEmails] = useState({}); // { key: string }
+  const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [msgs, setMsgs] = useState({}); // { key: {type,text} }
+  const [busy, setBusy] = useState(false);
+  const [newEmail, setNewEmail] = useState("");
+  const [revealed, setRevealed] = useState(null); // { label, password }
+  const [err, setErr] = useState(null);
 
   useEffect(() => {
     (async () => {
       try {
-        const rows = await adminEmails();
-        const recMap = {};
-        const mailMap = {};
-        SLOTS.forEach((s) => {
-          const rec = rows.find((r) => r.key === s.key) || null;
-          recMap[s.key] = rec;
-          mailMap[s.key] = rec?.value || "";
-        });
-        setRecords(recMap);
-        setEmails(mailMap);
-      } catch (e) { console.error(e); }
+        setAccounts(await adminList("AdminAccount"));
+      } catch (e) {
+        console.error(e);
+      }
       setLoading(false);
     })();
   }, []);
 
-  const setField = (key, value) => {
-    setEmails((p) => ({ ...p, [key]: value }));
-    setMsgs((p) => ({ ...p, [key]: undefined }));
-  };
-
-  const saveSlot = async (slot) => {
-    const trimmed = (emails[slot.key] || "").trim().toLowerCase();
-    const rec = records[slot.key];
-    if (rec && (rec.value || "").toLowerCase().trim() === trimmed) {
-      setMsgs((p) => ({ ...p, [slot.key]: { type: "info", text: "Nenhuma alteração." } }));
-      return null;
-    }
-    try {
-      if (!trimmed) {
-        // remover
-        if (rec?.id) {
-          await adminDelete("Setting", rec.id);
-          setRecords((p) => ({ ...p, [slot.key]: null }));
-        }
-        setMsgs((p) => ({ ...p, [slot.key]: { type: "success", text: "Administrador removido." } }));
-        return null;
-      }
-      if (rec?.id) {
-        const updated = await adminUpdate("Setting", rec.id, { value: trimmed });
-        setRecords((p) => ({ ...p, [slot.key]: updated }));
-      } else {
-        const created = await adminCreate("Setting", { key: slot.key, value: trimmed });
-        setRecords((p) => ({ ...p, [slot.key]: created }));
-      }
-      setMsgs((p) => ({ ...p, [slot.key]: { type: "success", text: "Administrador salvo." } }));
-      return null;
-    } catch (err) {
-      console.error(err);
-      setMsgs((p) => ({ ...p, [slot.key]: { type: "error", text: "Sem permissão para alterar este administrador." } }));
-      return err;
-    }
-  };
-
-  const saveAll = async (e) => {
+  const addAdmin = async (e) => {
     e.preventDefault();
-    setSaving(true);
-    await Promise.all(SLOTS.map((s) => saveSlot(s)));
-    setSaving(false);
+    const email = newEmail.trim().toLowerCase();
+    if (!email) return;
+    if (accounts.length >= MAX_ADMINS) {
+      setErr(`Máximo de ${MAX_ADMINS} administradores.`);
+      return;
+    }
+    setBusy(true);
+    setErr(null);
+    try {
+      const password = genPassword(10);
+      const rec = await adminCreate("AdminAccount", {
+        email,
+        password_hash: await sha256(password),
+        password_changed: false,
+        is_active: true,
+      });
+      setAccounts((p) => [...p, rec]);
+      setNewEmail("");
+      setRevealed({ label: email, password });
+    } catch (e2) {
+      setErr(e2.message);
+    }
+    setBusy(false);
+  };
+
+  const resetPassword = async (acc) => {
+    setBusy(true);
+    setErr(null);
+    try {
+      const password = genPassword(10);
+      await adminUpdate("AdminAccount", acc.id, {
+        password_hash: await sha256(password),
+        password_changed: false,
+      });
+      setRevealed({ label: acc.email, password });
+    } catch (e2) {
+      setErr(e2.message);
+    }
+    setBusy(false);
+  };
+
+  const removeAdmin = async (acc) => {
+    if (accounts.length <= 1) {
+      setErr("Mantenha pelo menos um administrador com acesso ao painel.");
+      return;
+    }
+    setBusy(true);
+    setErr(null);
+    try {
+      await adminDelete("AdminAccount", acc.id);
+      setAccounts((p) => p.filter((a) => a.id !== acc.id));
+    } catch (e2) {
+      setErr(e2.message);
+    }
+    setBusy(false);
   };
 
   if (loading) {
@@ -95,61 +98,79 @@ export default function AdminAccessManager() {
           <ShieldCheck className="h-6 w-6" />
         </span>
         <div>
-          <h2 className="heading-font text-xl font-bold">Acesso dos administradores</h2>
-          <p className="text-sm text-muted-foreground">Defina até 5 e-mails que podem acessar este painel. Apenas o administrador atual pode alterá-los.</p>
+          <h2 className="heading-font text-xl font-bold">Contas de administrador</h2>
+          <p className="text-sm text-muted-foreground">
+            Até {MAX_ADMINS} contas com e-mail e senha entram no painel — o login não usa mais o Google.
+          </p>
         </div>
       </div>
 
-      <form onSubmit={saveAll} className="mt-6 max-w-md space-y-5">
-        {SLOTS.map((slot, idx) => {
-          const msg = msgs[slot.key];
-          return (
-            <div key={slot.key}>
-              <label className="mb-1.5 flex items-center gap-2 text-sm font-medium">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">{idx + 1}</span>
-                {slot.label}
-              </label>
-              <div className="relative">
-                <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <input
-                  type="email"
-                  value={emails[slot.key] || ""}
-                  onChange={(e) => setField(slot.key, e.target.value)}
-                  placeholder="admin@escola.com"
-                  className="w-full rounded-xl border border-border bg-background py-3 pl-11 pr-11 text-sm outline-none ring-primary transition focus:ring-2"
-                />
-                {records[slot.key] && (emails[slot.key] || "").trim() && (
-                  <button
-                    type="button"
-                    onClick={() => setField(slot.key, "")}
-                    title="Remover"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition hover:text-destructive"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-              {msg && (
-                <p className={`mt-1.5 text-xs ${msg.type === "success" ? "text-secondary" : msg.type === "info" ? "text-muted-foreground" : "text-destructive"}`}>
-                  {msg.text}
-                </p>
-              )}
-            </div>
-          );
-        })}
+      {revealed && (
+        <div className="mt-5 rounded-2xl border border-secondary/40 bg-secondary/10 p-4">
+          <p className="text-sm font-semibold">Senha gerada para {revealed.label}</p>
+          <p className="mt-1 break-all font-mono text-lg font-bold text-foreground">{revealed.password}</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Copie agora e entregue ao administrador — ela não será exibida novamente.
+          </p>
+        </div>
+      )}
+      {err && <p className="mt-4 text-sm text-destructive">{err}</p>}
 
-        <button
-          type="submit"
-          disabled={saving}
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-105 disabled:opacity-60"
-        >
-          {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <ShieldCheck className="h-4 w-4" />}
-          Salvar administradores
-        </button>
-      </form>
+      <div className="mt-6 space-y-2">
+        {accounts.map((acc, idx) => (
+          <div key={acc.id} className="flex items-center gap-3 rounded-2xl border border-border bg-background p-4">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xs font-bold text-primary">
+              {idx + 1}
+            </span>
+            <p className="min-w-0 flex-1 truncate text-sm font-medium">{acc.email}</p>
+            <button
+              type="button"
+              onClick={() => resetPassword(acc)}
+              disabled={busy}
+              title="Gerar nova senha"
+              className="rounded-xl p-2 text-muted-foreground transition hover:bg-primary/10 hover:text-primary disabled:opacity-60"
+            >
+              <KeyRound className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => removeAdmin(acc)}
+              disabled={busy}
+              title="Remover administrador"
+              className="rounded-xl p-2 text-muted-foreground transition hover:bg-destructive/10 hover:text-destructive disabled:opacity-60"
+            >
+              <Trash2 className="h-4 w-4" />
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {accounts.length < MAX_ADMINS && (
+        <form onSubmit={addAdmin} className="mt-6 flex max-w-lg flex-col gap-3 sm:flex-row">
+          <div className="relative flex-1">
+            <Mail className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              placeholder="novo.admin@escola.com"
+              className="w-full rounded-xl border border-border bg-background py-3 pl-11 pr-4 text-sm outline-none ring-primary transition focus:ring-2"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={busy}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition hover:scale-105 disabled:opacity-60"
+          >
+            {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />} Adicionar
+          </button>
+        </form>
+      )}
 
       <p className="mt-6 rounded-xl border border-border bg-background p-4 text-xs text-muted-foreground">
-        Ao adicionar ou trocar um e-mail, o acesso a este painel passa a pertencer também à nova conta. Certifique-se de que os e-mails já estejam registrados na plataforma antes de salvar.
+        O acesso ao painel é feito com e-mail e senha na tela de login do painel. Ao adicionar um administrador, uma
+        senha é gerada e exibida apenas uma vez — use o botão de chave para gerar uma nova senha quando precisar.
       </p>
     </div>
   );
