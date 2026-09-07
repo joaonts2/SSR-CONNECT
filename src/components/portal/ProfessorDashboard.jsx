@@ -42,7 +42,7 @@ export default function ProfessorDashboard({ session, onLogout }) {
 
       <PortalSectionTitle>Aulas e materiais</PortalSectionTitle>
 
-      <LessonManager turmas={turmas} author={session.name} teacherId={session.id} />
+      <LessonManager turmas={turmas} disciplines={disciplines} author={session.name} teacherId={session.id} />
 
       <PortalSectionTitle>Comunicações da escola</PortalSectionTitle>
 

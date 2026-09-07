@@ -10,6 +10,7 @@ export default function TurmaStudentsTable({ turmas, teacherId }) {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
+  const [turmaFilter, setTurmaFilter] = useState("Todas");
   const [savingId, setSavingId] = useState(null);
   const [savedAt, setSavedAt] = useState({});
 
@@ -34,11 +35,17 @@ export default function TurmaStudentsTable({ turmas, teacherId }) {
     setSavingId(null);
   };
 
-  const filtered = students.filter((s) => {
+  const matchesSearch = (s) => {
     if (!query) return true;
     const q = query.toLowerCase();
     return (s.name || "").toLowerCase().includes(q) || (s.student_login || "").toLowerCase().includes(q) || (s.turma || "").toLowerCase().includes(q);
-  });
+  };
+  const matchesTurma = (s) => turmaFilter === "Todas" || s.turma === turmaFilter;
+  const filtered = students.filter((s) => matchesSearch(s) && matchesTurma(s));
+  const countByTurma = {};
+  students.forEach((s) => { countByTurma[s.turma || ""] = (countByTurma[s.turma || ""] || 0) + 1; });
+  const chipCls = (active) =>
+    `rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${active ? "bg-primary text-primary-foreground shadow-soft" : "bg-muted text-muted-foreground hover:bg-primary/10 hover:text-primary"}`;
 
   const inputCls = "w-full rounded-lg border border-transparent bg-transparent px-2 py-1.5 text-sm outline-none transition hover:border-border focus:border-primary focus:bg-background";
 
@@ -56,6 +63,17 @@ export default function TurmaStudentsTable({ turmas, teacherId }) {
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar por nome, login ou turma" className="w-full rounded-xl border border-border bg-background py-2.5 pl-10 pr-4 text-sm outline-none ring-primary transition focus:ring-2" />
       </div>
+
+      {!loading && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button onClick={() => setTurmaFilter("Todas")} className={chipCls(turmaFilter === "Todas")}>Todas ({students.length})</button>
+          {turmas.map((t) => (
+            <button key={t} onClick={() => setTurmaFilter(t)} className={chipCls(turmaFilter === t)}>
+              {t} ({countByTurma[t] || 0})
+            </button>
+          ))}
+        </div>
+      )}
 
       {loading ? (
         <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-primary" /></div>

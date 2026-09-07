@@ -12,7 +12,8 @@
       "type": "string",
       "enum": [
         "V\u00eddeo",
-        "Link"
+        "Link",
+        "Arquivo"
       ],
       "default": "V\u00eddeo"
     },
