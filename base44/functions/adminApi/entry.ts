@@ -8,7 +8,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.44';
 // role "user" — pois a checagem de permissão acontece aqui no servidor.
 
 const ADMIN_KEYS = ["admin_email", "admin_email_2", "admin_email_3", "admin_email_4", "admin_email_5"];
-const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Teacher", "Menu", "ContactInfo", "Ticker", "Setting"];
+const ALLOWED = ["News", "Notice", "CalendarEvent", "Testimonial", "Student", "Teacher", "Menu", "ContactInfo", "Ticker", "Setting", "GalleryImage"];
 
 async function isAdmin(base44, svc) {
   let user;

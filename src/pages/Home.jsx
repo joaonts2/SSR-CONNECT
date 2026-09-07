@@ -12,7 +12,7 @@ const HERO_IMG = "https://media.base44.com/images/public/6a72477229bbbca7bf4eb1f
 const STUDENTS_IMG = "https://media.base44.com/images/public/6a72477229bbbca7bf4eb1f0/9c8933120_generated_5bed5cc3.png";
 
 const hubTiles = [
-  { icon: BookOpen, title: "Biblioteca Digital", desc: "Mais de 50.000 títulos, e-books e periódicos acadêmicos.", to: "/biblioteca", color: "from-blue-500 to-blue-600" },
+  { icon: BookOpen, title: "Biblioteca Digital", desc: "Vídeo-aulas e materiais de estudo publicados pelos professores.", to: "/biblioteca", color: "from-blue-500 to-blue-600" },
   { icon: CalendarDays, title: "Calendário Escolar", desc: "Provas, eventos, feriados e reuniões em um só lugar.", to: "/calendario", color: "from-emerald-500 to-emerald-600" },
   { icon: Newspaper, title: "Notícias e Avisos", desc: "Comunicados oficiais e atualizações da escola.", to: "/noticias", color: "from-amber-500 to-orange-500" },
   { icon: ImageIcon, title: "Galeria", desc: "Fotos e vídeos dos eventos e do dia a dia escolar.", to: "/galeria", color: "from-sky-500 to-indigo-500" },

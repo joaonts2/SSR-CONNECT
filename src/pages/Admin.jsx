@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio } from "lucide-react";
+import { Newspaper, Megaphone, CalendarDays, MessageSquare, ShieldCheck, Users, UtensilsCrossed, Phone, LayoutDashboard, Radio, Images } from "lucide-react";
 import AdminOverview from "@/components/admin/AdminOverview";
 import NewsManager from "@/components/admin/NewsManager";
 import NoticeManager from "@/components/admin/NoticeManager";
@@ -12,6 +12,7 @@ import MenuManager from "@/components/admin/MenuManager";
 import ContactInfoManager from "@/components/admin/ContactInfoManager";
 import TickerManager from "@/components/admin/TickerManager";
 import AdminSectionNav from "@/components/admin/AdminSectionNav";
+import GalleryManager from "@/components/admin/GalleryManager";
 
 const SECTIONS = [
   { key: "overview", label: "Início", group: "Início", icon: LayoutDashboard, desc: "Visão geral do portal", Component: AdminOverview },
@@ -22,6 +23,7 @@ const SECTIONS = [
   { key: "testimonials", label: "Depoimentos", group: "Conteúdo", icon: MessageSquare, desc: "Aprovar depoimentos da comunidade", Component: TestimonialManager },
   { key: "contact", label: "Contato", group: "Conteúdo", icon: Phone, desc: "Textos e dados da página de contato", Component: ContactInfoManager },
   { key: "ticker", label: "Banner Avisos", group: "Conteúdo", icon: Radio, desc: "Frase do topo da página inicial", Component: TickerManager },
+  { key: "gallery", label: "Galeria", group: "Conteúdo", icon: Images, desc: "Fotos da escola publicadas no site", Component: GalleryManager },
   { key: "students", label: "Alunos", group: "Pessoas", icon: Users, desc: "Listas por turma e logins/senhas", Component: StudentManager },
   { key: "teachers", label: "Professores", group: "Pessoas", icon: Users, desc: "Aprovar cadastros e definir turmas", Component: TeacherManager },
   { key: "access", label: "Acesso", group: "Configurações", icon: ShieldCheck, desc: "Definir e-mail do administrador", Component: AdminAccessManager },
