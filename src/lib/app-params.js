@@ -6,6 +6,10 @@ const toSnakeCase = (str) => {
 	return str.replace(/([A-Z])/g, '_$1').toLowerCase();
 }
 
+// Valores como "null"/"undefined" chegam à URL ou ao localStorage após
+// redirecionamentos quebrados e, se fossem aceitos, quebrariam o app.
+const isInvalidParamValue = (v) => !v || v === "null" || v === "undefined";
+
 const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl = false } = {}) => {
 	if (isNode) {
 		return defaultValue;
@@ -13,23 +17,27 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 	const storageKey = `base44_${toSnakeCase(paramName)}`;
 	const urlParams = new URLSearchParams(window.location.search);
 	const searchParam = urlParams.get(paramName);
-	if (removeFromUrl) {
+	const hasValidSearchParam = !isInvalidParamValue(searchParam);
+	if (hasValidSearchParam || removeFromUrl || (searchParam && !hasValidSearchParam)) {
 		urlParams.delete(paramName);
 		const newUrl = `${window.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : ""
 			}${window.location.hash}`;
 		window.history.replaceState({}, document.title, newUrl);
 	}
-	if (searchParam) {
+	if (hasValidSearchParam) {
 		storage.setItem(storageKey, searchParam);
 		return searchParam;
 	}
-	if (defaultValue) {
+	if (!isInvalidParamValue(defaultValue)) {
 		storage.setItem(storageKey, defaultValue);
 		return defaultValue;
 	}
 	const storedValue = storage.getItem(storageKey);
-	if (storedValue) {
+	if (!isInvalidParamValue(storedValue)) {
 		return storedValue;
+	}
+	if (storedValue) {
+		storage.removeItem(storageKey); // limpa valor poluído salvo no navegador
 	}
 	return null;
 }

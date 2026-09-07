@@ -8,6 +8,7 @@ import { LogIn, Mail, Lock, Loader2, GraduationCap, ArrowRight } from "lucide-re
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
 import { safeReturnTo } from "@/lib/authReturnTo";
+import { appParams } from "@/lib/app-params";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -33,6 +34,12 @@ export default function Login() {
   };
 
   const handleGoogle = () => {
+    // Não deixa o navegador navegar para um endereço quebrado (JSON de erro)
+    // quando o identificador do app não foi resolvido corretamente.
+    if (!appParams.appId) {
+      setError("Não foi possível iniciar o login com o Google. Recarregue a página e tente novamente.");
+      return;
+    }
     base44.auth.loginWithProvider("google", returnTo);
   };
 
