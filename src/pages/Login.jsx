@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { LogIn, Mail, Lock, Loader2, GraduationCap, ArrowRight } from "lucide-react";
 import AuthLayout from "@/components/AuthLayout";
 import GoogleIcon from "@/components/GoogleIcon";
-import { safeReturnTo } from "@/lib/authReturnTo";
+import { safeReturnTo, absoluteReturnTo } from "@/lib/authReturnTo";
 import { appParams } from "@/lib/app-params";
 
 export default function Login() {
@@ -25,7 +25,7 @@ export default function Login() {
     setLoading(true);
     try {
       await base44.auth.loginViaEmailPassword(email, password);
-      window.location.href = returnTo;
+      window.location.href = absoluteReturnTo();
     } catch (err) {
       setError(err.message || "Invalid email or password");
     } finally {
@@ -40,7 +40,7 @@ export default function Login() {
       setError("Não foi possível iniciar o login com o Google. Recarregue a página e tente novamente.");
       return;
     }
-    base44.auth.loginWithProvider("google", returnTo);
+    base44.auth.loginWithProvider("google", absoluteReturnTo());
   };
 
   return (

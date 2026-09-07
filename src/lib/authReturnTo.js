@@ -31,3 +31,12 @@ export function safeReturnTo() {
     return "/";
   }
 }
+
+// URL completa (com o caminho base do app, ex.: /SSR-CONNECT do GitHub Pages)
+// para redirecionamentos que saem da página ou navegam via window.location —
+// um href = "/rota" perderia o prefixo do site em hospedagens com subcaminho.
+export function absoluteReturnTo() {
+  const path = safeReturnTo();
+  const base = (import.meta.env.BASE_URL || "/").replace(/\/+$/, "");
+  return new URL(base + path, window.location.origin).toString();
+}
