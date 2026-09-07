@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { Camera, Loader2, Trash2, Upload, CheckCircle2, Eye, EyeOff } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Camera, Loader2, Trash2, Upload, CheckCircle2, Eye, EyeOff, X } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { adminList, adminCreate, adminDelete, adminUpdate } from "@/lib/adminApi";
-import { Field, inputCls } from "@/components/admin/ui";
+import { inputCls } from "@/components/admin/ui";
 import { Image } from "@/components/ui/image";
 
 // Gestão da galeria de fotos: envio, exibição/ocultação e remoção das fotos
@@ -11,9 +11,27 @@ export default function GalleryManager() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [title, setTitle] = useState("");
-  const [file, setFile] = useState(null);
+  const [pending, setPending] = useState([]);
+  const [done, setDone] = useState(0);
   const [ok, setOk] = useState(null);
+  const inputRef = useRef(null);
+
+  const addFiles = (fileList) => {
+    const newOnes = Array.from(fileList || [])
+      .filter((f) => f.type?.startsWith("image/"))
+      .map((f) => ({ file: f, title: f.name.replace(/\.[^.]+$/, ""), preview: URL.createObjectURL(f) }));
+    if (!newOnes.length) return;
+    setPending((p) => [...p, ...newOnes]);
+  };
+
+  const setEntryTitle = (i) => (e) =>
+    setPending((p) => p.map((it, idx) => (idx === i ? { ...it, title: e.target.value } : it)));
+
+  const removeEntry = (i) =>
+    setPending((p) => {
+      URL.revokeObjectURL(p[i].preview);
+      return p.filter((_, idx) => idx !== i);
+    });
 
   const load = async () => {
     setLoading(true);
@@ -26,20 +44,29 @@ export default function GalleryManager() {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!file || !title.trim()) return;
+    if (!pending.length) return;
     setSaving(true);
     setOk(null);
+    let published = 0;
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await adminCreate("GalleryImage", { title: title.trim(), image_url: file_url, is_active: true });
-      setTitle("");
-      setFile(null);
-      e.target.reset();
-      setOk("Foto publicada na galeria do site!");
+      for (const entry of pending) {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file: entry.file });
+        await adminCreate("GalleryImage", { title: (entry.title || entry.file.name).trim(), image_url: file_url, is_active: true });
+        published++;
+        setDone(published);
+      }
+      pending.forEach((entry) => URL.revokeObjectURL(entry.preview));
+      setPending([]);
+      setOk(`${published} ${published === 1 ? "foto publicada" : "fotos publicadas"} na galeria do site!`);
       load();
     } catch (err) {
-      setOk("Erro ao enviar: " + (err?.message || "tente novamente."));
+      pending.slice(0, published).forEach((entry) => URL.revokeObjectURL(entry.preview));
+      setPending(pending.slice(published));
+      setOk(`Erro ao enviar — ${published} ${published === 1 ? "foto publicada" : "fotos publicadas"} antes do erro: ` + (err?.message || "tente novamente."));
+      if (published) load();
     }
+    setDone(0);
+    if (inputRef.current) inputRef.current.value = "";
     setSaving(false);
   };
 
@@ -73,22 +100,74 @@ export default function GalleryManager() {
         </p>
       )}
 
-      <form onSubmit={submit} className="mt-6 rounded-2xl border border-border bg-card p-4 sm:p-5">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Título da foto">
-            <input value={title} onChange={(e) => setTitle(e.target.value)} className={inputCls} placeholder="Ex.: Feira de Ciências 2026" required />
-          </Field>
-          <Field label="Imagem">
-            <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] || null)} className={inputCls} required />
-          </Field>
-        </div>
+      <form
+        onSubmit={submit}
+        className="mt-6 rounded-2xl border border-border bg-card p-4 sm:p-5"
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={(e) => {
+          e.preventDefault();
+          addFiles(e.dataTransfer?.files);
+        }}
+      >
+        <label className="flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-border bg-background px-4 py-8 text-center transition hover:border-primary/50 hover:bg-primary/5">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Camera className="h-6 w-6" />
+          </span>
+          <p className="text-sm font-semibold">Arraste as fotos aqui ou clique para escolher do computador</p>
+          <p className="text-xs text-muted-foreground">Dá para selecionar várias fotos de uma vez — os títulos podem ser ajustados antes de publicar</p>
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={(e) => {
+              addFiles(e.target.files);
+              e.target.value = "";
+            }}
+            className="hidden"
+          />
+        </label>
+
+        {pending.length > 0 && (
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {pending.map((entry, i) => (
+              <div key={i} className="overflow-hidden rounded-xl border border-border bg-background">
+                <div className="relative">
+                  <img src={entry.preview} alt={entry.title} className="aspect-square w-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => removeEntry(i)}
+                    aria-label="Remover da lista"
+                    className="absolute right-2 top-2 rounded-full bg-background/90 p-1.5 text-foreground shadow-soft transition hover:bg-destructive hover:text-destructive-foreground"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+                <div className="p-2">
+                  <input
+                    value={entry.title}
+                    onChange={setEntryTitle(i)}
+                    className={inputCls + " !py-1.5 !text-xs"}
+                    placeholder="Ex.: Feira de Ciências 2026"
+                    maxLength={120}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         <button
           type="submit"
-          disabled={saving || !file || !title.trim()}
+          disabled={saving || pending.length === 0}
           className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-float transition hover:scale-[1.02] disabled:opacity-50"
         >
           {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-          {saving ? "Enviando..." : "Publicar foto"}
+          {saving
+            ? `Enviando... (${done}/${pending.length})`
+            : pending.length > 1
+              ? `Publicar ${pending.length} fotos`
+              : "Publicar foto"}
         </button>
       </form>
 
